@@ -12,7 +12,7 @@ BEGIN
 		SELECT Clave FROM usuario WHERE Nombre=vNombre INTO contraCif;
 		#Desencripta la contraseña en la BD, utilizando la clave recibida
 		SET contraTemp=AES_DECRYPT(contraCif,vPass);
-		#Compara si la contraseña introducida es igual a la desencriptada de la BD
+		#Compara si la contraseña introducida es igual a la desencriptada de la BD, se devuelve 1 si son iguales, 0 de lo contrario
 		IF(STRCMP(vContraAComparar,contraTemp)=0) THEN
 			RETURN 1;
 		ELSE
