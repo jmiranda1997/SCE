@@ -5,8 +5,10 @@
  */
 package Ventanas;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -21,6 +23,7 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setEtiqueta(jLabel2);
+        
     }
     public void setEtiqueta(JLabel etiqueta){
         etiqueta.setBackground(Color.BLACK);
@@ -40,7 +43,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        btn_Compras = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -57,6 +60,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 0, 0));
 
         jLabel2.setBackground(new java.awt.Color(255, 0, 0));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/barcode (1).png"))); // NOI18N
         jLabel2.setOpaque(true);
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -66,6 +70,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jLabel3.setBackground(new java.awt.Color(255, 0, 0));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/settings.png"))); // NOI18N
         jLabel3.setOpaque(true);
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -74,16 +79,18 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/shopping-cart.png"))); // NOI18N
-        jLabel4.setOpaque(true);
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_Compras.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Compras.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Compras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/shopping-cart.png"))); // NOI18N
+        btn_Compras.setOpaque(true);
+        btn_Compras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                btn_ComprasMouseClicked(evt);
             }
         });
 
         jLabel5.setBackground(new java.awt.Color(255, 0, 0));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/price-tag.png"))); // NOI18N
         jLabel5.setOpaque(true);
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -93,6 +100,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jLabel6.setBackground(new java.awt.Color(255, 0, 0));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/locked.png"))); // NOI18N
         jLabel6.setOpaque(true);
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -102,6 +110,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jLabel7.setBackground(new java.awt.Color(255, 0, 0));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/coin.png"))); // NOI18N
         jLabel7.setOpaque(true);
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -114,32 +123,27 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(btn_Compras, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(96, 96, 96)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(96, 96, 96)
-                .addComponent(jLabel6)
-                .addGap(96, 96, 96)
-                .addComponent(jLabel7)
-                .addGap(96, 96, 96)
-                .addComponent(jLabel3)
-                .addGap(9, 9, 9))
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
+                .addComponent(btn_Compras, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 690));
@@ -174,7 +178,6 @@ public class Principal extends javax.swing.JFrame {
         jTable1.setRowHeight(24);
         jTable1.setSelectionBackground(new java.awt.Color(255, 51, 51));
         jTable1.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        jTable1.setShowGrid(true);
         jTable1.setShowVerticalLines(false);
         jScrollPane1.setViewportView(jTable1);
 
@@ -195,7 +198,7 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 292, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -218,25 +221,31 @@ public class Principal extends javax.swing.JFrame {
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         setEtiqueta(jLabel2);
         resetEtiqueta(jLabel3);
-        resetEtiqueta(jLabel4);
+        resetEtiqueta(btn_Compras);
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        setEtiqueta(jLabel4);
+    private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
+        setEtiqueta(btn_Compras);
         resetEtiqueta(jLabel3);
         resetEtiqueta(jLabel2);
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
-    }//GEN-LAST:event_jLabel4MouseClicked
+        JPanel j = new Compras();
+        j.setLocation(0, 0);
+        j.setSize(jPanel2.getSize());
+        jPanel2.removeAll();
+        jPanel2.add(j, BorderLayout.CENTER);
+        jPanel2.revalidate();
+    }//GEN-LAST:event_btn_ComprasMouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         setEtiqueta(jLabel5);
         resetEtiqueta(jLabel3);
-        resetEtiqueta(jLabel4);
+        resetEtiqueta(btn_Compras);
         resetEtiqueta(jLabel2);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
@@ -245,7 +254,7 @@ public class Principal extends javax.swing.JFrame {
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         setEtiqueta(jLabel6);
         resetEtiqueta(jLabel3);
-        resetEtiqueta(jLabel4);
+        resetEtiqueta(btn_Compras);
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel2);
         resetEtiqueta(jLabel7);
@@ -254,7 +263,7 @@ public class Principal extends javax.swing.JFrame {
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         setEtiqueta(jLabel7);
         resetEtiqueta(jLabel3);
-        resetEtiqueta(jLabel4);
+        resetEtiqueta(btn_Compras);
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel2);
@@ -263,7 +272,7 @@ public class Principal extends javax.swing.JFrame {
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         setEtiqueta(jLabel3);
         resetEtiqueta(jLabel2);
-        resetEtiqueta(jLabel4);
+        resetEtiqueta(btn_Compras);
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
@@ -305,15 +314,15 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btn_Compras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    public static javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
