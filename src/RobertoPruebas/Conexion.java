@@ -15,14 +15,18 @@ public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados
     private static String user="root", ip="localhost", pass=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
-    public Conexion()
+    public Conexion (){}
+    public Conexion(String user, String ip, String pass)
     {
-        
+        this.user=user;
+        this.ip=ip;
+        this.pass=pass;
     }
     /**
      * Metodo que genera la conexion utilizando los atributos de esta clase
+     * @param nombreBD el nombre de la base de datos a conectarse
      */
-    private void conectar()
+    private void conectar(String nombreBD)
     {
        conexion=null;
         try{
@@ -31,7 +35,7 @@ public class Conexion {
             } catch (ClassNotFoundException ex) {
             System.out.println("Error al registrar el driver de MySQL: " + ex);
         }
-            conexion=DriverManager.getConnection(url+ip+"/"+"rm_db",user,"blackdiamond");//Se conecta con la base de datos enviando
+            conexion=DriverManager.getConnection(url+ip+"/"+nombreBD,user,pass);//Se conecta con la base de datos enviando
             //los parametros url, user, pass,
             
         } catch (SQLException ex) {
@@ -39,7 +43,7 @@ public class Conexion {
         }
     }
     public void ejemploDeUso() throws SQLException{
-        conectar(); //permite la conexion con la base de datos
+        conectar("rm_db"); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("select id,Nombre, Apellido from cliente"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
         while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
