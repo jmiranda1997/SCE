@@ -1,0 +1,15 @@
+DELIMITER //
+
+DROP TRIGGER IF EXISTS nuevoProv //
+
+CREATE TRIGGER nuevoProv
+BEFORE INSERT ON proveedor
+FOR EACH ROW
+BEGIN
+
+	SET NEW.Habilitado = 1;
+	SET NEW.Saldo = 0.00;
+
+END //
+
+DELIMITER ;
