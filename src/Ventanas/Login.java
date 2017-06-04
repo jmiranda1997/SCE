@@ -5,9 +5,12 @@
  */
 package Ventanas;
 
+import Excepciones.ArchivoNoExiste;
+import Excepciones.FormatoInvalido;
 import JP.*;
 import RobertoPruebas.Conexion;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +29,7 @@ import javax.crypto.spec.SecretKeySpec;
  * @author jonathanmiranda
  */
 public class Login extends javax.swing.JFrame {
-    private final String claveCifrado = "Sistema de Control Empresarial";
+    
     /**
      * Creates new form Interfaz
      */
@@ -287,23 +290,21 @@ public class Login extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         try {
-            File configDServer = new File("server.conf");
+            File configDServer = Server.SERVER_CONFIG_DEFAULT_FILE;
             //Comprobamos si la configuración de conexion al servidor ya existe
-            if(configDServer.exists()){
+            if(configDServer.exists()&&configDServer.length()>0){
                 //Leemos la configuración del archivo
-                Server server = new Server();
+                Server server = new Server(Server.SERVER_CONFIG_DEFAULT_FILE);
                 // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
-                Key key = new SecretKeySpec(claveCifrado.getBytes(),  0, 16, "AES");
+                Key key = new SecretKeySpec(Seguridad.claveCifrado.getBytes(),  0, 16, "AES");
                 // Se obtiene un cifrador AES
                 Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
-                aes.init(Cipher.ENCRYPT_MODE,key);
-                System.out.println(aes.doFinal("jpmrjmmm".getBytes()));
                 // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
                 aes.init(Cipher.DECRYPT_MODE,key);
-                // Se desencripta
-                byte[] desencriptado=aes.doFinal();  
+                // Se desencripta y se guarda en la variable de servidor
+                server.setPass(new String(aes.doFinal(server.getPassArray())));
             }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | FileNotFoundException | FormatoInvalido | ArchivoNoExiste ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         Principal m = new Principal();
