@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import RobertoPruebas.Conexion;
 import java.util.Arrays;
 
 /**
@@ -272,7 +273,8 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        // TODO add your handling code here:
+        Conexion conexion = new Conexion("root", "localhost", "jpmrjmmm");
+        
         Principal m = new Principal();
         m.setVisible(true);
     }//GEN-LAST:event_jLabel9MouseClicked

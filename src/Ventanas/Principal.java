@@ -233,6 +233,13 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel2);
         resetEtiqueta(jLabel7);
+        JPanel j = new Seguridad();
+        j.setLocation(0,0);
+        j.setSize(jPanel2.getSize());
+        jPanel2.removeAll();
+        jPanel2.add(j,BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked

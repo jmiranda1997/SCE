@@ -22,7 +22,15 @@ public class Seguridad extends javax.swing.JPanel {
      * Creates new form Seguridad
      */
     public Seguridad() {
-        initComponents();
+        try {
+            initComponents();
+            RandomAccessFile archivo= new RandomAccessFile(new File("server.conf"),"rw");
+            archivo.writeBytes(marcaInicio);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -98,7 +106,7 @@ public class Seguridad extends javax.swing.JPanel {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(533, Short.MAX_VALUE))
+                .addContainerGap(573, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
