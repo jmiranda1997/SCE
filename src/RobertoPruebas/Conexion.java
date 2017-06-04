@@ -51,9 +51,27 @@ public class Conexion {
         }
         conexion.close();
     }
-    public void insertarProducto (String codigo, String codBarras,String descrip, double venta, double costo, String estanteria, String columna, String fila, String marca, String unidad, int sucursal) throws SQLException{
+    /**
+     * Metodo que inserta un nuevo producto en la base
+     * @param codigo codigo interno
+     * @param codBarras codigo de barras del producto
+     * @param descrip //descripcion del profucto
+     * @param venta //precio de venta
+     * @param costo //Precio de compra
+     * @param estanteria //estanteria donde se encuentra
+     * @param columna //columna de estanteria
+     * @param fila //fila de estanteria
+     * @param marca //marca del producto
+     * @param unidad //id de la unidad de medicion
+     * @param sucursal //sucursal a la que se quiere agregar
+     * @param existencia
+     * @throws SQLException 
+     */
+    public void insertarProducto (String codigo, String codBarras,String descrip, double venta,
+            double costo, String estanteria, String columna, String fila, String marca, String unidad, 
+            int sucursal, float existencia) throws SQLException{
         conectar(); //permite la conexion con la base de datos
-        int marcaId=0;
+        int marcaId;
         int fraccion=0;
         if(estanteria.isEmpty())
             estanteria=null;
@@ -80,9 +98,44 @@ public class Conexion {
                 columna+","+fila+","+marcaId+","+unidad+","+fraccion+");");
         conexion.close();
     }
+    public void modificarProducto(int id,String codigo, String codBarras,String descrip, double venta,
+            double costo, String estanteria, String columna, String fila, String marca) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        String marcaId;
+        //int fraccion=0;
+        if(estanteria.isEmpty())
+            estanteria=null;
+        if(columna.isEmpty())
+            columna=null;
+        if(fila.isEmpty())
+            fila=null;
+        /*if(unidad!=null)
+            fraccion=1;*/
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado;
+        if(marca.isEmpty())
+            marcaId=null;
+        else{
+            resultado = instruccion.executeQuery("select id from marca where Nombre= '"+marca.toUpperCase()+"';"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+            if(resultado.next())
+                marcaId=resultado.getString(1);
+            else
+            {
+                instruccion=conexion.createStatement();
+                instruccion.executeUpdate("insert into marca (Nombre) values ('"+marca.toUpperCase()+"');");
+                resultado = instruccion.executeQuery("select id from marca where Nombre= '"+marca.toUpperCase()+"';");
+                marcaId=resultado.getString(1);       
+            }
+        }
+        instruccion.executeUpdate("update producto set codigo='"+codigo+"',codigo_barras='"+codBarras+"',descripcion='"+descrip+
+                "',precio_venta="+venta+",precio_costo="+costo+",Estanteria="+estanteria+",Columna="+columna+
+                ",Fila="+fila+",marca_id="+marcaId+" where id="+id+";");
+        conexion.close();
+    }
     /**
-     * Funcion que retorna guarda las sucursales y su id en una matriz 
-     * @return matriz dinamica de tamaño 2xN que alamcena la sucursal y su id
+     * Funcion que retorna guarda las sucursales y su id en una matriz, tambien guarda las unidades 
+     * registradas en la base de datos y su id
+     * @return matriz dinamica de tamaño 2xN que alamcena la sucursal y su id, y esta matriz tambien incluye otra de 2xN
      * @throws SQLException 
      */
     public ArrayList[] obtener_Sucursales_Unidades() throws SQLException{
@@ -107,6 +160,31 @@ public class Conexion {
         }
         conexion.close();
         return matriz;
+    }
+    /**
+     * 
+     * @param id Recibe una id del producto a buscar
+     * @param sucursal Id de la sucursal en donde se busca
+     * @return un arreglo con todos los atributos del producti
+     * @throws SQLException 
+     */
+    public ArrayList obtener_detalleProducto(int id,int sucursal) throws SQLException
+    {
+        ArrayList atributo=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("select p.id, p.codigo, codigo_barras,descripcion, precio_venta, "+
+                "precio_costo,estanteria, columna, fila,u.id ,m.Nombre from producto p left join "+
+                "unidad u on u.id=p.Unidad_id left join marca m ON m.id=p.Marca_id where p.id="+id+";"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        if(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            for(int i=1;i<12;i++)
+            {
+                atributo.add(resultado.getString(i));
+            }
+        }   
+        conexion.close();
+        return atributo;
     }
 
 
