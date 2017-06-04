@@ -5,15 +5,28 @@
  */
 package Ventanas;
 
+import JP.*;
 import RobertoPruebas.Conexion;
+import java.io.File;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
  * @author jonathanmiranda
  */
 public class Login extends javax.swing.JFrame {
-
+    private final String claveCifrado = "Sistema de Control Empresarial";
     /**
      * Creates new form Interfaz
      */
@@ -273,8 +286,26 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        Conexion conexion = new Conexion("root", "localhost", "jpmrjmmm");
-        
+        try {
+            File configDServer = new File("server.conf");
+            //Comprobamos si la configuración de conexion al servidor ya existe
+            if(configDServer.exists()){
+                //Leemos la configuración del archivo
+                Server server = new Server();
+                // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                Key key = new SecretKeySpec(claveCifrado.getBytes(),  0, 16, "AES");
+                // Se obtiene un cifrador AES
+                Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                aes.init(Cipher.ENCRYPT_MODE,key);
+                System.out.println(aes.doFinal("jpmrjmmm".getBytes()));
+                // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
+                aes.init(Cipher.DECRYPT_MODE,key);
+                // Se desencripta
+                byte[] desencriptado=aes.doFinal();  
+            }
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Principal m = new Principal();
         m.setVisible(true);
     }//GEN-LAST:event_jLabel9MouseClicked
