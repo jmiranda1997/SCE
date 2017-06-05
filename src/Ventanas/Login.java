@@ -19,6 +19,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -50,8 +51,10 @@ public class Login extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -129,30 +132,38 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 690));
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 228, 166, -1));
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 48)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("LOG IN");
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 162, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("USUARIO");
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("CONTRASEÑA");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, -1));
 
         jSeparator4.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 371, -1));
 
         jSeparator5.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, 371, 6));
 
         jTextField2.setBackground(new java.awt.Color(0, 0, 0));
         jTextField2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jTextField2.setForeground(new java.awt.Color(255, 255, 255));
         jTextField2.setText("INGRESE EL NOMBRE DE USUARIO");
         jTextField2.setBorder(null);
+        jTextField2.setCaretColor(new java.awt.Color(255, 255, 255));
         jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField2FocusGained(evt);
@@ -171,17 +182,20 @@ public class Login extends javax.swing.JFrame {
                 jTextField2ActionPerformed(evt);
             }
         });
+        jPanel3.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 371, 26));
 
         jPasswordField1.setBackground(new java.awt.Color(0, 0, 0));
         jPasswordField1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jPasswordField1.setForeground(new java.awt.Color(255, 255, 255));
         jPasswordField1.setText("jPasswordField1");
         jPasswordField1.setBorder(null);
+        jPasswordField1.setCaretColor(new java.awt.Color(255, 255, 255));
         jPasswordField1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jPasswordField1FocusGained(evt);
             }
         });
+        jPanel3.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 371, 30));
 
         jTextField3.setBackground(new java.awt.Color(0, 0, 0));
         jTextField3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -193,6 +207,7 @@ public class Login extends javax.swing.JFrame {
                 jTextField3MouseClicked(evt);
             }
         });
+        jPanel3.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(268, 552, -1, -1));
 
         jLabel9.setBackground(new java.awt.Color(255, 0, 0));
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -204,6 +219,7 @@ public class Login extends javax.swing.JFrame {
                 jLabel9MouseClicked(evt);
             }
         });
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 513, 192, 84));
 
         jCheckBox1.setBackground(new java.awt.Color(0, 0, 0));
         jCheckBox1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -211,64 +227,30 @@ public class Login extends javax.swing.JFrame {
         jCheckBox1.setText("GUARDAR CONTRASEÑA");
         jCheckBox1.setBorder(null);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(153, 153, 153)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator2)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel7)
-                                .addComponent(jSeparator4)
-                                .addComponent(jSeparator5, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
-                                .addComponent(jTextField2)
-                                .addComponent(jPasswordField1)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(9, 9, 9))))))
-                .addContainerGap(29, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(149, 149, 149)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
-                .addGap(40, 40, 40)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(148, 148, 148))
-        );
+      
+      
+      
+      
+      
+        jPanel3.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, -1, -1));
+
+        jLabel10.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
+        jLabel10.setOpaque(true);
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(416, 11, -1, -1));
+
+      
+      
+      
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 450, 690));
+
+        getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -304,9 +286,14 @@ public class Login extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        Main m = new Main();
+        Principal m = new Principal();
         m.setVisible(true);
     }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jLabel10MouseClicked
 
     /**
      * @param args the command line arguments
@@ -319,7 +306,7 @@ public class Login extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -353,6 +340,7 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
