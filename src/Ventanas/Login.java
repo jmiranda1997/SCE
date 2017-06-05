@@ -5,21 +5,81 @@
  */
 package Ventanas;
 
+
+import Excepciones.ArchivoNoExiste;
+import Excepciones.FormatoInvalido;
+import Excepciones.NoSePuedeEscribirArchivo;
+import JP.*;
+import RobertoPruebas.Conexion;
+import static Ventanas.Seguridad.claveCifrado;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import Ventanas.*;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author jonathanmiranda
  */
 public class Login extends javax.swing.JFrame {
-
+    private Server server;
+    private Conexion conexion;
+    private UsuarioG user;
     /**
      * Creates new form Interfaz
      */
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+        try {
+            File configDServer = Server.SERVER_CONFIG_DEFAULT_FILE;
+            //Comprobamos si la configuración de conexion al servidor ya existe
+            if(configDServer.exists()&&configDServer.length()>0){
+                //Leemos la configuración del archivo
+                server = new Server(Server.SERVER_CONFIG_DEFAULT_FILE);
+                // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                Key key = new SecretKeySpec(Seguridad.claveCifrado.getBytes(),  0, 16, "AES");
+                // Se obtiene un cifrador AES
+                Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
+                aes.init(Cipher.DECRYPT_MODE,key);
+                // Se desencripta y se guarda en la variable de servidor
+                server.setPass(new String(aes.doFinal(server.getPassArray())));
+                conexion= new Conexion(server.getUser(), server.getIp(), server.getPass(), server.getBd());
+                //Comprobamos si hay una sesión guardada
+                File configDUser=UsuarioG.LOGGED_USER_DEFAULT_FILE;
+                if(configDUser.exists()&&configDUser.length()>0){
+                    user= new UsuarioG(configDUser);
+                    // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                    key = new SecretKeySpec(Seguridad.claveCifrado.getBytes(),  0, 16, "AES");
+                    // Se obtiene un cifrador AES
+                    aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                    // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
+                    aes.init(Cipher.DECRYPT_MODE,key);
+                    // Se desencripta y se guarda en la variable de servidor
+                    user.setPass(new String(aes.doFinal(user.getPassBytes())));
+                    logueo(user.getUser(),user.getPass(),true);
+                }
+                else{
+                    this.setVisible(true);
+                }
+            }
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | FileNotFoundException | FormatoInvalido | ArchivoNoExiste ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -80,7 +140,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("NOMBRE DE LA EMPRESA");
+        jLabel2.setText("REPUESTOS PESADOS MQ, S.A.");
 
         jSeparator3.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -105,9 +165,9 @@ public class Login extends javax.swing.JFrame {
                                     .addComponent(jLabel1)))
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(118, 118, 118)
+                        .addGap(86, 86, 86)
                         .addComponent(jLabel2)))
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,11 +345,52 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        // TODO add your handling code here:
-        Principal m = new Principal();
-        m.setVisible(true);
+        logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());     
     }//GEN-LAST:event_jLabel9MouseClicked
-
+    private void logueo(String usuario, String password, boolean guardar){
+        if(!server.getUser().equals("")){
+            try {
+                if(conexion.login(usuario,password)==1){
+                    if(guardar){
+                        // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                        Key key = new SecretKeySpec(claveCifrado.getBytes(),  0, 16, "AES");
+                        // Se obtiene un cifrador AES
+                        Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                        // Se inicializa el cifrador, se pone en modo de cifrado y se le envia la clave
+                        aes.init(Cipher.ENCRYPT_MODE,key);
+                        // Se encripta
+                        byte[] encriptado=aes.doFinal(password.getBytes());
+                        user=new UsuarioG(usuario, encriptado);
+                        user.escribirArchivo(UsuarioG.LOGGED_USER_DEFAULT_FILE);
+                    }
+                    Principal m = new Principal(conexion);
+                    m.setVisible(true);
+                    this.setVisible(false);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Datos inválidos","Error de login",JOptionPane.WARNING_MESSAGE);
+                }
+                jTextField2.setText("");
+                jPasswordField1.setText("");
+                jTextField2.requestFocus();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchPaddingException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadPaddingException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSePuedeEscribirArchivo ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         // TODO add your handling code here:
         System.exit(0);
@@ -332,7 +433,7 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login()/*.setVisible(true)*/;
             }
         });
     }
