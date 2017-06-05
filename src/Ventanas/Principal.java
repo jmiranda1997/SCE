@@ -247,6 +247,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel2.add(j,BorderLayout.CENTER);
         jPanel2.revalidate();
         jPanel2.repaint();
+        jPanel1.repaint();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked

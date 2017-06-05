@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -85,5 +86,17 @@ public class Conexion {
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("DELETE FROM usuario WHERE Usuario='"+usuario+"'"); //se guarda el resultado de la instruccion
         conexion.close();
+    }
+    public ArrayList<String> obtenerUsuarios() throws SQLException{
+        ArrayList<String> users=new ArrayList<>();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT Usuario FROM usuario"); //se guarda el resultado de la instruccion
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            users= (ArrayList<String>) resultado.getArray(1);
+        }
+        conexion.close();
+        return users;
     }
 }
