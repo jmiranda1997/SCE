@@ -7,8 +7,10 @@ package Ventanas;
 
 import Excepciones.ArchivoNoExiste;
 import Excepciones.FormatoInvalido;
+import Excepciones.NoSePuedeEscribirArchivo;
 import JP.*;
 import RobertoPruebas.Conexion;
+import static Ventanas.Seguridad.claveCifrado;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
@@ -33,6 +35,7 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
     private Server server;
     private Conexion conexion;
+    private UsuarioG user;
     /**
      * Creates new form Interfaz
      */
@@ -57,7 +60,7 @@ public class Login extends javax.swing.JFrame {
                 //Comprobamos si hay una sesión guardada
                 File configDUser=UsuarioG.LOGGED_USER_DEFAULT_FILE;
                 if(configDUser.exists()&&configDUser.length()>0){
-                    UsuarioG user= new UsuarioG(configDUser);
+                    user= new UsuarioG(configDUser);
                     // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
                     key = new SecretKeySpec(Seguridad.claveCifrado.getBytes(),  0, 16, "AES");
                     // Se obtiene un cifrador AES
@@ -67,6 +70,9 @@ public class Login extends javax.swing.JFrame {
                     // Se desencripta y se guarda en la variable de servidor
                     user.setPass(new String(aes.doFinal(user.getPassBytes())));
                     logueo(user.getUser(),user.getPass(),true);
+                }
+                else{
+                    this.setVisible(true);
                 }
             }
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | FileNotFoundException | FormatoInvalido | ArchivoNoExiste ex) {
@@ -331,8 +337,21 @@ public class Login extends javax.swing.JFrame {
         if(!server.getUser().equals("")){
             try {
                 if(conexion.login(usuario,password)==1){
+                    if(guardar){
+                        // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                        Key key = new SecretKeySpec(claveCifrado.getBytes(),  0, 16, "AES");
+                        // Se obtiene un cifrador AES
+                        Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                        // Se inicializa el cifrador, se pone en modo de cifrado y se le envia la clave
+                        aes.init(Cipher.ENCRYPT_MODE,key);
+                        // Se encripta
+                        byte[] encriptado=aes.doFinal(password.getBytes());
+                        user=new UsuarioG(usuario, encriptado);
+                        user.escribirArchivo(UsuarioG.LOGGED_USER_DEFAULT_FILE);
+                    }
                     Principal m = new Principal(conexion);
-                    m.setVisible(true); 
+                    m.setVisible(true);
+                    this.setVisible(false);
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Datos inválidos","Error de login",JOptionPane.WARNING_MESSAGE);
@@ -342,6 +361,18 @@ public class Login extends javax.swing.JFrame {
                 jTextField2.requestFocus();
                 
             } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchPaddingException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadPaddingException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSePuedeEscribirArchivo ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -384,7 +415,7 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login()/*.setVisible(true)*/;
             }
         });
     }

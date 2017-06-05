@@ -8,8 +8,10 @@ package Ventanas;
 import Excepciones.NoSePuedeEscribirArchivo;
 import JP.*;
 import RobertoPruebas.*;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
@@ -42,6 +44,12 @@ public class Seguridad extends javax.swing.JPanel {
     public Seguridad(Conexion conexion) {
         initComponents();  
         this.conexion=conexion;
+        eliminarPanel.setVisible(false);
+        ingresarPanel.setVisible(false);
+        conexionPanel.setVisible(false);
+        usuariosPanel1.setVisible(false);
+        ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
+        conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
     }
 
     /**
@@ -75,13 +83,14 @@ public class Seguridad extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         userIButtton = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        gesConButton = new javax.swing.JLabel();
+        gesUsuariosButton = new javax.swing.JLabel();
         usuariosPanel1 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        verUsElButton = new javax.swing.JLabel();
+        verUsModButton = new javax.swing.JLabel();
+        verUsInButton = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        logoutButton = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setPreferredSize(new java.awt.Dimension(940, 650));
@@ -171,6 +180,10 @@ public class Seguridad extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        eliminarPanel.setOpaque(false);
+
+        jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Usuario:");
 
         userEButton.setBackground(new java.awt.Color(255, 0, 0));
@@ -208,10 +221,18 @@ public class Seguridad extends javax.swing.JPanel {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
+        ingresarPanel.setOpaque(false);
+
+        jLabel6.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Nombre de Usuario:");
 
+        jLabel7.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Contraseña:");
 
+        jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Confirmar Contraseña:");
 
         userIButtton.setBackground(new java.awt.Color(255, 0, 0));
@@ -242,7 +263,7 @@ public class Seguridad extends javax.swing.JPanel {
                     .addComponent(userIField))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ingresarPanelLayout.createSequentialGroup()
-                .addContainerGap(95, Short.MAX_VALUE)
+                .addContainerGap(108, Short.MAX_VALUE)
                 .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(86, 86, 86))
         );
@@ -266,45 +287,62 @@ public class Seguridad extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel10.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel10.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Gestión de Conexión");
-        jLabel10.setOpaque(true);
-
-        jLabel11.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel11.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Gestión de Usuarios");
-        jLabel11.setOpaque(true);
-
-        jLabel13.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel13.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Eliminación");
-        jLabel13.setOpaque(true);
-        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+        gesConButton.setBackground(new java.awt.Color(255, 0, 0));
+        gesConButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        gesConButton.setForeground(new java.awt.Color(255, 255, 255));
+        gesConButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        gesConButton.setText("Gestión de Conexión");
+        gesConButton.setOpaque(true);
+        gesConButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel13MouseClicked(evt);
+                gesConButtonMouseClicked(evt);
             }
         });
 
-        jLabel14.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel14.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("Modificación");
-        jLabel14.setOpaque(true);
+        gesUsuariosButton.setBackground(new java.awt.Color(255, 0, 0));
+        gesUsuariosButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        gesUsuariosButton.setForeground(new java.awt.Color(255, 255, 255));
+        gesUsuariosButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        gesUsuariosButton.setText("Gestión de Usuarios");
+        gesUsuariosButton.setOpaque(true);
+        gesUsuariosButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gesUsuariosButtonMouseClicked(evt);
+            }
+        });
 
-        jLabel15.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel15.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("Ingreso");
-        jLabel15.setOpaque(true);
+        usuariosPanel1.setOpaque(false);
+
+        verUsElButton.setBackground(new java.awt.Color(255, 0, 0));
+        verUsElButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        verUsElButton.setForeground(new java.awt.Color(255, 255, 255));
+        verUsElButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        verUsElButton.setText("Eliminación");
+        verUsElButton.setOpaque(true);
+        verUsElButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                verUsElButtonMouseClicked(evt);
+            }
+        });
+
+        verUsModButton.setBackground(new java.awt.Color(255, 0, 0));
+        verUsModButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        verUsModButton.setForeground(new java.awt.Color(255, 255, 255));
+        verUsModButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        verUsModButton.setText("Modificación");
+        verUsModButton.setOpaque(true);
+
+        verUsInButton.setBackground(new java.awt.Color(255, 0, 0));
+        verUsInButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        verUsInButton.setForeground(new java.awt.Color(255, 255, 255));
+        verUsInButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        verUsInButton.setText("Ingreso");
+        verUsInButton.setOpaque(true);
+        verUsInButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                verUsInButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout usuariosPanel1Layout = new javax.swing.GroupLayout(usuariosPanel1);
         usuariosPanel1.setLayout(usuariosPanel1Layout);
@@ -312,11 +350,11 @@ public class Seguridad extends javax.swing.JPanel {
             usuariosPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, usuariosPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(verUsInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(verUsModButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(verUsElButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         usuariosPanel1Layout.setVerticalGroup(
@@ -324,9 +362,9 @@ public class Seguridad extends javax.swing.JPanel {
             .addGroup(usuariosPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(usuariosPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(verUsElButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(verUsModButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(verUsInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -337,49 +375,68 @@ public class Seguridad extends javax.swing.JPanel {
             }
         });
 
+        logoutButton.setBackground(new java.awt.Color(255, 0, 0));
+        logoutButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        logoutButton.setForeground(new java.awt.Color(255, 255, 255));
+        logoutButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logoutButton.setText("Log Out");
+        logoutButton.setOpaque(true);
+        logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(145, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(ingresarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(conexionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(59, 59, 59))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(eliminarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(275, 275, 275))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(usuariosPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(163, 163, 163)))))
-                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(ingresarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(conexionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(usuariosPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(163, 163, 163))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addComponent(eliminarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(128, 128, 128))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(gesUsuariosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gesConButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(gesConButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(gesUsuariosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(usuariosPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(eliminarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(conexionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ingresarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(240, 240, 240))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                        .addComponent(conexionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(240, 240, 240))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ingresarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -398,6 +455,11 @@ public class Seguridad extends javax.swing.JPanel {
                 Server server=new Server(ipField.getText(), userField.getText(),encriptado , bdField.getText());
                 server.escribirArchivo(Server.SERVER_CONFIG_DEFAULT_FILE);
                 JOptionPane.showMessageDialog(null, "Archivo Escrito","Escritura exitosa", JOptionPane.INFORMATION_MESSAGE);
+                ipField.setText("");
+                userField.setText("");
+                passField.setText("");
+                bdField.setText("");
+                limpiar();
             } catch (NoSePuedeEscribirArchivo | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
                 JOptionPane.showMessageDialog(null, ex, "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -420,23 +482,68 @@ public class Seguridad extends javax.swing.JPanel {
         System.exit(0);
     }//GEN-LAST:event_jLabel9MouseClicked
 
-    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+    private void verUsElButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verUsElButtonMouseClicked
         try {
+            int tamano=usuariosCombo1.getModel().getSize();
+            for (int i = 0; i < tamano; i++) {
+                usuariosCombo1.removeItemAt(0);
+            }
             ArrayList modelo= conexion.obtenerUsuarios();
-            usuariosCombo1.setModel((ComboBoxModel)modelo );
+            for(int i=0;i<modelo.size();i++){
+                usuariosCombo1.addItem((String) modelo.get(i));
+            }
+            usuariosCombo1.setSelectedIndex(-1);
+            eliminarPanel.setVisible(true);
+            usuariosPanel1.setVisible(false);
         } catch (SQLException ex) {
             Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jLabel13MouseClicked
+    }//GEN-LAST:event_verUsElButtonMouseClicked
+
+    private void gesUsuariosButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gesUsuariosButtonMouseClicked
+       usuariosPanel1.setVisible(true);
+       gesConButton.setEnabled(false);
+    }//GEN-LAST:event_gesUsuariosButtonMouseClicked
+
+    private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutButtonMouseClicked
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(UsuarioG.LOGGED_USER_DEFAULT_FILE));
+            bw.write("");
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        System.exit(0);
+    }//GEN-LAST:event_logoutButtonMouseClicked
+
+    private void verUsInButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verUsInButtonMouseClicked
+        ingresarPanel.setVisible(true);
+        usuariosPanel1.setVisible(false);
+    }//GEN-LAST:event_verUsInButtonMouseClicked
+
+    private void gesConButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gesConButtonMouseClicked
+        conexionPanel.setVisible(true);
+        gesUsuariosButton.setEnabled(false);
+    }//GEN-LAST:event_gesConButtonMouseClicked
     private void eliminarUser(){
-        if(!usuariosCombo1.getSelectedItem().equals("")){
+        if(usuariosCombo1.getSelectedIndex()!=-1){
             try {
                 conexion.eliminarUsuario((String) usuariosCombo1.getSelectedItem());
+                JOptionPane.showMessageDialog(null, "Eliminado exitoso","Eliminación",JOptionPane.INFORMATION_MESSAGE);
+                limpiar();
             } catch (SQLException ex) {
                 Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
+    
     private void ingresoUserNuevo(){
         String pass1=new String(passIField.getPassword()),pass2=new String(passIField2.getPassword());
         String user=userIField.getText();
@@ -444,6 +551,10 @@ public class Seguridad extends javax.swing.JPanel {
             try {
                 if(conexion.crearUsuario(user, pass1)==1){
                     JOptionPane.showMessageDialog(null, "Ingreso exitoso","Ingreso",JOptionPane.INFORMATION_MESSAGE);
+                    passIField.setText("");
+                    passIField2.setText("");
+                    userIField.setText("");
+                    limpiar();
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
@@ -452,20 +563,28 @@ public class Seguridad extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Ingrese adecuadamente los datos","Error",JOptionPane.WARNING_MESSAGE);
         }
     }
+    private void limpiar(){
+        eliminarPanel.setVisible(false);
+        ingresarPanel.setVisible(false);
+        conexionPanel.setVisible(false);
+        usuariosPanel1.setVisible(false);
+        ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
+        conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
+        gesConButton.setEnabled(true);
+        gesUsuariosButton.setEnabled(true);
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField bdField;
     private javax.swing.JPanel conexionPanel;
     private javax.swing.JPanel eliminarPanel;
+    private javax.swing.JLabel gesConButton;
+    private javax.swing.JLabel gesUsuariosButton;
     private javax.swing.JLabel guardarDBButton;
     private javax.swing.JPanel ingresarPanel;
     private javax.swing.JTextField ipField;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -474,6 +593,7 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel logoutButton;
     private javax.swing.JPasswordField passField;
     private javax.swing.JPasswordField passIField;
     private javax.swing.JPasswordField passIField2;
@@ -483,5 +603,8 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JTextField userIField;
     private javax.swing.JComboBox<String> usuariosCombo1;
     private javax.swing.JPanel usuariosPanel1;
+    private javax.swing.JLabel verUsElButton;
+    private javax.swing.JLabel verUsInButton;
+    private javax.swing.JLabel verUsModButton;
     // End of variables declaration//GEN-END:variables
 }

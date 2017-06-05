@@ -84,7 +84,7 @@ public class Conexion {
     public void eliminarUsuario(String usuario) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("DELETE FROM usuario WHERE Usuario='"+usuario+"'"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("DELETE FROM usuario WHERE Usuario='"+usuario+"'"); //se guarda el resultado de la instruccion
         conexion.close();
     }
     public ArrayList obtenerUsuarios() throws SQLException{
