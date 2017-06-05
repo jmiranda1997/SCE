@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import RobertoPruebas.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -15,7 +16,7 @@ import javax.swing.JPanel;
  * @author jonathanmiranda
  */
 public class Principal extends javax.swing.JFrame {
-
+    Conexion conexion;
     /**
      * Creates new form Principal
      */
@@ -24,6 +25,12 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setEtiqueta(jLabel2);
         
+    }
+    public Principal(Conexion con){
+        initComponents();
+        setLocationRelativeTo(null);
+        setEtiqueta(jLabel2);
+        this.conexion=con;
     }
     public void setEtiqueta(JLabel etiqueta){
         etiqueta.setBackground(Color.BLACK);
@@ -233,7 +240,7 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel2);
         resetEtiqueta(jLabel7);
-        JPanel j = new Seguridad();
+        JPanel j = new Seguridad(conexion);
         j.setLocation(0,0);
         j.setSize(jPanel2.getSize());
         jPanel2.removeAll();

@@ -26,9 +26,9 @@ public class UsuarioG {
     public static final File LOGGED_USER_DEFAULT_FILE= new File("login.conf");
     private String user="", pass="";
     private byte[] passBytes=null;
-    public UsuarioG(String user, String pass){
+    public UsuarioG(String user, byte[] pass){
         this.user=user;
-        this.pass=pass;
+        this.passBytes=pass;
     }
     public UsuarioG(){}
     public UsuarioG(File archivo) throws ArchivoNoExiste, FormatoInvalido{
