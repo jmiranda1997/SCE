@@ -7,41 +7,41 @@ package Ventanas;
 
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author jonathan Miranda
  */
-public class DialogodeMensaje extends javax.swing.JFrame {
+public class DialogodeConfrimacion extends javax.swing.JFrame {
 
-    /**
-     * Creates new form DialogodeMensaje
-     */
     public static final int ICONO_ERROR = 1;
     public static final int ICONO_INFORMACION = 2;
     public static final int ICONO_INTERROGANTE = 3;
+    private int seleccion;
     private Conexion Conexion_DB = new Conexion();
-//    private DialogodeMensaje Dialogo = new DialogodeMensaje();
-    public DialogodeMensaje() {
+    private String Nombre;
+    private DialogodeMensaje Dialogo = new DialogodeMensaje();
+    public int estado = 0;
+    public DialogodeConfrimacion() {
         initComponents();
-        setLocationRelativeTo(null);
     }
-    
-    public void setContenido(String Titulo, String Mensaje, int Icono){
+    public void setContenido(String Titulo, String Mensaje, int Icono, String Nombre){
         this.lbl_Titulo.setText(Titulo);
         this.Mensaje.setText(Mensaje);
+        this.seleccion = Icono;
+        this.Nombre =Nombre;
+        estado = 0;
         if (Icono == 1) {
             this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/error.png")));
+            this.btn_Cancelar.setVisible(false);
         }else if (Icono == 2){
             this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/info.png")));
+            this.btn_Cancelar.setVisible(false);
         }else if (Icono == 3){
-            this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/quesion.png")));
+            this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/question.png")));
+            this.btn_Cancelar.setVisible(true);
         }
-        
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +53,7 @@ public class DialogodeMensaje extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        btn_Cancelar = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lbl_Titulo = new javax.swing.JLabel();
         Icono = new javax.swing.JLabel();
@@ -60,12 +61,22 @@ public class DialogodeMensaje extends javax.swing.JFrame {
         btn_Aceptar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btn_Cancelar.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Cancelar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        btn_Cancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Cancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Cancelar.setText("CANCELAR");
+        btn_Cancelar.setOpaque(true);
+        btn_Cancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_CancelarMouseClicked(evt);
+            }
+        });
+        jPanel1.add(btn_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 160, 40));
 
         jPanel2.setBackground(new java.awt.Color(255, 0, 0));
 
@@ -114,13 +125,39 @@ public class DialogodeMensaje extends javax.swing.JFrame {
         });
         jPanel1.add(btn_Aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 160, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 200));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_CancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CancelarMouseClicked
+        // TODO add your handling code here:
+        estado = 1;
+        this.setVisible(false);
+    }//GEN-LAST:event_btn_CancelarMouseClicked
+
     private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
         // TODO add your handling code here:
+        if (seleccion == 3) {
+            try {
+                Conexion_DB.desHabilitarProvedor(Nombre);
+            } catch (SQLException ex) {
+                Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+                Dialogo.setVisible(true);
+            }
+        }
+        estado = 1;
         this.setVisible(false);
     }//GEN-LAST:event_btn_AceptarMouseClicked
 
@@ -141,20 +178,20 @@ public class DialogodeMensaje extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DialogodeMensaje.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogodeConfrimacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DialogodeMensaje.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogodeConfrimacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DialogodeMensaje.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogodeConfrimacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DialogodeMensaje.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogodeConfrimacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DialogodeMensaje().setVisible(true);
+                new DialogodeConfrimacion().setVisible(true);
             }
         });
     }
@@ -163,6 +200,7 @@ public class DialogodeMensaje extends javax.swing.JFrame {
     private javax.swing.JLabel Icono;
     private javax.swing.JLabel Mensaje;
     private javax.swing.JLabel btn_Aceptar;
+    private javax.swing.JLabel btn_Cancelar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lbl_Titulo;

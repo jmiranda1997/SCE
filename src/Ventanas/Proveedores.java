@@ -9,6 +9,7 @@ import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
 /**
@@ -22,8 +23,10 @@ public class Proveedores extends javax.swing.JPanel {
      */
     private Conexion Conexion_DB = new Conexion();
     private DialogodeMensaje Dialogo = new DialogodeMensaje();
+    private DialogodeConfrimacion DialogoConfirmacion = new DialogodeConfrimacion();
     public Proveedores() {
         initComponents();
+        tabla_prov.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         try {
             tabla_prov.setModel(Conexion_DB.obtenerProceedores());
         } catch (SQLException ex) {
@@ -61,7 +64,6 @@ public class Proveedores extends javax.swing.JPanel {
         sep_Saldo = new javax.swing.JSeparator();
         txt_Saldo = new javax.swing.JTextField();
         lbl_Saldos = new javax.swing.JLabel();
-        rbtn_Habilitado = new javax.swing.JRadioButton();
         txt_Filtro = new javax.swing.JTextField();
         sep_Filtro = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
@@ -88,9 +90,22 @@ public class Proveedores extends javax.swing.JPanel {
         tabla_prov.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tabla_prov.setShowVerticalLines(false);
         tabla_prov.getTableHeader().setReorderingAllowed(false);
+        tabla_prov.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabla_provMousePressed(evt);
+            }
+        });
+        tabla_prov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabla_provKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tabla_provKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla_prov);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 319, 940, 330));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 940, 320));
 
         txt_Nit.setBackground(new java.awt.Color(0, 0, 0));
         txt_Nit.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -302,14 +317,6 @@ public class Proveedores extends javax.swing.JPanel {
         lbl_Saldos.setText("SALDO");
         add(lbl_Saldos, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 100, -1, -1));
 
-        rbtn_Habilitado.setBackground(new java.awt.Color(0, 0, 0));
-        rbtn_Habilitado.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        rbtn_Habilitado.setForeground(new java.awt.Color(255, 255, 255));
-        rbtn_Habilitado.setSelected(true);
-        rbtn_Habilitado.setText("HABILITADO");
-        rbtn_Habilitado.setBorder(null);
-        add(rbtn_Habilitado, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 180, -1));
-
         txt_Filtro.setBackground(new java.awt.Color(0, 0, 0));
         txt_Filtro.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txt_Filtro.setForeground(new java.awt.Color(255, 255, 255));
@@ -343,7 +350,7 @@ public class Proveedores extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 0, 0));
         jLabel2.setText("*");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 180, -1, 20));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, -1, 20));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 0, 0));
@@ -353,15 +360,15 @@ public class Proveedores extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("CAMPOS OBLIGATORIOS");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 180, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 180, -1, 20));
 
         rbtn_Credito.setBackground(new java.awt.Color(0, 0, 0));
         rbtn_Credito.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         rbtn_Credito.setForeground(new java.awt.Color(255, 255, 255));
         rbtn_Credito.setSelected(true);
-        rbtn_Credito.setText("EFECTIVO");
+        rbtn_Credito.setText("CREDITO");
         rbtn_Credito.setBorder(null);
-        add(rbtn_Credito, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 200, -1));
+        add(rbtn_Credito, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 400, -1));
 
         btn_Eliminar.setBackground(new java.awt.Color(255, 0, 0));
         btn_Eliminar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -376,15 +383,25 @@ public class Proveedores extends javax.swing.JPanel {
         });
         add(btn_Eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 300, 84));
     }// </editor-fold>//GEN-END:initComponents
-
+    private void filaSeleccionada(){
+        int selecion = tabla_prov.getSelectedRow();
+        
+        if (selecion != -1) {
+            txt_Nombre.setText(tabla_prov.getValueAt(selecion, 0).toString());
+            txt_Nit.setText(tabla_prov.getValueAt(selecion, 1).toString());
+            rbtn_Credito.setSelected((tabla_prov.getValueAt(selecion, 2).toString().equals("SI")));
+            txt_Saldo.setText(tabla_prov.getValueAt(selecion, 3).toString());
+        }
+            
+    }
     private void txt_NitFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NitFocusGained
         // TODO add your handling code here:
-        if(txt_Nit.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Nit.setText("");
+        if(txt_Nit.getText().equals("INGRESE EL NIT DEL PROVEEDOR (SI APLICA)"))txt_Nit.setText("");
     }//GEN-LAST:event_txt_NitFocusGained
 
     private void txt_NitFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NitFocusLost
         // TODO add your handling code here:
-        if(txt_Nit.getText().equals("")) txt_Nit.setText("INGRESE EL NOMBRE DE USUARIO");
+        if(txt_Nit.getText().equals("")) txt_Nit.setText("INGRESE EL NIT DEL PROVEEDOR (SI APLICA)");
     }//GEN-LAST:event_txt_NitFocusLost
 
     private void txt_NitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_NitMousePressed
@@ -448,7 +465,7 @@ public class Proveedores extends javax.swing.JPanel {
     private void btn_GuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GuardarMouseClicked
        try {
             if (!txt_Nombre.getText().equals("INGRESE EL NOMBRE DEL PROVEEDOR")){
-                Conexion_DB.crearProveedor(txt_Nombre.getText(), txt_Nit.getText(), !rbtn_Habilitado.isSelected());
+                Conexion_DB.crearProveedor(txt_Nombre.getText(), txt_Nit.getText(), rbtn_Credito.isSelected());
                 Dialogo.setContenido("INFORMACION", "EL PROVEEDOR FUE CREADO EXITOSAMENTE!", DialogodeMensaje.ICONO_INFORMACION);
                 Dialogo.setVisible(true);
                 tabla_prov.setModel(Conexion_DB.obtenerProceedores());
@@ -465,13 +482,17 @@ public class Proveedores extends javax.swing.JPanel {
     private void btn_NuevoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_NuevoMouseClicked
         btn_Nuevo.setEnabled(false);
         btn_Guardar.setEnabled(true);
-        rbtn_Habilitado.setEnabled(false);
         txt_Nit.setText("INGRESE EL NIT DEL PROVEEDOR (SI APLICA)");
         txt_Nombre.setText("INGRESE EL NOMBRE DEL PROVEEDOR");
         txt_Deuda.setText("0.00");
         txt_Saldo.setText("0.00");
         txt_abonos.setText("0.00");
-        
+        try {
+            tabla_prov.setModel(Conexion_DB.obtenerProceedores());
+        } catch (SQLException ex) {
+             Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+                Dialogo.setVisible(true);
+        }
     }//GEN-LAST:event_btn_NuevoMouseClicked
 
     private void txt_NombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_NombreActionPerformed
@@ -483,11 +504,11 @@ public class Proveedores extends javax.swing.JPanel {
     }//GEN-LAST:event_txt_NombreMousePressed
 
     private void txt_NombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NombreFocusLost
-        // TODO add your handling code here:
+        if (txt_Nombre.getText().equals("")) txt_Nombre.setText("INGRESE EL NOMBRE DEL PROVEEDOR");
     }//GEN-LAST:event_txt_NombreFocusLost
 
     private void txt_NombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NombreFocusGained
-        // TODO add your handling code here:
+        if (txt_Nombre.getText().equals("INGRESE EL NOMBRE DEL PROVEEDOR")) txt_Nombre.setText("");
     }//GEN-LAST:event_txt_NombreFocusGained
 
     private void txt_FiltroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_FiltroFocusGained
@@ -507,8 +528,40 @@ public class Proveedores extends javax.swing.JPanel {
     }//GEN-LAST:event_txt_FiltroActionPerformed
 
     private void btn_EliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_EliminarMouseClicked
-        // TODO add your handling code here:
+        int selccion = tabla_prov.getSelectedRow();
+        if (selccion != -1) {
+            try {
+                DialogoConfirmacion.setContenido("CONFIRMACION", "¿ESTA SEGURO QUE DESEA ELIMINAR EL PROVEEDOR?", DialogodeMensaje.ICONO_INTERROGANTE, tabla_prov.getValueAt(selccion, 0).toString());
+                DialogoConfirmacion.setVisible(true);
+                while(DialogoConfirmacion.estado == 0){
+                    
+                }
+                tabla_prov.setModel(Conexion_DB.obtenerProceedores());
+            } catch (SQLException ex) {
+                Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+                Dialogo.setVisible(true);
+            }
+        }else {
+            Dialogo.setContenido("ERROR", "DEBE SELECCIONAR UN PROVEEDOR PARA PODER ELIMINARLO", DialogodeMensaje.ICONO_ERROR);
+                Dialogo.setVisible(true);
+        }
     }//GEN-LAST:event_btn_EliminarMouseClicked
+
+    private void tabla_provKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_provKeyPressed
+
+    }//GEN-LAST:event_tabla_provKeyPressed
+
+    private void tabla_provMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_provMousePressed
+        filaSeleccionada();
+        btn_Nuevo.setEnabled(true);
+    }//GEN-LAST:event_tabla_provMousePressed
+
+    private void tabla_provKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_provKeyReleased
+        if (evt.getKeyCode() == 38 || evt.getKeyCode()== 40)
+        {
+            filaSeleccionada();
+        }
+    }//GEN-LAST:event_tabla_provKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -526,7 +579,6 @@ public class Proveedores extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_Nombre;
     private javax.swing.JLabel lbl_Saldos;
     private javax.swing.JRadioButton rbtn_Credito;
-    private javax.swing.JRadioButton rbtn_Habilitado;
     private javax.swing.JSeparator sep_Abonos;
     private javax.swing.JSeparator sep_Deuda;
     private javax.swing.JSeparator sep_Filtro;
