@@ -69,9 +69,9 @@ public class Conexion {
      */
     public void insertarProducto (String codigo, String codBarras,String descrip, double venta,
             double costo, String estanteria, String columna, String fila, String marca, String unidad, 
-            int sucursal, float existencia) throws SQLException{
+            int sucursal, double existencia) throws SQLException{
         conectar(); //permite la conexion con la base de datos
-        int marcaId;
+        int marcaId=0;
         int fraccion=0;
         if(estanteria.isEmpty())
             estanteria=null;
@@ -89,16 +89,25 @@ public class Conexion {
         {
             instruccion=conexion.createStatement();
             instruccion.executeUpdate("insert into marca (Nombre) values ('"+marca.toUpperCase()+"');");
-            resultado = instruccion.executeQuery("select id from marca where Nombre= '"+marca.toUpperCase()+"';");
-            marcaId=resultado.getInt(1);       
+             resultado = instruccion.executeQuery("select id from marca where Nombre= '"+marca.toUpperCase()+"';");
+            if(resultado.next())
+            {   
+                marcaId=resultado.getInt(1);      
+            }
         }
-       
+        instruccion=conexion.createStatement();
         instruccion.executeUpdate("insert into producto (codigo,codigo_barras,descripcion,precio_venta,precio_costo,Estanteria,"
                 +"Columna,Fila,marca_id,unidad_id,fraccion) values ('"+codigo+"','"+codBarras+"','"+descrip+"',"+venta+","+costo+","+estanteria+","+
                 columna+","+fila+","+marcaId+","+unidad+","+fraccion+");");
+        instruccion=conexion.createStatement();
+        resultado = instruccion.executeQuery("select max(id) from producto;");
+        instruccion=conexion.createStatement();
+        if(resultado.next())
+            instruccion.executeUpdate("insert into existencia (sucursales_id,producto_id,existencia) values ("
+                +sucursal+","+resultado.getInt(1)+","+existencia+");");
         conexion.close();
     }
-    public void modificarProducto(int id,String codigo, String codBarras,String descrip, double venta,
+    public void modificarProducto(int id,String codigo, String codBarras,String descrip, double venta, 
             double costo, String estanteria, String columna, String fila, String marca) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         String marcaId;
@@ -186,6 +195,24 @@ public class Conexion {
         conexion.close();
         return atributo;
     }
-
+   public ArrayList[] obtener_productos() throws SQLException{
+        ArrayList[] matriz=new ArrayList[4];
+        matriz[0]=new ArrayList();
+        matriz[1]=new ArrayList();
+        matriz[2]=new ArrayList();
+        matriz[3]=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("select id,codigo,codigo_barras,descripcion from producto"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            matriz[0].add(resultado.getInt(1));
+            matriz[1].add(resultado.getString(2));
+            matriz[2].add(resultado.getString(3));
+            matriz[3].add(resultado.getString(4));
+        }
+        conexion.close();
+        return matriz;
+    }
 
 }
