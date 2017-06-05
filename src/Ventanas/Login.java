@@ -29,13 +29,46 @@ import javax.crypto.spec.SecretKeySpec;
  * @author jonathanmiranda
  */
 public class Login extends javax.swing.JFrame {
-    
+    private Server server;
+    private Conexion conexion;
     /**
      * Creates new form Interfaz
      */
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+        try {
+            File configDServer = Server.SERVER_CONFIG_DEFAULT_FILE;
+            //Comprobamos si la configuración de conexion al servidor ya existe
+            if(configDServer.exists()&&configDServer.length()>0){
+                //Leemos la configuración del archivo
+                server = new Server(Server.SERVER_CONFIG_DEFAULT_FILE);
+                // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                Key key = new SecretKeySpec(Seguridad.claveCifrado.getBytes(),  0, 16, "AES");
+                // Se obtiene un cifrador AES
+                Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
+                aes.init(Cipher.DECRYPT_MODE,key);
+                // Se desencripta y se guarda en la variable de servidor
+                server.setPass(new String(aes.doFinal(server.getPassArray())));
+                conexion= new Conexion(server.getUser(), server.getIp(), server.getPass(), server.getPass());
+                //Comprobamos si hay una sesión guardada
+                File configDUser=UsuarioG.LOGGED_USER_DEFAULT_FILE;
+                if(configDUser.exists()&&configDUser.length()>0){
+                    UsuarioG user= new UsuarioG(configDUser);
+                    // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
+                    key = new SecretKeySpec(Conexion.claveCifradoBase.getBytes(),  0, 16, "AES");
+                    // Se obtiene un cifrador AES
+                    aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                    // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
+                    aes.init(Cipher.DECRYPT_MODE,key);
+                    // Se desencripta y se guarda en la variable de servidor
+                    user.setPass(new String(aes.doFinal(user.getPassBytes())));
+                }
+            }
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | FileNotFoundException | FormatoInvalido | ArchivoNoExiste ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -289,24 +322,8 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        try {
-            File configDServer = Server.SERVER_CONFIG_DEFAULT_FILE;
-            //Comprobamos si la configuración de conexion al servidor ya existe
-            if(configDServer.exists()&&configDServer.length()>0){
-                //Leemos la configuración del archivo
-                Server server = new Server(Server.SERVER_CONFIG_DEFAULT_FILE);
-                // Generamos una clave que queramos que tenga al menos 16 bytes adecuada para AES
-                Key key = new SecretKeySpec(Seguridad.claveCifrado.getBytes(),  0, 16, "AES");
-                // Se obtiene un cifrador AES
-                Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
-                // Se inicializa el cifrador, se pone en modo de descifrado y se le envia la clave
-                aes.init(Cipher.DECRYPT_MODE,key);
-                // Se desencripta y se guarda en la variable de servidor
-                server.setPass(new String(aes.doFinal(server.getPassArray())));
-            }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | FileNotFoundException | FormatoInvalido | ArchivoNoExiste ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        
         Principal m = new Principal();
         m.setVisible(true);
     }//GEN-LAST:event_jLabel9MouseClicked
