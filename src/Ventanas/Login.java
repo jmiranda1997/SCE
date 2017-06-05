@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Ventanas.*;
 import java.util.Arrays;
 
 /**
@@ -225,6 +226,12 @@ public class Login extends javax.swing.JFrame {
         jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox1.setText("GUARDAR CONTRASEÑA");
         jCheckBox1.setBorder(null);
+
+      
+      
+      
+      
+      
         jPanel3.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, -1, -1));
 
         jLabel10.setBackground(new java.awt.Color(0, 0, 0));
@@ -236,6 +243,10 @@ public class Login extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(416, 11, -1, -1));
+
+      
+      
+      
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 450, 690));
 
@@ -309,6 +320,10 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
