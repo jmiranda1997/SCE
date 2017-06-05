@@ -17,6 +17,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -421,7 +422,8 @@ public class Seguridad extends javax.swing.JPanel {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         try {
-            usuariosCombo1.setModel((ComboBoxModel<String>) conexion.obtenerUsuarios());
+            ArrayList modelo= conexion.obtenerUsuarios();
+            usuariosCombo1.setModel((ComboBoxModel)modelo );
         } catch (SQLException ex) {
             Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
         }
