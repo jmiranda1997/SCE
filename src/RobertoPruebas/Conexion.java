@@ -16,16 +16,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
-    private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados
-    private static String user="root", ip="localhost", pass=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
-//    private DialogodeMensaje Dialogo = new DialogodeMensaje();
-//    private final DialogodeMensaje Dialogo = new DialogodeMensaje();
-    public Conexion()
+    private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados0
+    private static String user="root", ip="localhost", pass="", nombreBD=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
+    public final static String claveCifradoBase="SCEUser Cifrado AES";
+    public Conexion (){}
+    public Conexion(String user, String ip, String pass, String db)
     {
-        
+        this.user=user;
+        this.ip=ip;
+        this.pass=pass;
+        this.nombreBD=db;
     }
     /**
      * Metodo que genera la conexion utilizando los atributos de esta clase
+     * @param nombreBD el nombre de la base de datos a conectarse
      */
     private void conectar()
     {
@@ -36,9 +40,7 @@ public class Conexion {
             } catch (ClassNotFoundException ex) {
             System.out.println("Error al registrar el driver de MySQL: " + ex);
         }
-
-            conexion=DriverManager.getConnection(url+ip+"/"+"sce",user,"@Sistemas2017");//Se conecta con la base de datos enviando
-
+            conexion=DriverManager.getConnection(url+ip+"/"+nombreBD,user,pass);//Se conecta con la base de datos enviando
             //los parametros url, user, pass,
             
         } catch (SQLException ex) {
@@ -271,6 +273,48 @@ public class Conexion {
         }
         conexion.close();
     }
+    public int login(String usuario, String pass) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT login('"+usuario+"','"+claveCifradoBase+"','"+pass+"') R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    public int crearUsuario(String usuario, String pass) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creacionUsuarioVacio('"+usuario+"','"+pass+"','"+claveCifradoBase+"') R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    public void eliminarUsuario(String usuario) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("DELETE FROM usuario WHERE Usuario='"+usuario+"'"); //se guarda el resultado de la instruccion
+        conexion.close();
+    }
+    public ArrayList obtenerUsuarios() throws SQLException{
+        ArrayList users=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT Usuario FROM usuario"); //se guarda el resultado de la instruccion
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            users.add(resultado.getString(1));
+        }
+        conexion.close();
+        return users;
+    }
     /**
      * Metodo que inserta un nuevo producto en la base
      * @param codigo codigo interno
@@ -434,5 +478,4 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
-
 }
