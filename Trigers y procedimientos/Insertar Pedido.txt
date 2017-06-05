@@ -1,0 +1,14 @@
+DELIMITER //
+DROP TRIGGER IF EXISTS nuevoPedido //
+
+CREATE TRIGGER nuevoPedido
+BEFORE INSERT ON compra
+FOR EACH ROW
+
+BEGIN
+	SET NEW.Fecha = NOW();
+	SET NEW.Saldo = NEW.Total;
+	SET NEW.Autorizada = 0;
+	SET NEW.Anulada = 0;
+END //
+DELIMITER ;
