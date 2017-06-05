@@ -90,7 +90,7 @@ public class Conexion {
         while (resultado.next()) {            
             cantNombre = resultado.getInt("Cantidad");
         }
-        if (cantNombre == 0) {
+        if (cantNombre != 0) {
             conexion.close();
             return true;
         }
@@ -99,7 +99,7 @@ public class Conexion {
             while (resultado.next()) {            
                 cantNit = resultado.getInt("Cantidad");
             }
-            if (cantNit == 0) {
+            if (cantNit != 0) {
                 conexion.close();
                 return true;
             }

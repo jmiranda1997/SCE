@@ -221,7 +221,6 @@ public class Pedidos extends javax.swing.JPanel {
         lbl_Orden.setText("000001");
         add(lbl_Orden, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, -1, -1));
 
-        txt_Factura.setEditable(false);
         txt_Factura.setBackground(new java.awt.Color(0, 0, 0));
         txt_Factura.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txt_Factura.setForeground(new java.awt.Color(255, 255, 255));

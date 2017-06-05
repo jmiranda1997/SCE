@@ -533,9 +533,7 @@ public class Proveedores extends javax.swing.JPanel {
             try {
                 DialogoConfirmacion.setContenido("CONFIRMACION", "¿ESTA SEGURO QUE DESEA ELIMINAR EL PROVEEDOR?", DialogodeMensaje.ICONO_INTERROGANTE, tabla_prov.getValueAt(selccion, 0).toString());
                 DialogoConfirmacion.setVisible(true);
-                while(DialogoConfirmacion.estado == 0){
-                    
-                }
+                
                 tabla_prov.setModel(Conexion_DB.obtenerProceedores());
             } catch (SQLException ex) {
                 Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);

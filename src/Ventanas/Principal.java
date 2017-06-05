@@ -39,7 +39,7 @@ public class Principal extends javax.swing.JFrame {
     public Principal(Conexion con){
         initComponents();
         setLocationRelativeTo(null);
-        setEtiqueta(jLabel2);
+        setEtiqueta(btn_Inventario);
         this.conexion=con;
     }
     public void setEtiqueta(JLabel etiqueta){
@@ -65,9 +65,9 @@ public class Principal extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        
         Salir = new javax.swing.JLabel();
         Minimizar = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
@@ -183,33 +183,23 @@ public class Principal extends javax.swing.JFrame {
 
         Minimizar.setForeground(new java.awt.Color(255, 255, 255));
         Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-
-                .addContainerGap(920, Short.MAX_VALUE)
-                .addGap(6, 6, 6))
-
-                .addGap(0, 880, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(880, 880, 880)
                 .addComponent(Minimizar)
                 .addGap(6, 6, 6)
-
+                .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-
-                .addContainerGap()
-                .addContainerGap(654, Short.MAX_VALUE))
-
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(Minimizar))
-                    .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-
+                .addGap(10, 10, 10)
+                .addComponent(Minimizar))
+            .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 950, 690));
@@ -230,11 +220,11 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
-        JPanel p= new Productos();
-        p.setLocation(0, 0);
-        p.setSize(jPanel2.getSize());
+        JPanel j = new Productos();
+        j.setLocation(0, 0);
+        j.setSize(jPanel2.getSize());
         jPanel2.removeAll();
-        jPanel2.add(p, BorderLayout.CENTER);
+        jPanel2.add(j, BorderLayout.CENTER);
         jPanel2.revalidate();
         jPanel2.repaint();
         jPanel1.repaint();
