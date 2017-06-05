@@ -18,15 +18,17 @@ import javax.swing.table.DefaultTableModel;
  * @author jonathan Miranda
  */
 public class selectorProducto extends javax.swing.JFrame {
-
+    private DialogodeMensaje dialogo = new DialogodeMensaje();
     private Conexion Conexion_DB = new Conexion();
     private DefaultTableModel Productos;
     public selectorProducto() {
         initComponents();
+        this.setLocationRelativeTo(null);
         try {
             tabla_produc.setModel(Conexion_DB.obtenerProductos());
         } catch (SQLException ex) {
-            Logger.getLogger(selectorProducto.class.getName()).log(Level.SEVERE, null, ex);
+            dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+            dialogo.setVisible(true);
         }
     }
 
@@ -202,11 +204,13 @@ public class selectorProducto extends javax.swing.JFrame {
     private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
         // TODO add your handling code here:
 
-        int seleccion = tabla_produc.getSelectedRow();
+        int seleccion = tabla_produc.getSelectedRow(), seleccion2 = Productos.getRowCount()-1;
         if (seleccion != -1) {
-            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), Productos.getRowCount()-1, 0);
-            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), Productos.getRowCount()-1, 1);
-            Productos.setValueAt(txt_Cantidad.getText(), Productos.getRowCount()-1, 2);  
+            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), seleccion2, 0);
+            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), seleccion2, 1);
+            Productos.setValueAt(txt_Cantidad.getText(), seleccion2, 2);  
+            Productos.setValueAt("0.00", seleccion2, 3);
+            Productos.setValueAt("0.00", seleccion2, 4);
             Productos.addRow(new String[]{});
         }
         this.setVisible(false);

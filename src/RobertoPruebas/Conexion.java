@@ -18,6 +18,7 @@ public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados
     private static String user="root", ip="localhost", pass=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
+//    private DialogodeMensaje Dialogo = new DialogodeMensaje();
 //    private final DialogodeMensaje Dialogo = new DialogodeMensaje();
     public Conexion()
     {
@@ -39,7 +40,8 @@ public class Conexion {
             //los parametros url, user, pass,
             
         } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+//            Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+//            Dialogo.setVisible(true);
         }
     }
     /**
@@ -66,6 +68,13 @@ public class Conexion {
 //           Dialogo.setContenido("INFORMACION", "EL PROVEEDOR YA EXISTE", credito);
 //           Dialogo.setVisible(true);
         }
+        conexion.close();
+    }
+    public void crearPedido(String Factura, float Total, boolean credito) throws SQLException{
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        instruccion.executeUpdate("INSERT INTO compra (Factura, Total, Credito) VALUES ('" + Factura + "', " + Total + ", " + ((credito) ? 1: 0) +");");
+              
         conexion.close();
     }
     private boolean existeProveedor(String Nombre, String Nit) throws SQLException{
@@ -116,6 +125,17 @@ public class Conexion {
             }
         };
     }
+    private void iniciarTablaPedidos() {
+//        
+        Productos = new DefaultTableModel(null, new String[]{"Numero", "Proveedor", "Fecha", "Total", "Saldo"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
     public void desHabilitarProvedor(String Nombre) throws SQLException{
         conectar();
         
@@ -123,7 +143,7 @@ public class Conexion {
         instruccion.executeUpdate("UPDATE proveedor SET Habilitado = 0 WHERE Nombre = '" + Nombre + "';");
         conexion.close();
     }
-    private DefaultTableModel Proveedores, Productos;
+    private DefaultTableModel Proveedores, Productos, Pedidos;
     /**
      * Metodo que regresa la lista de proveedores como un arreglo
      * @return
@@ -156,6 +176,61 @@ public class Conexion {
         }
         conexion.close();
         return Productos;
+    }
+    public DefaultTableModel obtenerPedidos() throws SQLException{
+        Pedidos = null;
+        iniciarTablaProveedores();
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT Nombre, Nit, Credito, Saldo, Habilitado FROM proveedor;");
+        while(resultado.next()){
+            boolean habilitado = (resultado.getString("Habilitado").equals("1"));
+            if(habilitado) Pedidos.addRow(new String[] {resultado.getString("Nombre"), resultado.getString("Nit"), (resultado.getString("Credito").equals("1"))? "SI": "NO", resultado.getString("Saldo")});
+        }
+        conexion.close();
+        return Pedidos;
+    }
+    public int numeroPedido() throws SQLException{
+        int numero = 0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT AUTO_INCREMENT Nuevo FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'sce' AND TABLE_NAME = 'compra';");
+        while (resultado.next()) {
+            numero = resultado.getInt("Nuevo");
+        }
+        conexion.close();
+        return numero;
+    }
+    public void insertarDetallePedido(int idCodigo, int idProve, int Pedido, float Precio, float Cantidad) throws SQLException{
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        
+        instruccion.executeUpdate("INSERT INTO detalle_compra (Producto_id, Compra_id, proveedor_id, Precio, Cantidad) VALUES (" + idCodigo + ", " + (Pedido - 1) + ", " + idProve + ", " + Precio + ", " + Cantidad + ");");
+        
+        conexion.close();
+    }
+    public int idCodigo(String codigo) throws SQLException{
+        int numero = 0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id FROM Producto WHERE Codigo = '" + codigo +"';");
+        while (resultado.next()) {
+            numero = resultado.getInt("id");
+        }
+        conexion.close();
+        return numero;
+    }
+    public int idProve(String Nombre) throws SQLException{
+        int numero = 0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id FROM proveedor WHERE Nombre = '" + Nombre +"';");
+        while (resultado.next()) {
+            numero = resultado.getInt("id");
+        }
+        conexion.close();
+        return numero;
     }
     private float existencias(int id) throws SQLException{
        float existencias = 0;

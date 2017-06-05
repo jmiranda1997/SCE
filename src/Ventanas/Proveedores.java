@@ -548,7 +548,7 @@ public class Proveedores extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_EliminarMouseClicked
 
     private void tabla_provKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_provKeyPressed
-
+        
     }//GEN-LAST:event_tabla_provKeyPressed
 
     private void tabla_provMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_provMousePressed

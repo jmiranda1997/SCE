@@ -5,6 +5,10 @@
  */
 package Ventanas;
 
+import RobertoPruebas.Conexion;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,10 +18,16 @@ import javax.swing.table.DefaultTableModel;
 public class Pedidos extends javax.swing.JPanel {
 
     private DefaultTableModel Productos;
-    private boolean primra = false;
+    private final Conexion Conexion_DB = new Conexion();
+    private final DialogodeMensaje dialogo = new DialogodeMensaje();
     public Pedidos() {
         initComponents();
-        
+        try {
+            lbl_Orden.setText(Conexion_DB.numeroPedido()+"");
+        } catch (SQLException ex) {
+            dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+            dialogo.setVisible(true);
+        }
     }
     private void iniciarTablaProductos() {
 //        
@@ -25,6 +35,7 @@ public class Pedidos extends javax.swing.JPanel {
             boolean[] canEdit = new boolean [] {
         false, false, true, true, false
             };
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
         return canEdit [columnIndex];
             }
@@ -49,13 +60,13 @@ public class Pedidos extends javax.swing.JPanel {
         txt_Nombre = new javax.swing.JTextField();
         lbl_Nombre = new javax.swing.JLabel();
         btn_Seleccion = new javax.swing.JLabel();
-        lbl_Nombre1 = new javax.swing.JLabel();
-        txt_Nombre1 = new javax.swing.JTextField();
+        lbl_Orden = new javax.swing.JLabel();
+        txt_Factura = new javax.swing.JTextField();
         sep_Nombre1 = new javax.swing.JSeparator();
         lbl_Nombre2 = new javax.swing.JLabel();
         lbl_Nombre3 = new javax.swing.JLabel();
         lbl_Deuda = new javax.swing.JLabel();
-        txt_Deuda = new javax.swing.JTextField();
+        txt_Total = new javax.swing.JTextField();
         sep_Deuda = new javax.swing.JSeparator();
         lbl_Deuda1 = new javax.swing.JLabel();
         txt_Deuda1 = new javax.swing.JTextField();
@@ -95,6 +106,11 @@ public class Pedidos extends javax.swing.JPanel {
         tabla_detalle.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tabla_detalle.setShowVerticalLines(false);
         tabla_detalle.getTableHeader().setReorderingAllowed(false);
+        tabla_detalle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabla_detalleMousePressed(evt);
+            }
+        });
         tabla_detalle.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tabla_detalleKeyPressed(evt);
@@ -199,38 +215,39 @@ public class Pedidos extends javax.swing.JPanel {
         });
         add(btn_Seleccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, 90, 30));
 
-        lbl_Nombre1.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        lbl_Nombre1.setForeground(new java.awt.Color(255, 0, 0));
-        lbl_Nombre1.setText("000001");
-        add(lbl_Nombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, -1, -1));
+        lbl_Orden.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        lbl_Orden.setForeground(new java.awt.Color(255, 0, 0));
+        lbl_Orden.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_Orden.setText("000001");
+        add(lbl_Orden, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, -1, -1));
 
-        txt_Nombre1.setEditable(false);
-        txt_Nombre1.setBackground(new java.awt.Color(0, 0, 0));
-        txt_Nombre1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txt_Nombre1.setForeground(new java.awt.Color(255, 255, 255));
-        txt_Nombre1.setText("INGRESE NUEMERO DE FACTURA");
-        txt_Nombre1.setBorder(null);
-        txt_Nombre1.setCaretColor(new java.awt.Color(255, 255, 255));
-        txt_Nombre1.setSelectionColor(new java.awt.Color(255, 0, 0));
-        txt_Nombre1.addFocusListener(new java.awt.event.FocusAdapter() {
+        txt_Factura.setEditable(false);
+        txt_Factura.setBackground(new java.awt.Color(0, 0, 0));
+        txt_Factura.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txt_Factura.setForeground(new java.awt.Color(255, 255, 255));
+        txt_Factura.setText("INGRESE NUEMERO DE FACTURA");
+        txt_Factura.setBorder(null);
+        txt_Factura.setCaretColor(new java.awt.Color(255, 255, 255));
+        txt_Factura.setSelectionColor(new java.awt.Color(255, 0, 0));
+        txt_Factura.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txt_Nombre1FocusGained(evt);
+                txt_FacturaFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txt_Nombre1FocusLost(evt);
+                txt_FacturaFocusLost(evt);
             }
         });
-        txt_Nombre1.addMouseListener(new java.awt.event.MouseAdapter() {
+        txt_Factura.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txt_Nombre1MousePressed(evt);
+                txt_FacturaMousePressed(evt);
             }
         });
-        txt_Nombre1.addActionListener(new java.awt.event.ActionListener() {
+        txt_Factura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_Nombre1ActionPerformed(evt);
+                txt_FacturaActionPerformed(evt);
             }
         });
-        add(txt_Nombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 400, 26));
+        add(txt_Factura, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 400, 26));
 
         sep_Nombre1.setForeground(new java.awt.Color(255, 255, 255));
         add(sep_Nombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 400, 10));
@@ -250,34 +267,34 @@ public class Pedidos extends javax.swing.JPanel {
         lbl_Deuda.setText("TOTAL");
         add(lbl_Deuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, -1, -1));
 
-        txt_Deuda.setBackground(new java.awt.Color(0, 0, 0));
-        txt_Deuda.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txt_Deuda.setForeground(new java.awt.Color(255, 255, 255));
-        txt_Deuda.setText("0.00");
-        txt_Deuda.setBorder(null);
-        txt_Deuda.setCaretColor(new java.awt.Color(255, 255, 255));
-        txt_Deuda.setDisabledTextColor(new java.awt.Color(255, 0, 0));
-        txt_Deuda.setEnabled(false);
-        txt_Deuda.setSelectionColor(new java.awt.Color(255, 0, 0));
-        txt_Deuda.addFocusListener(new java.awt.event.FocusAdapter() {
+        txt_Total.setBackground(new java.awt.Color(0, 0, 0));
+        txt_Total.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txt_Total.setForeground(new java.awt.Color(255, 255, 255));
+        txt_Total.setText("0.00");
+        txt_Total.setBorder(null);
+        txt_Total.setCaretColor(new java.awt.Color(255, 255, 255));
+        txt_Total.setDisabledTextColor(new java.awt.Color(255, 0, 0));
+        txt_Total.setEnabled(false);
+        txt_Total.setSelectionColor(new java.awt.Color(255, 0, 0));
+        txt_Total.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txt_DeudaFocusGained(evt);
+                txt_TotalFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txt_DeudaFocusLost(evt);
+                txt_TotalFocusLost(evt);
             }
         });
-        txt_Deuda.addMouseListener(new java.awt.event.MouseAdapter() {
+        txt_Total.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txt_DeudaMousePressed(evt);
+                txt_TotalMousePressed(evt);
             }
         });
-        txt_Deuda.addActionListener(new java.awt.event.ActionListener() {
+        txt_Total.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_DeudaActionPerformed(evt);
+                txt_TotalActionPerformed(evt);
             }
         });
-        add(txt_Deuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 220, 26));
+        add(txt_Total, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 220, 26));
 
         sep_Deuda.setForeground(new java.awt.Color(255, 255, 255));
         add(sep_Deuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 220, -1));
@@ -390,13 +407,36 @@ public class Pedidos extends javax.swing.JPanel {
             btn_Seleccion.setEnabled(true);
             btn_Consultar.setText("GUARDAR");
             btn_Editar.setText("CANCELAR");
+            try {
+            lbl_Orden.setText(Conexion_DB.numeroPedido()+"");
+        } catch (SQLException ex) {
+            dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+            dialogo.setVisible(true);
+        }
         }
         
     }//GEN-LAST:event_btn_NuevoMouseClicked
 
     private void btn_ConsultarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ConsultarMouseClicked
         if (btn_Consultar.getText().equals("GUARDAR")) {
-            
+            try {
+                if (!txt_Nombre.getText().equals("PROVEEDOR") && !txt_Nombre.getText().equals("")) {
+                    Conexion_DB.crearPedido(((txt_Factura.getText().equals("INGRESE NUEMERO DE FACTURA")) ? "": txt_Factura.getText()), total, rbtn_Credito.isSelected());
+                    dialogo.setContenido("INFORMACION", "SE A GUARDADO EXITOSAMENTE", DialogodeMensaje.ICONO_INFORMACION);
+                    dialogo.setVisible(true);
+                    lbl_Orden.setText(Conexion_DB.numeroPedido()+"");
+                    for (int i = 0; i < tabla_detalle.getRowCount() - 1; i++) {
+                        Conexion_DB.insertarDetallePedido(Conexion_DB.idCodigo(tabla_detalle.getValueAt(i, 0).toString()), Conexion_DB.idProve(txt_Nombre.getText()), Conexion_DB.numeroPedido(), Float.parseFloat(tabla_detalle.getValueAt(i, 3).toString()), Float.parseFloat(tabla_detalle.getValueAt(i, 2).toString()));
+                    }
+                }else{
+                    dialogo.setContenido("INFORMACION", "SELECCIONE UN PROVEEDOR", DialogodeMensaje.ICONO_INFORMACION);
+                    dialogo.setVisible(true);
+                }
+                
+            } catch (SQLException ex) {
+                dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
+                dialogo.setVisible(true);
+            }
         }
     }//GEN-LAST:event_btn_ConsultarMouseClicked
 
@@ -431,48 +471,48 @@ public class Pedidos extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_SeleccionMouseEntered
 
-    private void txt_Nombre1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Nombre1FocusGained
+    private void txt_FacturaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_FacturaFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_Nombre1FocusGained
+    }//GEN-LAST:event_txt_FacturaFocusGained
 
-    private void txt_Nombre1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Nombre1FocusLost
+    private void txt_FacturaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_FacturaFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_Nombre1FocusLost
+    }//GEN-LAST:event_txt_FacturaFocusLost
 
-    private void txt_Nombre1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_Nombre1MousePressed
+    private void txt_FacturaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_FacturaMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_Nombre1MousePressed
+    }//GEN-LAST:event_txt_FacturaMousePressed
 
-    private void txt_Nombre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_Nombre1ActionPerformed
+    private void txt_FacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_FacturaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_Nombre1ActionPerformed
+    }//GEN-LAST:event_txt_FacturaActionPerformed
 
-    private void txt_DeudaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_DeudaFocusGained
+    private void txt_TotalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_TotalFocusGained
         // TODO add your handling code here:
-        if(txt_Deuda.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Deuda.setText("");
-    }//GEN-LAST:event_txt_DeudaFocusGained
+        if(txt_Total.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Total.setText("");
+    }//GEN-LAST:event_txt_TotalFocusGained
 
-    private void txt_DeudaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_DeudaFocusLost
+    private void txt_TotalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_TotalFocusLost
         // TODO add your handling code here:
-        if(txt_Deuda.getText().equals("")) txt_Deuda.setText("INGRESE EL NOMBRE DE USUARIO");
-    }//GEN-LAST:event_txt_DeudaFocusLost
+        if(txt_Total.getText().equals("")) txt_Total.setText("INGRESE EL NOMBRE DE USUARIO");
+    }//GEN-LAST:event_txt_TotalFocusLost
 
-    private void txt_DeudaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_DeudaMousePressed
+    private void txt_TotalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_TotalMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_DeudaMousePressed
+    }//GEN-LAST:event_txt_TotalMousePressed
 
-    private void txt_DeudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_DeudaActionPerformed
+    private void txt_TotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TotalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_DeudaActionPerformed
+    }//GEN-LAST:event_txt_TotalActionPerformed
 
     private void txt_Deuda1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Deuda1FocusGained
         // TODO add your handling code here:
-        if(txt_Deuda.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Deuda.setText("");
+        if(txt_Total.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Total.setText("");
     }//GEN-LAST:event_txt_Deuda1FocusGained
 
     private void txt_Deuda1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Deuda1FocusLost
         // TODO add your handling code here:
-        if(txt_Deuda.getText().equals("")) txt_Deuda.setText("INGRESE EL NOMBRE DE USUARIO");
+        if(txt_Total.getText().equals("")) txt_Total.setText("INGRESE EL NOMBRE DE USUARIO");
     }//GEN-LAST:event_txt_Deuda1FocusLost
 
     private void txt_Deuda1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_Deuda1MousePressed
@@ -485,12 +525,12 @@ public class Pedidos extends javax.swing.JPanel {
 
     private void txt_Deuda2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Deuda2FocusGained
         // TODO add your handling code here:
-        if(txt_Deuda.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Deuda.setText("");
+        if(txt_Total.getText().equals("INGRESE EL NOMBRE DE USUARIO"))txt_Total.setText("");
     }//GEN-LAST:event_txt_Deuda2FocusGained
 
     private void txt_Deuda2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Deuda2FocusLost
         // TODO add your handling code here:
-        if(txt_Deuda.getText().equals("")) txt_Deuda.setText("INGRESE EL NOMBRE DE USUARIO");
+        if(txt_Total.getText().equals("")) txt_Total.setText("INGRESE EL NOMBRE DE USUARIO");
     }//GEN-LAST:event_txt_Deuda2FocusLost
 
     private void txt_Deuda2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_Deuda2MousePressed
@@ -512,9 +552,9 @@ public class Pedidos extends javax.swing.JPanel {
     private void tabla_detalleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyPressed
         
     }//GEN-LAST:event_tabla_detalleKeyPressed
-
+    private float total = 0;
     private void tabla_detalleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyReleased
-        if(btn_Consultar.getText().equals("GUARDAR"))
+        if(btn_Consultar.getText().equals("GUARDAR")){
             if (evt.getKeyCode() == 112) {
                 selectorProducto selector = new selectorProducto();
                 selector.setProductos(Productos);
@@ -523,10 +563,37 @@ public class Pedidos extends javax.swing.JPanel {
             if (evt.getKeyCode() == 114) {
                 if (Productos.getRowCount()>1) {
                     Productos.removeRow(tabla_detalle.getSelectedRow());
+                    total();
                 }
 
             }
+            if (evt.getKeyCode() == 38) {
+                int seleccion = tabla_detalle.getSelectedRow() + 1;
+                float cantidad = Float.parseFloat(tabla_detalle.getValueAt(seleccion, 2).toString());
+                float precio = Float.parseFloat(tabla_detalle.getValueAt(seleccion, 3).toString());
+                tabla_detalle.setValueAt("" + (cantidad * precio), seleccion, 4);
+                total();
+            }
+            if (evt.getKeyCode() == 40 || evt.getKeyCode() ==13 || evt.getKeyCode() == 9) {
+                int seleccion = tabla_detalle.getSelectedRow() - 1;
+                float cantidad = Float.parseFloat(tabla_detalle.getValueAt(seleccion, 2).toString());
+                float precio = Float.parseFloat(tabla_detalle.getValueAt(seleccion, 3).toString());
+                tabla_detalle.setValueAt("" + (cantidad * precio), seleccion, 4);
+                total();
+            }
+        }
     }//GEN-LAST:event_tabla_detalleKeyReleased
+    private void total(){
+        int cant = tabla_detalle.getRowCount() - 1;
+        total =0;
+        for (int i = 0; i < cant; i++) {
+            total += Float.parseFloat(tabla_detalle.getValueAt(i, 4).toString());
+        }
+        txt_Total.setText(total+"");
+    }
+    private void tabla_detalleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_detalleMousePressed
+        
+    }//GEN-LAST:event_tabla_detalleMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -541,9 +608,9 @@ public class Pedidos extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_Deuda1;
     private javax.swing.JLabel lbl_Deuda2;
     private javax.swing.JLabel lbl_Nombre;
-    private javax.swing.JLabel lbl_Nombre1;
     private javax.swing.JLabel lbl_Nombre2;
     private javax.swing.JLabel lbl_Nombre3;
+    private javax.swing.JLabel lbl_Orden;
     private javax.swing.JRadioButton rbtn_Credito;
     private javax.swing.JSeparator sep_Deuda;
     private javax.swing.JSeparator sep_Deuda1;
@@ -551,10 +618,10 @@ public class Pedidos extends javax.swing.JPanel {
     private javax.swing.JSeparator sep_Nombre;
     private javax.swing.JSeparator sep_Nombre1;
     private javax.swing.JTable tabla_detalle;
-    private javax.swing.JTextField txt_Deuda;
     private javax.swing.JTextField txt_Deuda1;
     private javax.swing.JTextField txt_Deuda2;
+    private javax.swing.JTextField txt_Factura;
     private javax.swing.JTextField txt_Nombre;
-    private javax.swing.JTextField txt_Nombre1;
+    private javax.swing.JTextField txt_Total;
     // End of variables declaration//GEN-END:variables
 }
