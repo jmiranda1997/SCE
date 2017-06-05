@@ -14,19 +14,20 @@ import java.util.logging.Logger;
 public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados
-    private static String user="root", ip="localhost", pass=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
+    private static String user="root", ip="localhost", pass="", nombreBD=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
     public Conexion (){}
-    public Conexion(String user, String ip, String pass)
+    public Conexion(String user, String ip, String pass, String db)
     {
         this.user=user;
         this.ip=ip;
         this.pass=pass;
+        this.nombreBD=db;
     }
     /**
      * Metodo que genera la conexion utilizando los atributos de esta clase
      * @param nombreBD el nombre de la base de datos a conectarse
      */
-    private void conectar(String nombreBD)
+    private void conectar()
     {
        conexion=null;
         try{
@@ -43,9 +44,21 @@ public class Conexion {
         }
     }
     public void ejemploDeUso() throws SQLException{
-        conectar("rm_db"); //permite la conexion con la base de datos
+        conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("select id,Nombre, Apellido from cliente"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            System.out.println(resultado.getInt(1)+"    "+resultado.getString("Nombre")+"    "+resultado.getString(3));
+            //para extraer los datos del resultado de la instruccion, pueden obtenerse en diferentes tipos de variable
+            //Y pueden buscarse por numero de columna (iniciando en 1) o nombre de columna
+        }
+        conexion.close();
+    }
+    public void ejecutarConsulta(String query) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery(query); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
         while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
         {
             System.out.println(resultado.getInt(1)+"    "+resultado.getString("Nombre")+"    "+resultado.getString(3));

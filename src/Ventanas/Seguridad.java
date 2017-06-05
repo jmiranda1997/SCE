@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 public class Seguridad extends javax.swing.JPanel {
     public final static String marcaInicio="SCE";
     public final static String claveCifrado = "Sistema de Control Empresarial";
+    public final static String claveCifradoBase="SCEUser";
     /**
      * Creates new form Seguridad
      */

@@ -9,7 +9,7 @@ BEGIN
 	SELECT COUNT(*) FROM usuario WHERE Usuario=vNombre INTO comparar;
 	IF (comparar!=0) THEN
 		#Obtiene la contraseña cifrada
-		SELECT Clave FROM usuario WHERE Usuario=vNombre INTO contraCif;
+		SELECT Password FROM usuario WHERE Usuario=vNombre INTO contraCif;
 		#Desencripta la contraseña en la BD, utilizando la clave recibida
 		SET contraTemp=AES_DECRYPT(contraCif,vPass);
 		#Compara si la contraseña introducida es igual a la desencriptada de la BD, se devuelve 1 si son iguales, 0 de lo contrario
