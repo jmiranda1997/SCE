@@ -21,7 +21,7 @@ public class Compras extends javax.swing.JPanel {
      */
     public Compras() {
         initComponents();
-        setBoton(btn_Pedidos);
+        setBoton(btn_Compras);
         resetBoton(btn_Pagos);
         resetBoton(btn_Proveedores);
         JPanel j = new Pedidos();
@@ -46,45 +46,46 @@ public class Compras extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        btn_Pedidos = new javax.swing.JLabel();
+        Salir = new javax.swing.JLabel();
+        Minimizar = new javax.swing.JLabel();
+        btn_Compras = new javax.swing.JLabel();
         btn_Proveedores = new javax.swing.JLabel();
+        btn_Reportes = new javax.swing.JLabel();
         btn_Pagos = new javax.swing.JLabel();
         panel_Contenido = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
-        jLabel1.setOpaque(true);
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        Salir.setBackground(new java.awt.Color(0, 0, 0));
+        Salir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
+        Salir.setOpaque(true);
+        Salir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                SalirMouseClicked(evt);
             }
         });
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 0, 40, 40));
+        add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 0, 40, 40));
 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, -1, -1));
+        Minimizar.setForeground(new java.awt.Color(255, 255, 255));
+        Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
+        add(Minimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, -1, -1));
 
-        btn_Pedidos.setBackground(new java.awt.Color(0, 0, 0));
-        btn_Pedidos.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btn_Pedidos.setForeground(new java.awt.Color(255, 255, 255));
-        btn_Pedidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn_Pedidos.setText("PEDIDOS");
-        btn_Pedidos.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btn_Pedidos.setName(""); // NOI18N
-        btn_Pedidos.setOpaque(true);
-        btn_Pedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_Compras.setBackground(new java.awt.Color(0, 0, 0));
+        btn_Compras.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btn_Compras.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Compras.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Compras.setText("COMPRAS");
+        btn_Compras.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btn_Compras.setName(""); // NOI18N
+        btn_Compras.setOpaque(true);
+        btn_Compras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_PedidosMouseClicked(evt);
+                btn_ComprasMouseClicked(evt);
             }
         });
-        add(btn_Pedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -10, 160, 50));
+        add(btn_Compras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -10, 160, 50));
 
         btn_Proveedores.setBackground(new java.awt.Color(0, 0, 0));
         btn_Proveedores.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -100,6 +101,21 @@ public class Compras extends javax.swing.JPanel {
             }
         });
         add(btn_Proveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, -10, 160, 50));
+
+        btn_Reportes.setBackground(new java.awt.Color(0, 0, 0));
+        btn_Reportes.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btn_Reportes.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Reportes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Reportes.setText("REPORTES");
+        btn_Reportes.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btn_Reportes.setName(""); // NOI18N
+        btn_Reportes.setOpaque(true);
+        btn_Reportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_ReportesMouseClicked(evt);
+            }
+        });
+        add(btn_Reportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, -10, 160, 50));
 
         btn_Pagos.setBackground(new java.awt.Color(0, 0, 0));
         btn_Pagos.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -133,48 +149,61 @@ public class Compras extends javax.swing.JPanel {
         add(panel_Contenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 940, 650));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void SalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalirMouseClicked
         // TODO add your handling code here:
         System.exit(0);
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_SalirMouseClicked
 
-    private void btn_PedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_PedidosMouseClicked
-        setBoton(btn_Pedidos);
+    private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
+        setBoton(btn_Compras);
         resetBoton(btn_Pagos);
         resetBoton(btn_Proveedores);
+        resetBoton(btn_Reportes);
         JPanel j = new Pedidos();
         j.setLocation(0, 0);
         j.setSize(panel_Contenido.getSize());
         panel_Contenido.removeAll();
         panel_Contenido.add(j, BorderLayout.CENTER);
         panel_Contenido.revalidate();
-    }//GEN-LAST:event_btn_PedidosMouseClicked
+        panel_Contenido.repaint();
+    }//GEN-LAST:event_btn_ComprasMouseClicked
 
     private void btn_ProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ProveedoresMouseClicked
-        resetBoton(btn_Pedidos);
+        resetBoton(btn_Compras);
         resetBoton(btn_Pagos);
         setBoton(btn_Proveedores);
+        resetBoton(btn_Reportes);
         JPanel j = new Proveedores();
         j.setLocation(0, 0);
         j.setSize(panel_Contenido.getSize());
         panel_Contenido.removeAll();
         panel_Contenido.add(j, BorderLayout.CENTER);
         panel_Contenido.revalidate();
+        panel_Contenido.repaint();
     }//GEN-LAST:event_btn_ProveedoresMouseClicked
 
     private void btn_PagosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_PagosMouseClicked
-        resetBoton(btn_Pedidos);
+        resetBoton(btn_Compras);
         setBoton(btn_Pagos);
         resetBoton(btn_Proveedores);
+        resetBoton(btn_Reportes);
     }//GEN-LAST:event_btn_PagosMouseClicked
+
+    private void btn_ReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ReportesMouseClicked
+        resetBoton(btn_Compras);
+        resetBoton(btn_Pagos);
+        resetBoton(btn_Proveedores);
+        setBoton(btn_Reportes);
+    }//GEN-LAST:event_btn_ReportesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Minimizar;
+    private javax.swing.JLabel Salir;
+    private javax.swing.JLabel btn_Compras;
     private javax.swing.JLabel btn_Pagos;
-    private javax.swing.JLabel btn_Pedidos;
     private javax.swing.JLabel btn_Proveedores;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel btn_Reportes;
     public static javax.swing.JPanel panel_Contenido;
     // End of variables declaration//GEN-END:variables
 }

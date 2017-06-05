@@ -1,0 +1,16 @@
+DELIMITER //
+DROP TRIGGER IF EXISTS autorizarPedido //
+
+CREATE TRIGGER autorizarPedido
+BEFORE UPDATE ON compra
+FOR EACH ROW
+
+BEGIN
+	IF (OLD.Autorizada = 0 AND NEW.Autorizada = 1)
+	THEN
+	SET NEW.Fecha_Auto = NOW();
+	END IF;
+
+END //
+DELIMITER ;
+
