@@ -1125,7 +1125,7 @@ public class Productos extends javax.swing.JPanel {
         {
             btn_eliminar.setBackground(Color.red);
             try {
-                DialogoOpcion dialogo= new DialogoOpcion(null,true, 2,"Eliminar Producto", "Esta seguro de eliminar este producto");
+                DialogoOpcion dialogo= new DialogoOpcion(null,true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminar Producto", "Esta seguro de eliminar este producto");
                 dialogo.setVisible(true);
                 if(dialogo.isAceptar())
                     conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
