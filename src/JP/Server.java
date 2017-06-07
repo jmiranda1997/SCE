@@ -55,7 +55,7 @@ public class Server {
     public Server (File archivo) throws FileNotFoundException, FormatoInvalido, ArchivoNoExiste{
         try {
             if(archivo.exists()){
-                ip=pass=bd="";
+                ip=user=pass=bd="";
                 passArray=null;
                 //Creamos un RandomAccessFile para leer el archivo de configuración
                 RandomAccessFile file = new RandomAccessFile(archivo, "r");
