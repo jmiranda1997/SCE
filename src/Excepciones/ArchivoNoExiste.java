@@ -6,10 +6,14 @@
 package Excepciones;
 
 /**
- *
+ * Clase para excepciones
  * @author Juampa
  */
 public class ArchivoNoExiste extends Exception {
+    /**
+     * Envia un mensaje de excepción
+     * @param msj mensaje a enviar
+     */
     public ArchivoNoExiste(String msj){
         super(msj);
     }

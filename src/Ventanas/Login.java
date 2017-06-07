@@ -71,9 +71,11 @@ public class Login extends javax.swing.JFrame {
                     aes.init(Cipher.DECRYPT_MODE,key);
                     // Se desencripta y se guarda en la variable de servidor
                     user.setPass(new String(aes.doFinal(user.getPassBytes())));
+                    //Se hace login desde el archivo
                     logueo(user.getUser(),user.getPass(),true);
                 }
                 else{
+                    //Si no hay sesión guardada, se muestra la ventana de login
                     this.setVisible(true);
                 }
             }
@@ -347,6 +349,12 @@ public class Login extends javax.swing.JFrame {
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());     
     }//GEN-LAST:event_jLabel9MouseClicked
+    /**
+     * Función que hace login o no, dependiendo de los datos enviados
+     * @param usuario nombre del usuario
+     * @param password contraseña del usuario
+     * @param guardar si va a guardarse la sesión o no
+     */
     private void logueo(String usuario, String password, boolean guardar){
         if(!server.getUser().equals("")){
             try {
