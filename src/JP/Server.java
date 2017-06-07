@@ -18,20 +18,40 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase utilizada para guardar las configuraciones de una conexión a un servidor, a un archivo
  * @author Juampa
  */
 public class Server {
+    //Variable de donde se guarda el archivo por default
     public static final File SERVER_CONFIG_DEFAULT_FILE=new File("server.conf");
-    private String ip="localhost", pass="", user="",bd="";
+    // Varibles de conexión a la BD, por defecto
+    private String ip="localhost", pass="", user="root",bd="";
+    //Array de bytes de la contraseña cifrada
     private byte[] passArray;
+    /**
+     * Constructor vacío, para añadirle datos luego
+     */
     public Server(){}
+    /**
+     * Constructor para guardar en archivo los datos de conexión
+     * @param ip ip del servidor
+     * @param user usuario del SGBD
+     * @param passArray contraseña del usuario
+     * @param bd nombre de la base de datos
+     */
     public Server(String ip,String user, byte[] passArray, String bd){
         this.ip=ip;
         this.user=user;
         this.passArray=passArray;
         this.bd=bd;
     }
+    /**
+     * Constructor que crea una estructura de la clase, extrayendo los datos del archivo de configuración
+     * @param archivo
+     * @throws FileNotFoundException si el archivo no se encuentra
+     * @throws FormatoInvalido si el archivo no pertenece a este programa
+     * @throws ArchivoNoExiste si el archivo no existe
+     */
     public Server (File archivo) throws FileNotFoundException, FormatoInvalido, ArchivoNoExiste{
         try {
             if(archivo.exists()){
@@ -76,7 +96,9 @@ public class Server {
                         contraTemp.add((byte)leer);
                         leer=file.read();
                     }
+                    //Se inicializa el array de datos de contraseña
                     passArray=new byte[contraTemp.size()];
+                    //Se guardan los datos en el array
                     for(int i=0;i<contraTemp.size();i++){
                         passArray[i]=contraTemp.get(i);
                     }
@@ -91,6 +113,11 @@ public class Server {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /**
+     * Escribe en un archivo las configuraciones
+     * @param file archivo a escribir
+     * @throws NoSePuedeEscribirArchivo en caso de que no pueda escribirse en el archivo
+     */
     public void escribirArchivo(File file) throws NoSePuedeEscribirArchivo{
         try {
             //Comprobamos si el archivo ya existe o si tiene datos

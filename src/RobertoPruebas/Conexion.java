@@ -19,11 +19,27 @@ public class Conexion {
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados0
     private static String user="root", ip="localhost", pass="", nombreBD=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
     public final static String claveCifradoBase="SCEUser Cifrado AES";
+    /**
+     * Crea un objeto conexión con datos predeterminados
+     */
     public Conexion (){}
+    /**
+     * Construye un objeto conexión con datos especificos del servidor con el SGBD
+     * @param user usuario de acceso
+     * @param ip ip del servidor
+     * @param pass contraseña del usuario
+     * @param db base de datos a conectarse
+     */
     public Conexion(String user, String ip, String pass, String db)
     {
         this.user=user;
         this.ip=ip;
+        this.pass=pass;
+        this.nombreBD=db;
+    }
+    public Conexion(String user, String pass, String db)
+    {
+        this.user=user;
         this.pass=pass;
         this.nombreBD=db;
     }
@@ -174,7 +190,7 @@ public class Conexion {
         
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT id, Codigo, Codigo_Barras, Descripcion FROM producto;");
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=0;");
         while(resultado.next()){
             Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion"), existencias(resultado.getInt("id"))+""});
         }
@@ -261,6 +277,10 @@ public class Conexion {
         conexion.close();
         return cant;
     }
+    /**
+     * EJEMPLO DE COMO USAR ESTA CLASE
+     * @throws SQLException en caso de error
+     */
     public void ejemploDeUso() throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -273,6 +293,13 @@ public class Conexion {
         }
         conexion.close();
     }
+    /**
+     * Invoca a un procedimiento almacenado en la BD para hacer login al programa
+     * @param usuario nombre del usuario
+     * @param pass contraeña
+     * @return retorna 1 si los datos son correctos, 0 de lo contrario
+     * @throws SQLException en caso de error
+     */
     public int login(String usuario, String pass) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -285,6 +312,13 @@ public class Conexion {
         conexion.close();
         return res;
     }
+    /**
+     * Invoca un procedimiento almacenado en la BD para crear un nuevo usuario
+     * @param usuario usuario nuevo
+     * @param pass contraseña del usuario
+     * @return 1 si se ha creado el usuario, 0 de lo contrario
+     * @throws SQLException en caso de error
+     */
     public int crearUsuario(String usuario, String pass) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -297,12 +331,22 @@ public class Conexion {
         conexion.close();
         return res;
     }
+    /**
+     * Elimina un usuario
+     * @param usuario usuario a eliminar
+     * @throws SQLException en caso de error
+     */
     public void eliminarUsuario(String usuario) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         int resultado = instruccion.executeUpdate("DELETE FROM usuario WHERE Usuario='"+usuario+"'"); //se guarda el resultado de la instruccion
         conexion.close();
     }
+    /**
+     * Obtiene la lista de usuarios
+     * @return un arreglo con la lista de usuarios
+     * @throws SQLException en caso de error
+     */
     public ArrayList obtenerUsuarios() throws SQLException{
         ArrayList users=new ArrayList();
         conectar(); //permite la conexion con la base de datos
@@ -459,6 +503,11 @@ public class Conexion {
         conexion.close();
         return atributo;
     }
+      /**
+     * Funcion que obtiene todos los productos contenidos en la base de datos, su descripcion, codiogs y su id en una matriz
+     * @return Matriz con atributos de todos los productos
+     * @throws SQLException 
+     */
    public ArrayList[] obtener_productos() throws SQLException{
         ArrayList[] matriz=new ArrayList[4];
         matriz[0]=new ArrayList();
@@ -467,7 +516,7 @@ public class Conexion {
         matriz[3]=new ArrayList();
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("select id,codigo,codigo_barras,descripcion from producto"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        ResultSet resultado = instruccion.executeQuery("select id,codigo,codigo_barras,descripcion from producto where habilitado=1;"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
         while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
         {
             matriz[0].add(resultado.getInt(1));
@@ -478,4 +527,14 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
+   public void deshabilitarProducto(int id) throws SQLException
+   {
+       if(id>0)
+       {
+           conectar();
+           Statement instruccion=conexion.createStatement();
+           instruccion.executeUpdate("update producto set habilitado=0 where id="+id+";");
+           conexion.close();
+       }
+   }
 }

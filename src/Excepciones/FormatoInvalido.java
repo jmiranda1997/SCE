@@ -6,10 +6,14 @@
 package Excepciones;
 
 /**
- *
+ * Clase para excepciones
  * @author Juampa
  */
 public class FormatoInvalido extends Exception {
+    /**
+     * Envia un mensaje de excepción
+     * @param msj mensaje a enviar
+     */
     public FormatoInvalido(String msj){
         super(msj);
     }
