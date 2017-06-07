@@ -63,6 +63,7 @@ public class DialogoOpcion extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        textArea1 = new java.awt.TextArea();
         jPanel1 = new javax.swing.JPanel();
         btn_Cancelar = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -162,6 +163,7 @@ public class DialogoOpcion extends javax.swing.JDialog {
         jTextArea1.setRows(5);
         jTextArea1.setBorder(null);
         jTextArea1.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        jTextArea1.setEnabled(false);
         jScrollPane2.setViewportView(jTextArea1);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 290, 90));
@@ -262,5 +264,6 @@ public class DialogoOpcion extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lbl_Titulo;
+    private java.awt.TextArea textArea1;
     // End of variables declaration//GEN-END:variables
 }
