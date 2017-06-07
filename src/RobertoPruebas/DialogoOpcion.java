@@ -33,17 +33,25 @@ public class DialogoOpcion extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
     }
+    /**
+     * Metodo que carga el icono del panel en base a un numero entero
+     * @param Icono numero del icono
+     */
     private void cargar_icono(int Icono)
     {
-        if (Icono == 1) {
-            this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/error.png")));
-            this.btn_Cancelar.setVisible(false);
-        }else if (Icono == 2){
-            this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/info.png")));
-            this.btn_Cancelar.setVisible(false);
-        }else if (Icono == 3){
-            this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/question.png")));
-            this.btn_Cancelar.setVisible(true);
+        switch (Icono) {
+            case 1:
+                this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/error.png")));
+                this.btn_Cancelar.setVisible(false);
+                break;
+            case 2:
+                this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/info.png")));
+                this.btn_Cancelar.setVisible(false);
+                break;
+            default:
+                this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/question.png")));
+                this.btn_Cancelar.setVisible(true);
+                break;
         }
     }
     /**
@@ -173,7 +181,10 @@ public class DialogoOpcion extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+    *funcion booleana que retorna el valor de la opcion elegida en el cuadro de dialogo     
+    * @return TRUE si se clickeo aceptar - FALSE si se cerro o se clickeo cancelar
+    */
     public static boolean isAceptar() {
         return aceptar;
     }

@@ -769,7 +769,7 @@ public class Productos extends javax.swing.JPanel {
             }
             if(listado!=null)
             {
-                JPanel panel;
+                pn_listado.removeAll();
                 for(int i=0;i<listado[0].size();i++)
                 {
                     JPanel pan=new producto_lista(listado[1].get(i).toString(),listado[2].get(i).toString(),
@@ -1117,12 +1117,26 @@ public class Productos extends javax.swing.JPanel {
 
     private void btn_verMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_verMouseReleased
         // TODO add your handling code here:
-        
-        
     }//GEN-LAST:event_btn_verMouseReleased
 
     private void btn_eliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_eliminarMouseClicked
         // TODO add your handling code here:
+       if(productoActual.size()>0)
+        {
+            btn_eliminar.setBackground(Color.red);
+            try {
+                DialogoOpcion dialogo= new DialogoOpcion(null,true, 2,"Eliminar Producto", "Esta seguro de eliminar este producto");
+                dialogo.setVisible(true);
+                if(dialogo.isAceptar())
+                    conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
+            } catch (SQLException ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            btn_eliminar.setBackground(Color.black);
+            llenarListado();
+            productoActual=new ArrayList();
+            modoSinDatos();
+        }
     }//GEN-LAST:event_btn_eliminarMouseClicked
 
     private void btn_eliminarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_eliminarMousePressed
