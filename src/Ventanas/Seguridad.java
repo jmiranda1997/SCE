@@ -28,6 +28,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.ComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,10 +45,12 @@ public class Seguridad extends javax.swing.JPanel {
     public Seguridad(Conexion conexion) {
         initComponents();  
         this.conexion=conexion;
+        //Hacemos invisibles todos lo paneles que no deben mostrarse desde el inicio
         eliminarPanel.setVisible(false);
         ingresarPanel.setVisible(false);
         conexionPanel.setVisible(false);
         usuariosPanel1.setVisible(false);
+        //Ponemos los paneles en el mismo punto, de tal manera que todos estén en el centro, y no regados en el JFrame
         ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
         conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
     }
@@ -89,8 +92,9 @@ public class Seguridad extends javax.swing.JPanel {
         verUsElButton = new javax.swing.JLabel();
         verUsModButton = new javax.swing.JLabel();
         verUsInButton = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         logoutButton = new javax.swing.JLabel();
+        Minimizar = new javax.swing.JLabel();
+        Salir = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setPreferredSize(new java.awt.Dimension(940, 650));
@@ -358,13 +362,13 @@ public class Seguridad extends javax.swing.JPanel {
         usuariosPanel1Layout.setHorizontalGroup(
             usuariosPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, usuariosPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addComponent(verUsInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(verUsModButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(verUsElButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
         usuariosPanel1Layout.setVerticalGroup(
             usuariosPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,15 +381,7 @@ public class Seguridad extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(usuariosPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 60, -1, -1));
-
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
-            }
-        });
-        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(916, 0, -1, -1));
+        add(usuariosPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, -1));
 
         logoutButton.setBackground(new java.awt.Color(255, 0, 0));
         logoutButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -399,6 +395,26 @@ public class Seguridad extends javax.swing.JPanel {
             }
         });
         add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 0, 200, 54));
+
+        Minimizar.setForeground(new java.awt.Color(255, 255, 255));
+        Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
+        Minimizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MinimizarMouseClicked(evt);
+            }
+        });
+        add(Minimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 0, -1, -1));
+
+        Salir.setBackground(new java.awt.Color(0, 0, 0));
+        Salir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
+        Salir.setOpaque(true);
+        Salir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SalirMouseClicked(evt);
+            }
+        });
+        add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void guardarDBButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarDBButtonMouseClicked
@@ -416,6 +432,7 @@ public class Seguridad extends javax.swing.JPanel {
                 Server server=new Server(ipField.getText(), userField.getText(),encriptado , bdField.getText());
                 server.escribirArchivo(Server.SERVER_CONFIG_DEFAULT_FILE);
                 JOptionPane.showMessageDialog(null, "Archivo Escrito","Escritura exitosa", JOptionPane.INFORMATION_MESSAGE);
+                //Limpiamos los campos de texto, y ponemos todo a su estado original
                 ipField.setText("");
                 userField.setText("");
                 passField.setText("");
@@ -438,21 +455,19 @@ public class Seguridad extends javax.swing.JPanel {
         ingresoUserNuevo();
     }//GEN-LAST:event_userIButttonMouseClicked
 
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_jLabel9MouseClicked
-
     private void verUsElButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verUsElButtonMouseClicked
         try {
+            //Limpiamos la lista de usuarios en el combo
             int tamano=usuariosCombo1.getModel().getSize();
             for (int i = 0; i < tamano; i++) {
                 usuariosCombo1.removeItemAt(0);
             }
+            //Obtenemos la lista de usuarios desde la BD, y luego los agregamos al combo
             ArrayList modelo= conexion.obtenerUsuarios();
             for(int i=0;i<modelo.size();i++){
                 usuariosCombo1.addItem((String) modelo.get(i));
             }
+            //Hacemos que no esté seleccionado ningún elemento del combo, y mostramos el panel
             usuariosCombo1.setSelectedIndex(-1);
             eliminarPanel.setVisible(true);
             usuariosPanel1.setVisible(false);
@@ -462,11 +477,13 @@ public class Seguridad extends javax.swing.JPanel {
     }//GEN-LAST:event_verUsElButtonMouseClicked
 
     private void gesUsuariosButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gesUsuariosButtonMouseClicked
-       usuariosPanel1.setVisible(true);
-       gesConButton.setEnabled(false);
+        //Mostramos el panel de gestión de usuarios, y deshabilitamos otras opciones
+        usuariosPanel1.setVisible(true);
+        gesConButton.setEnabled(false);
     }//GEN-LAST:event_gesUsuariosButtonMouseClicked
 
     private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutButtonMouseClicked
+        //Borramos el contenido del archivo de logueo, para que no vuelva a iniciarse la sesión
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(UsuarioG.LOGGED_USER_DEFAULT_FILE));
@@ -481,7 +498,14 @@ public class Seguridad extends javax.swing.JPanel {
                 Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        // (Comentar/Descomentar una opción) Despues de borrar el archivo, mostramos de nuevo la ventana de login, o cerramos el programa
+        //Opcion 1: cierra el programa
         System.exit(0);
+        //Opcion 2: muestra de nuevo el login (aun infuncional)
+        //Login l= new Login();
+        //this.setVisible(false);
+        //l.setVisible(true);
+        
     }//GEN-LAST:event_logoutButtonMouseClicked
 
     private void verUsInButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verUsInButtonMouseClicked
@@ -493,10 +517,25 @@ public class Seguridad extends javax.swing.JPanel {
         conexionPanel.setVisible(true);
         gesUsuariosButton.setEnabled(false);
     }//GEN-LAST:event_gesConButtonMouseClicked
+
+    private void SalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalirMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_SalirMouseClicked
+
+    private void MinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MinimizarMouseClicked
+        //Obtenemos los contenedores padres, hasta obtener el JFrame donde se está trabajando
+        JFrame padre= (JFrame)this.getParent().getParent().getParent().getParent().getParent();
+        //Se le manda la orden de minimizar
+        padre.setExtendedState(1);
+    }//GEN-LAST:event_MinimizarMouseClicked
+    //Elimina un usuario, seleccionado en el combo
     private void eliminarUser(){
+        //Verifica que haya un objeto seleccionado en el combo
         if(usuariosCombo1.getSelectedIndex()!=-1){
             try {
+                //Manda la orden de eliminación a la BD
                 conexion.eliminarUsuario((String) usuariosCombo1.getSelectedItem());
+                //Muestra mensaje de borrado, y pone todo en estado normal
                 JOptionPane.showMessageDialog(null, "Eliminado exitoso","Eliminación",JOptionPane.INFORMATION_MESSAGE);
                 limpiar();
             } catch (SQLException ex) {
@@ -504,13 +543,20 @@ public class Seguridad extends javax.swing.JPanel {
             }
         }
     }
-    
+    /**
+     * Ingresa un usuario nuevo
+     */
     private void ingresoUserNuevo(){
+        //Obtiene las Strings en los campos de contraseña
         String pass1=new String(passIField.getPassword()),pass2=new String(passIField2.getPassword());
+        //Obtiene el nombre del usuario
         String user=userIField.getText();
+        //Compara que las contraseñas sean iguales
         if(!user.equals("")&&pass1.equals(pass2)&&!pass1.equals("")){
             try {
+                //Manda la orden de ingreso de usuario, si la función retorna 1 significa que se ingresó correctamente
                 if(conexion.crearUsuario(user, pass1)==1){
+                    //Muestra un mensaje de exito, y limpia
                     JOptionPane.showMessageDialog(null, "Ingreso exitoso","Ingreso",JOptionPane.INFORMATION_MESSAGE);
                     passIField.setText("");
                     passIField2.setText("");
@@ -524,6 +570,9 @@ public class Seguridad extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Ingrese adecuadamente los datos","Error",JOptionPane.WARNING_MESSAGE);
         }
     }
+    /**
+     * Limpia el JPanel para poner los paneles no usados invisibles
+     */
     private void limpiar(){
         eliminarPanel.setVisible(false);
         ingresarPanel.setVisible(false);
@@ -537,6 +586,8 @@ public class Seguridad extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Minimizar;
+    private javax.swing.JLabel Salir;
     private javax.swing.JTextField bdField;
     private javax.swing.JPanel conexionPanel;
     private javax.swing.JPanel eliminarPanel;
@@ -553,7 +604,6 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel logoutButton;
     private javax.swing.JPasswordField passField;
     private javax.swing.JPasswordField passIField;

@@ -26,11 +26,25 @@ public class UsuarioG {
     public static final File LOGGED_USER_DEFAULT_FILE= new File("login.conf");
     private String user="", pass="";
     private byte[] passBytes=null;
+    /**
+     * Constructor a partir de datos existentes, que no sean el archivo
+     * @param user usuario a guardar
+     * @param pass constraseña del usuario
+     */
     public UsuarioG(String user, byte[] pass){
         this.user=user;
         this.passBytes=pass;
     }
+    /**
+     * Constructor vacío, para crear un objeto genérico
+     */
     public UsuarioG(){}
+    /**
+     * Construye un usuario a partir de un archivo
+     * @param archivo archivo a leer
+     * @throws ArchivoNoExiste En caso que el archivo no exista
+     * @throws FormatoInvalido en caso que el archivo no sea de este programa
+     */
     public UsuarioG(File archivo) throws ArchivoNoExiste, FormatoInvalido{
         try {
             if(archivo.exists()){
@@ -63,6 +77,7 @@ public class UsuarioG {
                         contraTemp.add((byte)leer);
                         leer=file.read();
                     }
+                    //Se pasan los datos del ArrayList al arreglo publico
                     passBytes=new byte[contraTemp.size()];
                     for(int i=0;i<contraTemp.size();i++){
                         passBytes[i]=contraTemp.get(i);
@@ -78,6 +93,11 @@ public class UsuarioG {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /**
+     * Escribe la información del inicio de sesión en un archivo
+     * @param file archivo donde se guardará
+     * @throws NoSePuedeEscribirArchivo En caso que no pueda guardarse el archivo
+     */
     public void escribirArchivo(File file) throws NoSePuedeEscribirArchivo{
         try {
             //Comprobamos si el archivo ya existe o si tiene datos
