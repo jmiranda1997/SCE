@@ -97,6 +97,7 @@ public class Productos extends javax.swing.JPanel {
         btn_nuevo = new javax.swing.JLabel();
         btn_modificar = new javax.swing.JLabel();
         btn_eliminar = new javax.swing.JLabel();
+        Salir1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -635,7 +636,7 @@ public class Productos extends javax.swing.JPanel {
         pnContenido.setLayout(pnContenidoLayout);
         pnContenidoLayout.setHorizontalGroup(
             pnContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE)
         );
         pnContenidoLayout.setVerticalGroup(
             pnContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -727,14 +728,25 @@ public class Productos extends javax.swing.JPanel {
         });
         pn_herramientas.add(btn_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(474, 0, 138, -1));
 
+        Salir1.setBackground(new java.awt.Color(0, 0, 0));
+        Salir1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Salir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
+        Salir1.setOpaque(true);
+        Salir1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Salir1MouseClicked(evt);
+            }
+        });
+        pn_herramientas.add(Salir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 0, 40, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addComponent(pnContenido, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE))
-            .addComponent(pn_herramientas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
+                .addComponent(pnContenido, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE))
+            .addComponent(pn_herramientas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -757,7 +769,7 @@ public class Productos extends javax.swing.JPanel {
             }
             if(listado!=null)
             {
-                JPanel panel;
+                pn_listado.removeAll();
                 for(int i=0;i<listado[0].size();i++)
                 {
                     JPanel pan=new producto_lista(listado[1].get(i).toString(),listado[2].get(i).toString(),
@@ -1105,12 +1117,26 @@ public class Productos extends javax.swing.JPanel {
 
     private void btn_verMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_verMouseReleased
         // TODO add your handling code here:
-        
-        
     }//GEN-LAST:event_btn_verMouseReleased
 
     private void btn_eliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_eliminarMouseClicked
         // TODO add your handling code here:
+       if(productoActual.size()>0)
+        {
+            btn_eliminar.setBackground(Color.red);
+            try {
+                DialogoOpcion dialogo= new DialogoOpcion(null,true, 2,"Eliminar Producto", "Esta seguro de eliminar este producto");
+                dialogo.setVisible(true);
+                if(dialogo.isAceptar())
+                    conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
+            } catch (SQLException ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            btn_eliminar.setBackground(Color.black);
+            llenarListado();
+            productoActual=new ArrayList();
+            modoSinDatos();
+        }
     }//GEN-LAST:event_btn_eliminarMouseClicked
 
     private void btn_eliminarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_eliminarMousePressed
@@ -1160,8 +1186,15 @@ public class Productos extends javax.swing.JPanel {
     private void btn_nuevoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_nuevoMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_nuevoMousePressed
+
+    private void Salir1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Salir1MouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_Salir1MouseClicked
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Salir;
+    private javax.swing.JLabel Salir1;
     private javax.swing.JLabel btn_Guardar_Aceptar;
     private javax.swing.JLabel btn_eliminar;
     private javax.swing.JLabel btn_modificar;
