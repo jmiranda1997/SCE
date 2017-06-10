@@ -225,6 +225,9 @@
               <Image iconType="3" name="/iconosSCE/minus-symbol.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="MinimizarMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

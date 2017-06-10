@@ -537,4 +537,47 @@ public class Conexion {
            conexion.close();
        }
    }
+   /**
+     * Metodo que regresa la lista de clientes como un arreglo
+     * @return
+     * @throws SQLException 
+     */
+    public DefaultTableModel obtenerClientes() throws SQLException{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaClientes(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito, Cheque FROM cliente;");
+        while(resultado.next()){
+            
+            modelo.addRow(new String[] {resultado.getString("NIT"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Descuento"),resultado.getString("Direccion"),(resultado.getString("LimiteCredito").equals("1"))? "SI": "NO"});
+        }
+        conexion.close();
+        return modelo;
+    }
+    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Se le acepta cheque"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false,false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    }
+    
+    public int crearCliente(String nombre, String apellido, int descuento, String direccion, int credito, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+nombre+"','"+apellido+"',"+descuento+",'"+direccion+"',"+credito+",'"+NIT+"',"+(cheque? 1:0)+" R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
 }
