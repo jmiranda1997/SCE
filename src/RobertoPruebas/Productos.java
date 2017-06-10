@@ -25,10 +25,11 @@ public class Productos extends javax.swing.JPanel {
     private boolean modificar=false;
     /**
      * Creates new form Productos
-     * @param nuevo
+     * @param conexion
      */
-    public Productos() {
+    public Productos(Conexion conexion) {
         initComponents();
+        this.conexion=conexion;
         try {
             sucursales_unidades=new ArrayList[2];
             sucursales_unidades=conexion.obtener_Sucursales_Unidades();
