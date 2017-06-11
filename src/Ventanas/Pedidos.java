@@ -549,7 +549,7 @@ public class Pedidos extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Seleccion1MouseEntered
 
     private void tabla_detalleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyPressed
-        
+       
     }//GEN-LAST:event_tabla_detalleKeyPressed
     private float total = 0;
     private void tabla_detalleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyReleased
