@@ -5,6 +5,7 @@
  */
 package JP;
 
+import JP.*;
 import Excepciones.*;
 import Ventanas.Seguridad;
 import java.io.BufferedWriter;

@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,10 +27,11 @@ public class Productos extends javax.swing.JPanel {
     private boolean modificar=false;
     /**
      * Creates new form Productos
-     * @param nuevo
+     * @param conexion
      */
-    public Productos() {
+    public Productos(Conexion conexion) {
         initComponents();
+        this.conexion=conexion;
         try {
             sucursales_unidades=new ArrayList[2];
             sucursales_unidades=conexion.obtener_Sucursales_Unidades();
@@ -91,7 +94,7 @@ public class Productos extends javax.swing.JPanel {
         btn_Guardar_Aceptar = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         scp_listado = new javax.swing.JScrollPane();
-        pn_listado = new javax.swing.JPanel();
+        tbl_productos = new javax.swing.JTable();
         pn_herramientas = new javax.swing.JPanel();
         btn_ver = new javax.swing.JLabel();
         btn_nuevo = new javax.swing.JLabel();
@@ -475,24 +478,24 @@ public class Productos extends javax.swing.JPanel {
 
         scp_listado.setBorder(null);
         scp_listado.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scp_listado.setAutoscrolls(true);
         scp_listado.setPreferredSize(new java.awt.Dimension(292, 615));
 
-        pn_listado.setBackground(new java.awt.Color(0, 0, 0));
-        pn_listado.setPreferredSize(new java.awt.Dimension(183, 400));
+        tbl_productos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        javax.swing.GroupLayout pn_listadoLayout = new javax.swing.GroupLayout(pn_listado);
-        pn_listado.setLayout(pn_listadoLayout);
-        pn_listadoLayout.setHorizontalGroup(
-            pn_listadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 292, Short.MAX_VALUE)
-        );
-        pn_listadoLayout.setVerticalGroup(
-            pn_listadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
-        );
+            },
+            new String [] {
 
-        scp_listado.setViewportView(pn_listado);
+            }
+        ));
+        tbl_productos.setAutoscrolls(false);
+        tbl_productos.setSelectionBackground(new java.awt.Color(255, 0, 0));
+        tbl_productos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_productosMouseClicked(evt);
+            }
+        });
+        scp_listado.setViewportView(tbl_productos);
 
         javax.swing.GroupLayout pnDetalleLayout = new javax.swing.GroupLayout(pnDetalle);
         pnDetalle.setLayout(pnDetalleLayout);
@@ -553,20 +556,20 @@ public class Productos extends javax.swing.JPanel {
                                 .addGap(64, 64, 64)
                                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btn_Guardar_Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scp_descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                                    .addComponent(scp_descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(10, 10, 10)
+                        .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnDetalleLayout.setVerticalGroup(
             pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnDetalleLayout.createSequentialGroup()
+                .addComponent(lbl_Titulo)
+                .addGap(9, 9, 9)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnDetalleLayout.createSequentialGroup()
-                        .addComponent(lbl_Titulo)
-                        .addGap(9, 9, 9)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
                         .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnDetalleLayout.createSequentialGroup()
                                 .addComponent(lbl_codigo)
@@ -628,7 +631,7 @@ public class Productos extends javax.swing.JPanel {
                             .addComponent(scp_descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Guardar_Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -760,30 +763,37 @@ public class Productos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     private void llenarListado()
     {
-        //if(!nuevo){
-            ArrayList[] listado=null;
-            try {
-                listado=conexion.obtener_productos();
-            } catch (SQLException ex) {
-                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if(listado!=null)
-            {
-                pn_listado.removeAll();
-                for(int i=0;i<listado[0].size();i++)
-                {
+        try {
+            DefaultTableModel tabla=conexion.obtenerProductos_vista();
+            if(tabla!=null)
+                    tbl_productos.setModel(conexion.obtenerProductos_vista());
+                    /*//if(!nuevo){
+                    ArrayList[] listado=null;
+                    try {
+                    listado=conexion.obtener_productos();
+                    } catch (SQLException ex) {
+                    Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if(listado!=null)
+                    {
+                    pn_listado.removeAll();
+                    for(int i=0;i<listado[0].size();i++)
+                    {
                     JPanel pan=new producto_lista(listado[1].get(i).toString(),listado[2].get(i).toString(),
-                            listado[3].get(i).toString(),this);
+                    listado[3].get(i).toString(),this);
                     pan.setSize(292,100);
                     pan.setLocation(0, i*100);
                     pan.setName(listado[0].get(i).toString());
                     pn_listado.add(pan);
-                }
-                pn_listado.setPreferredSize(new Dimension(pn_listado.getParent().getWidth(),listado[0].size()*100));
-                pn_listado.getParent().revalidate();
-                pn_listado.getParent().repaint();
-            }
-        //}
+                    }
+                    pn_listado.setPreferredSize(new Dimension(pn_listado.getParent().getWidth(),listado[0].size()*100));
+                    pn_listado.getParent().revalidate();
+                    pn_listado.getParent().repaint();
+                    }
+                    //}*/
+        } catch (SQLException ex) {
+            Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     private void modoEditable(){
         txt_codigo.setEnabled(true);      
@@ -809,6 +819,18 @@ public class Productos extends javax.swing.JPanel {
             cargarProductoActual();
         else
             modoSinDatos();
+    }
+    public void cargarProducto(String codigo, String codigo_barras, String descripcion)
+    {
+        try {
+            productoActual=conexion.obtener_detalleProducto(descripcion,codigo,codigo_barras);
+        } catch (SQLException ex) {
+            Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(productoActual.size()>0)
+            cargarProductoActual();
+        else
+           modoSinDatos();
     }
     private void cargarProductoActual()
     {
@@ -1032,8 +1054,9 @@ public class Productos extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Guardar_AceptarMouseReleased
 
     private void btn_Guardar_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Guardar_AceptarMouseClicked
-        if(nuevo){
-            try {
+        
+        try {
+            if(nuevo){
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText(), uni=(cmb_unidad.getSelectedIndex()+1)+"";
                 if(Integer.parseInt(uni)== cmb_unidad.getItemCount())
@@ -1045,14 +1068,10 @@ public class Productos extends javax.swing.JPanel {
                     Double.parseDouble(txt_costo.getText()),est,col,fil,txt_marca.getText(),
                     uni,Integer.parseInt(sucursales_unidades[0].get(cmb_sucursal.getSelectedIndex()).toString()),
                     Double.parseDouble(txt_existencia.getText()));
-                btn_verMouseClicked(evt);
                 llenarListado();
-            } catch (SQLException ex) {
-                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if(modificar){
-             try {
+                btn_verMouseClicked(evt); 
+                }
+            if(modificar){
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText();
                 conexion.modificarProducto(Integer.parseInt(productoActual.get(0).toString()),txt_codigo.getText(),txt_codigoBarra.getText(),
@@ -1060,9 +1079,10 @@ public class Productos extends javax.swing.JPanel {
                     Double.parseDouble(txt_costo.getText()),est,col,fil,txt_marca.getText());
                  cargarProducto(Integer.parseInt(productoActual.get(0).toString()));
                  btn_verMouseClicked(evt);
-            } catch (SQLException ex) {
-                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);;
+                 llenarListado();
             }
+        } catch (SQLException ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_Guardar_AceptarMouseClicked
 
@@ -1128,7 +1148,14 @@ public class Productos extends javax.swing.JPanel {
                 DialogoOpcion dialogo= new DialogoOpcion(null,true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminar Producto", "Esta seguro de eliminar este producto");
                 dialogo.setVisible(true);
                 if(dialogo.isAceptar())
-                    conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
+                {
+                    if(conexion.obtenerExistencia(0,Integer.parseInt(productoActual.get(0).toString()))==0)
+                        conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
+                    else{
+                        dialogo=new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR,"Error","Aun hay existencias del producto");
+                        dialogo.setVisible(true);
+                    }
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1163,7 +1190,7 @@ public class Productos extends javax.swing.JPanel {
         // TODO add your handling code here:
         if(productoActual.size()>0)
         {
-            cargarProductoActual();
+            
             btn_modificar.setBackground(Color.red);
             btn_nuevo.setBackground(Color.black);
             btn_ver.setBackground(Color.black);
@@ -1171,6 +1198,7 @@ public class Productos extends javax.swing.JPanel {
             nuevo=false;
             modoEditable();
             txt_codigo.requestFocus();
+            cargarProductoActual();
         }
     }//GEN-LAST:event_btn_modificarMouseClicked
 
@@ -1191,9 +1219,17 @@ public class Productos extends javax.swing.JPanel {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_Salir1MouseClicked
+
+    private void tbl_productosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_productosMouseClicked
+        // TODO add your handling code here:
+       int fila= tbl_productos.getSelectedRow();
+       if(fila>-1)
+       {
+           cargarProducto(tbl_productos.getValueAt(fila,0).toString(),tbl_productos.getValueAt(fila,1).toString(),tbl_productos.getValueAt(fila,2).toString());
+       }
+    }//GEN-LAST:event_tbl_productosMouseClicked
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Salir;
     private javax.swing.JLabel Salir1;
     private javax.swing.JLabel btn_Guardar_Aceptar;
     private javax.swing.JLabel btn_eliminar;
@@ -1220,9 +1256,9 @@ public class Productos extends javax.swing.JPanel {
     public static javax.swing.JPanel pnContenido;
     public static javax.swing.JPanel pnDetalle;
     private javax.swing.JPanel pn_herramientas;
-    private javax.swing.JPanel pn_listado;
     private javax.swing.JScrollPane scp_descripcion;
     public static javax.swing.JScrollPane scp_listado;
+    private javax.swing.JTable tbl_productos;
     private javax.swing.JTextArea txa_descripcion;
     private javax.swing.JTextField txt_codigo;
     private javax.swing.JTextField txt_codigoBarra;
