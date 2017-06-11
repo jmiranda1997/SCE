@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados0
-    private static String user="root", ip="localhost", pass="", nombreBD=""; //Variables que pueden ser modificadas y por defecto son las que se muestran
+    private static String user="root", ip="localhost", pass="@Sistemas2017", nombreBD="sce"; //Variables que pueden ser modificadas y por defecto son las que se muestran
     public final static String claveCifradoBase="SCEUser Cifrado AES";
     /**
      * Crea un objeto conexión con datos predeterminados
@@ -129,6 +129,7 @@ public class Conexion {
             boolean[] canEdit = new boolean [] {
         false, false, false, false
             };
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
         return canEdit [columnIndex];
             }
@@ -140,17 +141,44 @@ public class Conexion {
             boolean[] canEdit = new boolean [] {
         false, false, false, false
             };
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
         return canEdit [columnIndex];
             }
         };
     }
+     
     private void iniciarTablaPedidos() {
 //        
         Productos = new DefaultTableModel(null, new String[]{"Numero", "Proveedor", "Fecha", "Total", "Saldo"}){
             boolean[] canEdit = new boolean [] {
         false, false, false, false
             };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
+    private void iniciarTablaClientes() {
+//        
+        Clientes = new DefaultTableModel(null, new String[]{"Codigo", "Nit",  "Nombre",  "Descuento", "Credito", "Saldo"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false, false, false
+            };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
+    private void iniciarTablaExistencias() {
+//        
+        Existencias = new DefaultTableModel(null, new String[]{"Sucursal", "Cantidad"}){
+            boolean[] canEdit = new boolean [] {
+        false, false
+            };
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
         return canEdit [columnIndex];
             }
@@ -163,7 +191,7 @@ public class Conexion {
         instruccion.executeUpdate("UPDATE proveedor SET Habilitado = 0 WHERE Nombre = '" + Nombre + "';");
         conexion.close();
     }
-    private DefaultTableModel Proveedores, Productos, Pedidos;
+    private DefaultTableModel Proveedores, Productos, Pedidos, Clientes, Existencias;
     /**
      * Metodo que regresa la lista de proveedores como un arreglo
      * @return
@@ -186,16 +214,67 @@ public class Conexion {
     public DefaultTableModel obtenerProductos() throws SQLException{
          Productos = null;
          iniciarTablaProductos();
-        iniciarTablaProveedores();
         
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT id, Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=0;");
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
         while(resultado.next()){
             Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion"), existencias(resultado.getInt("id"))+""});
         }
         conexion.close();
         return Productos;
+    }
+    public DefaultTableModel obtenerProductosfac(String Sucursal) throws SQLException{
+         Productos = null;
+         iniciarTablaProductos();
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
+        while(resultado.next()){
+            Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion"), existencia(sucursalId(Sucursal),resultado.getInt("id"))+""});
+        }
+        conexion.close();
+        return Productos;
+    }
+     public DefaultTableModel obtenerExistencias(String Codigo) throws SQLException{
+         Existencias = null;
+         iniciarTablaExistencias();
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT s.Nombre , e.Existencia from existencia e INNER JOIN producto p ON e.Producto_id = p.id INNER JOIN sucursales s on e.Sucursales_id = s.id WHERE p.Codigo = '"+ Codigo +"';");
+        while(resultado.next()){
+            Existencias.addRow(new String[] {resultado.getString("Nombre"), resultado.getString("Existencia")});
+        }
+        conexion.close();
+        return Existencias;
+    }
+    private int sucursalId(String sucursal) throws SQLException{
+        int id= 0;
+        conectar();
+        
+        Statement instrucion = conexion.createStatement();
+        ResultSet resultado = instrucion.executeQuery("SELECT id FROM sucursales WHERE Nombre = '" + sucursal + "';");
+        while(resultado.next()){
+            id = resultado.getInt("id");
+        }
+        
+        conexion.close();
+        return id;
+    }
+    private float existencia(int Sucursal ,int Producto) throws SQLException{
+        float exi= 0;
+        conectar();
+        
+        Statement instrucion = conexion.createStatement();
+        ResultSet resultado = instrucion.executeQuery("SELECT Existencia from existencia WHERE Producto_id = " + Producto + " AND Sucursales_id = " + Sucursal + ";");
+        while(resultado.next()){
+            exi = resultado.getFloat("Existencia");
+        }
+        
+        conexion.close();
+        return exi;
     }
     public DefaultTableModel obtenerPedidos() throws SQLException{
         Pedidos = null;
@@ -210,6 +289,20 @@ public class Conexion {
         }
         conexion.close();
         return Pedidos;
+    }
+    public DefaultTableModel obtenerClientes() throws SQLException{
+        Clientes = null;
+        iniciarTablaClientes();
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, NIT, Nombre, Apellido, Descuento, LimiteCredito, Saldo FROM cliente;");
+        while(resultado.next()){
+            //boolean habilitado = (resultado.getString("Habilitado").equals("1"));
+            /*if(habilitado)*/ Clientes.addRow(new String[] {resultado.getInt("id")+ "", resultado.getString("NIT"), (resultado.getString("Apellido") == null)? resultado.getString("Nombre"): resultado.getString("Nombre") + " " + resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("LimiteCredito"), resultado.getString("Saldo")});
+        }
+        conexion.close();
+        return Clientes;
     }
     public int numeroPedido() throws SQLException{
         int numero = 0;
@@ -258,6 +351,19 @@ public class Conexion {
             conectar();
             Statement instruccion = conexion.createStatement();
             ResultSet resultado = instruccion.executeQuery("SELECT Existencia FROM Existencia WHERE Producto_id = " + id + ";");
+            while (resultado.next()){
+                existencias += resultado.getFloat("Existencia");
+            }
+            conexion.close();
+       
+       return existencias;
+    }
+    public float existencias(String Codigo) throws SQLException{
+       float existencias = 0;
+       
+            conectar();
+            Statement instruccion = conexion.createStatement();
+            ResultSet resultado = instruccion.executeQuery("SELECT e.Existencia from existencia e INNER JOIN producto p ON e.Producto_id = p.id WHERE p.Codigo = '" + Codigo + "';");
             while (resultado.next()){
                 existencias += resultado.getFloat("Existencia");
             }
@@ -537,6 +643,7 @@ public class Conexion {
            conexion.close();
        }
    }
+
    /**
      * Metodo que regresa la lista de clientes como un arreglo
      * @return
@@ -593,4 +700,76 @@ public class Conexion {
         conexion.close();
         return res;
     }
+
+   public ArrayList[] obtenerSucursales() throws SQLException{
+      
+       ArrayList[] Sucursales = new ArrayList[3];
+       Sucursales[0] = new ArrayList();
+       Sucursales[1] = new ArrayList();
+       Sucursales[2] = new ArrayList();
+       
+       conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT Nombre, NumeroFac, SerieFact FROM sucursales");
+       while (resultado.next()) {     
+           Sucursales[0].add(resultado.getString("Nombre"));
+           Sucursales[1].add(resultado.getString("NumeroFac"));
+           Sucursales[2].add((resultado.getString("SerieFact") == null) ? "": resultado.getString("SerieFact"));
+       }
+       
+       conexion.close();
+       return Sucursales;
+   }
+   public String fecha()throws SQLException{
+       String Fecha = "";
+       conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT obtenerFecha() Fecha;");
+       while (resultado.next()) {     
+           Fecha = resultado.getString("Fecha");
+       }
+       
+       conexion.close();
+       return Fecha;
+   }
+   public String[] obtenerCliente(int id) throws SQLException{
+        String[]  Cliente= null;
+               
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito FROM cliente WHERE id = " + id + ";");
+        while(resultado.next()){
+             Cliente = (new String[] {id + "", resultado.getString("NIT"), resultado.getString("Nombre"), (resultado.getString("Apellido") == null) ? "" : resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("Direccion"), resultado.getFloat("LimiteCredito") + ""});
+        }
+        conexion.close();
+        return Cliente;
+   }
+   public String[] obtenerCliente(String nit) throws SQLException{
+        String[] Cliente = null;
+
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Descuento, Direccion, LimiteCredito FROM cliente WHERE NIT = '" + nit + "';");
+        while(resultado.next()){
+            Cliente = (new String[] {resultado.getInt("id")+ "", nit, resultado.getString("Nombre"), (resultado.getString("Apellido") == null) ? "" : resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("Direccion"), resultado.getFloat("LimiteCredito") + ""});
+        }
+        conexion.close();
+        return Cliente;
+   }
+   public boolean existeCliente(String nit) throws SQLException{      
+       conectar();
+       Statement instruccion = conexion.createStatement();
+       ResultSet resultado = instruccion.executeQuery("SELECT COUNT(*) cant FROM cliente WHERE NIT = '" + nit + "';");
+       
+       while (resultado.next()) {           
+           if (resultado.getInt("cant") > 0) {
+               conexion.close();
+               return true;
+           }
+       }
+       
+       conexion.close();
+       return false;   
+   }
+
 }
