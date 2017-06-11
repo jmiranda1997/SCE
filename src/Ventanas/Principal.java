@@ -267,7 +267,7 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel7);
-        if(seguridad==null)
+        //if(seguridad==null)
             seguridad= new Clientes(conexion);
         seguridad.setLocation(0,0);
         seguridad.setSize(jPanel2.getSize());
