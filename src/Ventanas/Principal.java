@@ -33,9 +33,11 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+
         setLocationRelativeTo(null);  
         panel_Compras = new Compras();
         panel_Ventas = new Ventas();
+
     }
     public Principal(Conexion con){
         initComponents();
