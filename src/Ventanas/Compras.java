@@ -21,15 +21,7 @@ public class Compras extends javax.swing.JPanel {
      */
     public Compras() {
         initComponents();
-        setBoton(btn_Compras);
-        resetBoton(btn_Pagos);
-        resetBoton(btn_Proveedores);
-        JPanel j = new Pedidos();
-        j.setLocation(0, 0);
-        j.setSize(panel_Contenido.getSize());
-        panel_Contenido.removeAll();
-        panel_Contenido.add(j, BorderLayout.CENTER);
-        panel_Contenido.revalidate();
+        inicializarPedido();
     }
     private void setBoton(JLabel boton){
         boton.setBackground(Color.RED);
@@ -153,17 +145,26 @@ public class Compras extends javax.swing.JPanel {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_SalirMouseClicked
-
+    private JPanel panelPedido;
+    public void inicializarPedido(){
+        panelPedido = new Pedidos();
+        panelPedido.setLocation(0, 0);
+        panelPedido.setSize(panel_Contenido.getSize());
+        panel_Contenido.removeAll();
+        panel_Contenido.add(panelPedido, BorderLayout.CENTER);
+        panel_Contenido.revalidate();
+        panel_Contenido.repaint();
+    }
     private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
         setBoton(btn_Compras);
         resetBoton(btn_Pagos);
         resetBoton(btn_Proveedores);
         resetBoton(btn_Reportes);
-        JPanel j = new Pedidos();
-        j.setLocation(0, 0);
-        j.setSize(panel_Contenido.getSize());
+        //inicializarPedido();
+        panelPedido.setLocation(0, 0);
+        panelPedido.setSize(panel_Contenido.getSize());
         panel_Contenido.removeAll();
-        panel_Contenido.add(j, BorderLayout.CENTER);
+        panel_Contenido.add(panelPedido, BorderLayout.CENTER);
         panel_Contenido.revalidate();
         panel_Contenido.repaint();
     }//GEN-LAST:event_btn_ComprasMouseClicked

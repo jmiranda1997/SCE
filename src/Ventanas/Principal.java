@@ -31,16 +31,14 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-        setLocationRelativeTo(null);
-        setEtiqueta(btn_Inventario);
-        
-        
+        setLocationRelativeTo(null);  
+        panel_Compras = new Compras();
     }
     public Principal(Conexion con){
         initComponents();
         setLocationRelativeTo(null);
-        setEtiqueta(btn_Inventario);
         this.conexion=con;
+        panel_Compras = new Compras();
     }
     public void setEtiqueta(JLabel etiqueta){
         etiqueta.setBackground(Color.BLACK);
@@ -152,7 +150,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(btn_Inventario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(90, 90, 90)
                 .addComponent(btn_Compras, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(90, 90, 90)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,14 +190,18 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(880, 880, 880)
                 .addComponent(Minimizar)
                 .addGap(6, 6, 6)
-                .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1928, 1928, 1928))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(Minimizar))
-            .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(Minimizar))
+                    .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(650, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 950, 690));
@@ -226,11 +228,10 @@ public class Principal extends javax.swing.JFrame {
         jPanel2.removeAll();
         jPanel2.add(j, BorderLayout.CENTER);
         jPanel2.revalidate();
-        jPanel2.repaint();
         jPanel1.repaint();
-              
+        jPanel2.repaint();           
     }//GEN-LAST:event_btn_InventarioMouseClicked
-
+    private Compras panel_Compras;
     private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
         setEtiqueta(btn_Compras);
         resetEtiqueta(jLabel3);
@@ -238,14 +239,14 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
-        JPanel j = new Compras();
-        j.setLocation(0, 0);
-        j.setSize(jPanel2.getSize());
+        panel_Compras.setLocation(0, 0);
+        panel_Compras.setSize(jPanel2.getSize());
         jPanel2.removeAll();
-        jPanel2.add(j, BorderLayout.CENTER);
+        jPanel2.add(panel_Compras, BorderLayout.CENTER);
         jPanel2.revalidate();
-        jPanel2.repaint();
         jPanel1.repaint();
+        jPanel2.repaint();
+//        panel_Compras.inicializarPedido();
     }//GEN-LAST:event_btn_ComprasMouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
