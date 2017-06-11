@@ -729,6 +729,7 @@ public class Conexion {
         conexion.close();
         return lista;
    }
+
     public DefaultTableModel obtenerClientes_venta() throws SQLException{
         Clientes=null;
         iniciarTablaClientes();
@@ -759,6 +760,64 @@ public class Conexion {
             existencia=resultado.getInt(1);
         }
         return existencia;
+
+
+   /**
+     * Metodo que regresa la lista de clientes como un arreglo
+     * @return
+     * @throws SQLException 
+     */
+    public DefaultTableModel obtenerClientes() throws SQLException{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaClientes(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito, Saldo, Cheque FROM cliente;");
+        while(resultado.next()){
+            
+            modelo.addRow(new String[] {resultado.getString("NIT"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Descuento"),resultado.getString("Direccion"),resultado.getString("LimiteCredito"),resultado.getString("Saldo"), (resultado.getString("Cheque").equals("1")? "SI": "NO")});
+        }
+        conexion.close();
+        return modelo;
+    }
+    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false,false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
+    
+    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    
+    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("UPDATE Clientes SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+") WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+
     }
 
    public ArrayList[] obtenerSucursales() throws SQLException{
@@ -845,4 +904,5 @@ public class Conexion {
         conexion.close();
         return Productos;
     }
+
 }
