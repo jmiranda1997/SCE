@@ -528,6 +528,24 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
+      public ArrayList obtener_detalleProducto(String des, String codigo, String codigo_barras) throws SQLException{
+        ArrayList atributo=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("select p.id, p.codigo, codigo_barras,descripcion, precio_venta, "+
+                "precio_costo,estanteria, columna, fila,u.id ,m.Nombre from producto p left join "+
+                "unidad u on u.id=p.Unidad_id left join marca m ON m.id=p.Marca_id where p.codigo='"+codigo+
+                "' and p.codigo_barras='"+codigo_barras+"' and p.descripcion='"+des+"';"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        if(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            for(int i=1;i<12;i++)
+            {
+                atributo.add(resultado.getString(i));
+            }
+        }   
+        conexion.close();
+        return atributo;
+    }
    /**
     * metodo que deshabilita productos en la base de datos
     * @param id del producto a deshabilitar
@@ -643,5 +661,18 @@ public class Conexion {
             existencia=resultado.getInt(1);
         }
         return existencia;
+    }
+    public DefaultTableModel obtenerProductos_vista() throws SQLException{
+         Productos = null;
+         iniciarTablaProductos();
+        Productos.setColumnCount(3);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
+        while(resultado.next()){
+            Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion")});
+        }
+        conexion.close();
+        return Productos;
     }
 }
