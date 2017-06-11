@@ -92,7 +92,7 @@ public class Productos extends javax.swing.JPanel {
         btn_Guardar_Aceptar = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         scp_listado = new javax.swing.JScrollPane();
-        pn_listado = new javax.swing.JPanel();
+        jTable1 = new javax.swing.JTable();
         pn_herramientas = new javax.swing.JPanel();
         btn_ver = new javax.swing.JLabel();
         btn_nuevo = new javax.swing.JLabel();
@@ -476,24 +476,19 @@ public class Productos extends javax.swing.JPanel {
 
         scp_listado.setBorder(null);
         scp_listado.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scp_listado.setAutoscrolls(true);
         scp_listado.setPreferredSize(new java.awt.Dimension(292, 615));
 
-        pn_listado.setBackground(new java.awt.Color(0, 0, 0));
-        pn_listado.setPreferredSize(new java.awt.Dimension(183, 400));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        javax.swing.GroupLayout pn_listadoLayout = new javax.swing.GroupLayout(pn_listado);
-        pn_listado.setLayout(pn_listadoLayout);
-        pn_listadoLayout.setHorizontalGroup(
-            pn_listadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 292, Short.MAX_VALUE)
-        );
-        pn_listadoLayout.setVerticalGroup(
-            pn_listadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
-        );
+            },
+            new String [] {
 
-        scp_listado.setViewportView(pn_listado);
+            }
+        ));
+        jTable1.setAutoscrolls(false);
+        jTable1.setSelectionBackground(new java.awt.Color(255, 0, 0));
+        scp_listado.setViewportView(jTable1);
 
         javax.swing.GroupLayout pnDetalleLayout = new javax.swing.GroupLayout(pnDetalle);
         pnDetalle.setLayout(pnDetalleLayout);
@@ -555,9 +550,9 @@ public class Productos extends javax.swing.JPanel {
                                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btn_Guardar_Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(scp_descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnDetalleLayout.setVerticalGroup(
             pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -761,7 +756,7 @@ public class Productos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     private void llenarListado()
     {
-        //if(!nuevo){
+        /*//if(!nuevo){
             ArrayList[] listado=null;
             try {
                 listado=conexion.obtener_productos();
@@ -784,7 +779,7 @@ public class Productos extends javax.swing.JPanel {
                 pn_listado.getParent().revalidate();
                 pn_listado.getParent().repaint();
             }
-        //}
+        //}*/
     }
     private void modoEditable(){
         txt_codigo.setEnabled(true);      
@@ -1129,7 +1124,14 @@ public class Productos extends javax.swing.JPanel {
                 DialogoOpcion dialogo= new DialogoOpcion(null,true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminar Producto", "Esta seguro de eliminar este producto");
                 dialogo.setVisible(true);
                 if(dialogo.isAceptar())
-                    conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
+                {
+                    if(conexion.obtenerExistencia(0,Integer.parseInt(productoActual.get(0).toString()))==0)
+                        conexion.deshabilitarProducto(Integer.parseInt(productoActual.get(0).toString()));
+                    else{
+                        dialogo=new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR,"Aun hay existencias","No puede eliminarse porque aun hay existencias");
+                        dialogo.setVisible(true);
+                    }
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1194,7 +1196,6 @@ public class Productos extends javax.swing.JPanel {
     }//GEN-LAST:event_Salir1MouseClicked
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Salir;
     private javax.swing.JLabel Salir1;
     private javax.swing.JLabel btn_Guardar_Aceptar;
     private javax.swing.JLabel btn_eliminar;
@@ -1214,6 +1215,7 @@ public class Productos extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbl_Titulo;
     private javax.swing.JLabel lbl_codigo;
     private javax.swing.JLabel lbl_codigoBarra;
@@ -1221,7 +1223,6 @@ public class Productos extends javax.swing.JPanel {
     public static javax.swing.JPanel pnContenido;
     public static javax.swing.JPanel pnDetalle;
     private javax.swing.JPanel pn_herramientas;
-    private javax.swing.JPanel pn_listado;
     private javax.swing.JScrollPane scp_descripcion;
     public static javax.swing.JScrollPane scp_listado;
     private javax.swing.JTextArea txa_descripcion;

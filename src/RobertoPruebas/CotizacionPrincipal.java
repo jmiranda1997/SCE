@@ -5,10 +5,13 @@
  */
 package RobertoPruebas;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -16,8 +19,9 @@ import java.util.logging.Logger;
  * @author Roberto
  */
 public class CotizacionPrincipal extends javax.swing.JPanel {
-    private int cotizacionesActivas=0;
-    private boolean nuevo=false, cliente=false;
+    private int cotizacionesActivas=0;//Numero de cotizaciones que estan activas en la ventana
+    public ArrayList cotizacionActual=new ArrayList();//Cotizaciones que se esta editando
+    private boolean nuevo=false, cliente=false;//Banderas que indican si se esta haciendo una nueva cotizacion y si la cotizacion es para un cliente registrado
     private Conexion conexion=new Conexion();
     /**
      * Creates new form CotizacionPrincipal
@@ -28,6 +32,29 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         this.conexion=conexion;
         cambiarModo();
         cambiarCampos();
+    }/**
+     * Metodo que remueve una cotización activa y vuelve a cargar el scrollpane
+     * Para no modificar todos los paneles, se llaman a todos los paneles internos,
+     * por medio de su localizacion, y se actualizan las nuevas posiciones hacia abajo
+     * en mejor de los casos, se borrara la penultima cotizacion (panel) en el peor, sera la primera
+     * @param cotizacion panel que sera retirado de las cotizaciones activas
+     */
+    public void recargarCotizaciones(Component cotizacion){
+        int y=cotizacion.getLocation().y;//Se obtiene la localizacion del
+        pn_cotizaciones.remove(cotizacion);//Se elimina la cotizacion 
+        cotizacionesActivas--;//se reduce el numero de cotizaciones activas
+        for(int y1=y+133;y1<pn_cotizaciones.getSize().height;y1=y1+133)// el ciclo inicia en el panel que esta justo por debajo
+            //del eliminado y finaliza en donde inicia el ultimo panel, el iterador incrementa en 133, que es el tamaño de los paneles
+        {
+            pn_cotizaciones.getComponentAt(0,y1).setLocation(0,y1-133);//se obtiene el panel por su loalizacion y se sube 133 puntos
+        }
+        pn_cotizaciones.setPreferredSize(new Dimension(pn_cotizaciones.getWidth(),pn_cotizaciones.getHeight()-133));//se reestablece el tamaño del panel que contiene las cotizaciones
+        pn_cotizaciones.revalidate();
+        pn_cotizaciones.repaint();
+    }
+    public void restarCotizacion()
+    {
+        cotizacionesActivas--;
     }
     public void cambiarModo()
     {
@@ -45,18 +72,25 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         txt_nit.setText("");
         txt_numero.setText("");
     }
-    public void añadir_panel(int idCotizacion){
-        PANEL p=new PANEL();
-            p.setSize(250,100);
-            p.setLocation(0,100*cotizacionesActivas);
+    public void añadir_panel(){
+        if(cotizacionActual!=null && cotizacionActual.size()>3)
+        {
+            pn_cotizacion p=new pn_cotizacion(this);
+            p.setName(cotizacionActual.get(0).toString());
+            p.lbl_numero.setText(cotizacionActual.get(1).toString());
+            p.lbl_nombre.setText(cotizacionActual.get(2).toString());
+            p.lbl_total.setText(String.format("%.2f",Double.parseDouble(cotizacionActual.get(3).toString())));
+            p.setSize(254,133);
+            p.setLocation(0,133*cotizacionesActivas);
             scp_listado.add(p);
             pn_cotizaciones.add(p);
-            pn_cotizaciones.setPreferredSize(new Dimension(pn_cotizaciones.getWidth(),cotizacionesActivas*100));
+            pn_cotizaciones.setPreferredSize(new Dimension(pn_cotizaciones.getWidth(),(cotizacionesActivas+1)*133));
             scp_cotizaciones.revalidate();
             scp_cotizaciones.repaint();
             scp_listado.revalidate();
             scp_listado.repaint();
             cotizacionesActivas++;
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,7 +107,6 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         lbl_Titulo = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel3 = new javax.swing.JPanel();
         lbl_numero = new javax.swing.JLabel();
         txt_numero = new javax.swing.JTextField();
         lbl_nombre = new javax.swing.JLabel();
@@ -117,15 +150,6 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         lbl_Titulo.setText("COTIZACIONES");
 
         jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
-
-        jPanel3.setBackground(new java.awt.Color(255, 0, 0));
-        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel3MouseClicked(evt);
-            }
-        });
-        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
-        jScrollPane2.setViewportView(jPanel3);
 
         lbl_numero.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_numero.setForeground(new java.awt.Color(255, 255, 255));
@@ -259,7 +283,6 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         pnDetalle.setLayout(pnDetalleLayout);
         pnDetalleLayout.setHorizontalGroup(
             pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
             .addGroup(pnDetalleLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,16 +290,16 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
                         .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbl_nombre)
                             .addComponent(lbl_numero))
-                        .addGap(21, 26, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnDetalleLayout.createSequentialGroup()
-                                .addComponent(txt_numero, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(88, 88, 88)
+                                .addComponent(txt_numero, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(44, 44, 44)
                                 .addComponent(lbl_nit)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(36, 36, 36)
                                 .addComponent(txt_nit, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(86, 86, 86))
-                            .addComponent(txt_nombre, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txt_nombre)))
                     .addGroup(pnDetalleLayout.createSequentialGroup()
                         .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,6 +311,7 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
                                 .addComponent(btn_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(jScrollPane2)
         );
         pnDetalleLayout.setVerticalGroup(
             pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,28 +325,27 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
                     .addComponent(lbl_numero)
                     .addGroup(pnDetalleLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbl_nit)
-                            .addGroup(pnDetalleLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(txt_nit, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txt_nit, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbl_nombre)
                     .addGroup(pnDetalleLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(txt_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
-        scp_cotizaciones.setAutoscrolls(true);
-        scp_cotizaciones.setPreferredSize(new java.awt.Dimension(273, 448));
+        scp_cotizaciones.setBorder(null);
+        scp_cotizaciones.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scp_cotizaciones.setPreferredSize(new java.awt.Dimension(273, 429));
         scp_cotizaciones.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -339,11 +362,11 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         pn_cotizaciones.setLayout(pn_cotizacionesLayout);
         pn_cotizacionesLayout.setHorizontalGroup(
             pn_cotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 271, Short.MAX_VALUE)
+            .addGap(0, 273, Short.MAX_VALUE)
         );
         pn_cotizacionesLayout.setVerticalGroup(
             pn_cotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGap(0, 429, Short.MAX_VALUE)
         );
 
         scp_cotizaciones.setViewportView(pn_cotizaciones);
@@ -485,7 +508,7 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
                 .addComponent(btn_añadirCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(btn_buscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 366, Short.MAX_VALUE)
                 .addComponent(Salir1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pn_herramientasLayout.setVerticalGroup(
@@ -635,27 +658,15 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_añadirClienteMouseReleased
 
-    private void btn_buscarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscarClienteMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_buscarClienteMouseClicked
-
-    private void btn_buscarClienteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscarClienteMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_buscarClienteMousePressed
-
-    private void btn_buscarClienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscarClienteMouseReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_buscarClienteMouseReleased
-
     private void btn_guardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_guardarMouseClicked
         try {
             // TODO add your handling code here:
-            conexion.insertarCotizacion(0,txt_nombre.getText(),1);
+            cotizacionActual=conexion.insertarCotizacion(txt_nombre.getText(),1);
             nuevo=false;
             cliente=false;
             cambiarModo();
             cambiarCampos();
-            añadir_panel(0);
+            añadir_panel();
         } catch (SQLException ex) {
             Logger.getLogger(CotizacionPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -676,9 +687,17 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_cancelarMouseClicked
 
-    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+    private void btn_buscarClienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscarClienteMouseReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPanel3MouseClicked
+    }//GEN-LAST:event_btn_buscarClienteMouseReleased
+
+    private void btn_buscarClienteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscarClienteMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_buscarClienteMousePressed
+
+    private void btn_buscarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscarClienteMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_buscarClienteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -689,7 +708,6 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
     private javax.swing.JLabel btn_cancelar;
     private javax.swing.JLabel btn_guardar;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

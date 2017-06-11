@@ -625,4 +625,23 @@ public class Conexion {
         conexion.close();
         return Clientes;
     }
+    public int obtenerExistencia(int sucursalId, int productoId) throws SQLException{
+        int existencia=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+         ResultSet resultado;
+        if(sucursalId>0)
+        {
+            resultado = instruccion.executeQuery("select e.Existencia from existencia e where e.Sucursales_id="+sucursalId+" e.Producto_id="+productoId+";");
+        }
+        else
+        {
+            resultado = instruccion.executeQuery("select SUM(e.Existencia) from existencia e where  e.Producto_id="+productoId+";");
+        }
+        if(resultado.next())
+        {
+            existencia=resultado.getInt(1);
+        }
+        return existencia;
+    }
 }
