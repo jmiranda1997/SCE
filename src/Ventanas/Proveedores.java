@@ -105,7 +105,7 @@ public class Proveedores extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tabla_prov);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 940, 320));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 940, 330));
 
         txt_Nit.setBackground(new java.awt.Color(0, 0, 0));
         txt_Nit.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
