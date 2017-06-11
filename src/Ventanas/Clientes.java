@@ -440,6 +440,7 @@ public class Clientes extends javax.swing.JPanel {
 
     private void modificarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modificarButtonMouseClicked
         limpiar();
+        modificarButton.setBackground(Color.RED);
         listadoPanel.setVisible(true);
         generalPanel.setVisible(true);
     }//GEN-LAST:event_modificarButtonMouseClicked
