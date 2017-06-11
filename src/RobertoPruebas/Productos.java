@@ -1054,8 +1054,9 @@ public class Productos extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Guardar_AceptarMouseReleased
 
     private void btn_Guardar_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Guardar_AceptarMouseClicked
-        if(nuevo){
-            try {
+        
+        try {
+            if(nuevo){
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText(), uni=(cmb_unidad.getSelectedIndex()+1)+"";
                 if(Integer.parseInt(uni)== cmb_unidad.getItemCount())
@@ -1069,12 +1070,8 @@ public class Productos extends javax.swing.JPanel {
                     Double.parseDouble(txt_existencia.getText()));
                 llenarListado();
                 btn_verMouseClicked(evt); 
-            } catch (SQLException ex) {
-                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if(modificar){
-             try {
+                }
+            if(modificar){
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText();
                 conexion.modificarProducto(Integer.parseInt(productoActual.get(0).toString()),txt_codigo.getText(),txt_codigoBarra.getText(),
@@ -1082,9 +1079,10 @@ public class Productos extends javax.swing.JPanel {
                     Double.parseDouble(txt_costo.getText()),est,col,fil,txt_marca.getText());
                  cargarProducto(Integer.parseInt(productoActual.get(0).toString()));
                  btn_verMouseClicked(evt);
-            } catch (SQLException ex) {
-                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);;
+                 llenarListado();
             }
+        } catch (SQLException ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_Guardar_AceptarMouseClicked
 
