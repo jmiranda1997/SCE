@@ -8,29 +8,30 @@ package Ventanas;
 import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
 import java.awt.Color;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author jonathan Miranda
  */
-public class Facturacion extends javax.swing.JDialog {
-    
+public class Factura extends javax.swing.JPanel {
+
+    /**
+     * Creates new form Factura
+     */
     private String numeroCotizacion;
     private final Conexion Conexion_DB = new Conexion();
     private selectorSucursal Selector;
     private String[] Sucursal;
     private int id;
-    public Facturacion(java.awt.Frame parent, boolean modal, String Numero) {
-        super(parent, modal);
+    public Factura() {
+        initComponents();
+        panel_Coti.setVisible(false);
+    }
+    public Factura(String Numero) {
         initComponents();
         this.numeroCotizacion = Numero;
-        this.setLocationRelativeTo(null);
         setCotizacion();
         selector();
         inicializarTabla();
@@ -44,7 +45,7 @@ public class Facturacion extends javax.swing.JDialog {
             dialogo.setVisible(true);
         }
     }
-    private DefaultTableModel Productos;
+     private DefaultTableModel Productos;
     private void inicializarTabla(){
         Productos = new DefaultTableModel(null, new String[]{"Codigo", "Descripcion",  "Cantidad",  "Descuento", "Precio U", "Precio T"}){
             boolean[] canEdit = new boolean [] {
@@ -67,16 +68,6 @@ public class Facturacion extends javax.swing.JDialog {
         }
         
     }
-    /**
-     * Creates new form Facturación
-     */
-    public Facturacion(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        this.setLocationRelativeTo(null);
-        setCotizacion();
-        selector();
-    }
     private void setCotizacion(){
         lbl_Nombre.setText("COTIZACION NO:");
         lbl_Correlativo.setText(numeroCotizacion);
@@ -89,7 +80,7 @@ public class Facturacion extends javax.swing.JDialog {
         btn_Cotizacion.setBackground(Color.BLACK);
         btn_Factura.setBackground(Color.RED);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -136,13 +127,13 @@ public class Facturacion extends javax.swing.JDialog {
         lbl_Nombre8 = new javax.swing.JLabel();
         txt_Descuento = new javax.swing.JTextField();
         lbl_Nombre9 = new javax.swing.JLabel();
-        txt_Comentario = new javax.swing.JTextField();
         sep_Nombre7 = new javax.swing.JSeparator();
+        txt_Comentario = new javax.swing.JTextField();
         btn_Seleccion3 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
-        setResizable(false);
+        btn_Seleccion5 = new javax.swing.JLabel();
+        panel_Coti = new javax.swing.JPanel();
+        btn_Seleccion4 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -151,13 +142,13 @@ public class Facturacion extends javax.swing.JDialog {
         lbl_Correlativo.setForeground(new java.awt.Color(255, 0, 0));
         lbl_Correlativo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_Correlativo.setText("00001");
-        jPanel1.add(lbl_Correlativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 0, -1, 40));
+        jPanel1.add(lbl_Correlativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, -1, -1));
 
         lbl_Nombre.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre.setForeground(new java.awt.Color(255, 255, 255));
         lbl_Nombre.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         lbl_Nombre.setText("FACTURA NO:");
-        jPanel1.add(lbl_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, 220, 40));
+        jPanel1.add(lbl_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 220, -1));
 
         btn_Cotizacion.setBackground(new java.awt.Color(0, 0, 0));
         btn_Cotizacion.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -187,7 +178,7 @@ public class Facturacion extends javax.swing.JDialog {
                 btn_SucursalMouseClicked(evt);
             }
         });
-        jPanel1.add(btn_Sucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, -10, 300, 50));
+        jPanel1.add(btn_Sucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, -10, 260, 50));
 
         btn_Factura.setBackground(new java.awt.Color(0, 0, 0));
         btn_Factura.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -218,7 +209,7 @@ public class Facturacion extends javax.swing.JDialog {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, -1, -1));
 
         sep_Nombre.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 250, 10));
+        jPanel1.add(sep_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 240, 10));
 
         txt_Nit.setBackground(new java.awt.Color(0, 0, 0));
         txt_Nit.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -245,7 +236,7 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_NitActionPerformed(evt);
             }
         });
-        jPanel1.add(txt_Nit, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 250, 26));
+        jPanel1.add(txt_Nit, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 240, 26));
 
         btn_Seleccion.setBackground(new java.awt.Color(255, 0, 0));
         btn_Seleccion.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -261,7 +252,7 @@ public class Facturacion extends javax.swing.JDialog {
                 btn_SeleccionMouseEntered(evt);
             }
         });
-        jPanel1.add(btn_Seleccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 160, 150, 30));
+        jPanel1.add(btn_Seleccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 160, 150, 30));
 
         lbl_Nombre1.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre1.setForeground(new java.awt.Color(255, 255, 255));
@@ -294,7 +285,7 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_DireccionActionPerformed(evt);
             }
         });
-        jPanel1.add(txt_Direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 580, 26));
+        jPanel1.add(txt_Direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 550, 26));
 
         lbl_Nombre2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre2.setForeground(new java.awt.Color(255, 255, 255));
@@ -302,12 +293,12 @@ public class Facturacion extends javax.swing.JDialog {
         jPanel1.add(lbl_Nombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
         sep_Nombre1.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 580, 10));
+        jPanel1.add(sep_Nombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 550, 10));
 
         lbl_Nombre3.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre3.setForeground(new java.awt.Color(255, 255, 255));
         lbl_Nombre3.setText("NOMBRE");
-        jPanel1.add(lbl_Nombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, -1, -1));
+        jPanel1.add(lbl_Nombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, -1, -1));
 
         txt_Nombre.setEditable(false);
         txt_Nombre.setBackground(new java.awt.Color(0, 0, 0));
@@ -335,10 +326,10 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_NombreActionPerformed(evt);
             }
         });
-        jPanel1.add(txt_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 310, 26));
+        jPanel1.add(txt_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 300, 26));
 
         sep_Nombre2.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, 310, 10));
+        jPanel1.add(sep_Nombre2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, 300, 10));
 
         rbtn_Credito.setBackground(new java.awt.Color(0, 0, 0));
         rbtn_Credito.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -346,7 +337,7 @@ public class Facturacion extends javax.swing.JDialog {
         rbtn_Credito.setSelected(true);
         rbtn_Credito.setText("CREDITO");
         rbtn_Credito.setBorder(null);
-        jPanel1.add(rbtn_Credito, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 660, 90, -1));
+        jPanel1.add(rbtn_Credito, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 610, 90, 30));
 
         txt_Apellido.setEditable(false);
         txt_Apellido.setBackground(new java.awt.Color(0, 0, 0));
@@ -374,7 +365,7 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_ApellidoActionPerformed(evt);
             }
         });
-        jPanel1.add(txt_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 90, 310, 26));
+        jPanel1.add(txt_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 90, 300, 26));
 
         lbl_Nombre4.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre4.setForeground(new java.awt.Color(255, 255, 255));
@@ -382,12 +373,12 @@ public class Facturacion extends javax.swing.JDialog {
         jPanel1.add(lbl_Nombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
         sep_Nombre3.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 120, 310, 10));
+        jPanel1.add(sep_Nombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 120, 300, 10));
 
         lbl_Nombre5.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre5.setForeground(new java.awt.Color(255, 255, 255));
         lbl_Nombre5.setText("TELEFONO");
-        jPanel1.add(lbl_Nombre5, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, -1, -1));
+        jPanel1.add(lbl_Nombre5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 160, -1, -1));
 
         btn_Seleccion1.setBackground(new java.awt.Color(255, 0, 0));
         btn_Seleccion1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -403,7 +394,7 @@ public class Facturacion extends javax.swing.JDialog {
                 btn_Seleccion1MouseEntered(evt);
             }
         });
-        jPanel1.add(btn_Seleccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 650, 90, 30));
+        jPanel1.add(btn_Seleccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 610, 90, 40));
 
         tabla_detalle.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         tabla_detalle.setModel(new javax.swing.table.DefaultTableModel(
@@ -435,12 +426,12 @@ public class Facturacion extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tabla_detalle);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 950, 390));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 940, 360));
 
         lbl_Nombre6.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre6.setForeground(new java.awt.Color(255, 255, 255));
         lbl_Nombre6.setText("DECUENTO");
-        jPanel1.add(lbl_Nombre6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 210, -1, -1));
+        jPanel1.add(lbl_Nombre6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 210, -1, -1));
 
         txt_Nombre4.setEditable(false);
         txt_Nombre4.setBackground(new java.awt.Color(0, 0, 0));
@@ -468,10 +459,10 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_Nombre4ActionPerformed(evt);
             }
         });
-        jPanel1.add(txt_Nombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 340, 26));
+        jPanel1.add(txt_Nombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 240, 26));
 
         sep_Nombre4.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 440, 10));
+        jPanel1.add(sep_Nombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 340, 10));
 
         btn_Seleccioncliente.setBackground(new java.awt.Color(255, 0, 0));
         btn_Seleccioncliente.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -526,17 +517,17 @@ public class Facturacion extends javax.swing.JDialog {
         jPanel1.add(sep_Nombre5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 340, 10));
 
         sep_Nombre6.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre6, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 240, 60, 10));
+        jPanel1.add(sep_Nombre6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 240, 60, 10));
 
         lbl_Nombre8.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre8.setForeground(new java.awt.Color(255, 255, 255));
         lbl_Nombre8.setText("APELLIDO");
-        jPanel1.add(lbl_Nombre8, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 60, -1, -1));
+        jPanel1.add(lbl_Nombre8, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 60, -1, -1));
 
         txt_Descuento.setBackground(new java.awt.Color(0, 0, 0));
         txt_Descuento.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txt_Descuento.setForeground(new java.awt.Color(255, 255, 255));
-        txt_Descuento.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txt_Descuento.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txt_Descuento.setText("0.00");
         txt_Descuento.setBorder(null);
         txt_Descuento.setCaretColor(new java.awt.Color(255, 255, 255));
@@ -567,12 +558,15 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_DescuentoKeyTyped(evt);
             }
         });
-        jPanel1.add(txt_Descuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 210, 60, 26));
+        jPanel1.add(txt_Descuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 210, 60, 26));
 
         lbl_Nombre9.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Nombre9.setForeground(new java.awt.Color(255, 255, 255));
         lbl_Nombre9.setText("COMENTARIO");
-        jPanel1.add(lbl_Nombre9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, -1, -1));
+        jPanel1.add(lbl_Nombre9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 610, -1, 40));
+
+        sep_Nombre7.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(sep_Nombre7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 640, 340, 10));
 
         txt_Comentario.setBackground(new java.awt.Color(0, 0, 0));
         txt_Comentario.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -599,10 +593,7 @@ public class Facturacion extends javax.swing.JDialog {
                 txt_ComentarioActionPerformed(evt);
             }
         });
-        jPanel1.add(txt_Comentario, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 650, 340, 26));
-
-        sep_Nombre7.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(sep_Nombre7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 680, 340, 10));
+        jPanel1.add(txt_Comentario, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 610, 340, 40));
 
         btn_Seleccion3.setBackground(new java.awt.Color(255, 0, 0));
         btn_Seleccion3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -618,10 +609,50 @@ public class Facturacion extends javax.swing.JDialog {
                 btn_Seleccion3MouseEntered(evt);
             }
         });
-        jPanel1.add(btn_Seleccion3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 210, 90, 30));
+        jPanel1.add(btn_Seleccion3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 210, 90, 30));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        btn_Seleccion5.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Seleccion5.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        btn_Seleccion5.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Seleccion5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Seleccion5.setText("<");
+        btn_Seleccion5.setOpaque(true);
+        btn_Seleccion5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_Seleccion5MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn_Seleccion5MouseEntered(evt);
+            }
+        });
+        jPanel1.add(btn_Seleccion5, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 60, 10, 180));
+
+        panel_Coti.setBackground(new java.awt.Color(0, 0, 0));
+        panel_Coti.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btn_Seleccion4.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Seleccion4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        btn_Seleccion4.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Seleccion4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Seleccion4.setText(">");
+        btn_Seleccion4.setOpaque(true);
+        btn_Seleccion4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_Seleccion4MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn_Seleccion4MouseEntered(evt);
+            }
+        });
+        panel_Coti.add(btn_Seleccion4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 10, 550));
+
+        jScrollPane2.setBackground(new java.awt.Color(0, 0, 0));
+        panel_Coti.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 220, 470));
+
+        jPanel1.add(panel_Coti, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, 230, 550));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -630,8 +661,6 @@ public class Facturacion extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_CotizacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CotizacionMouseClicked
@@ -639,12 +668,16 @@ public class Facturacion extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_CotizacionMouseClicked
 
     private void btn_SucursalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_SucursalMouseClicked
-       selector();
+        selector();
     }//GEN-LAST:event_btn_SucursalMouseClicked
 
     private void btn_FacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_FacturaMouseClicked
         setFactura();
     }//GEN-LAST:event_btn_FacturaMouseClicked
+
+    private void btn_FacturaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_FacturaMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_FacturaMouseEntered
 
     private void txt_NitFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NitFocusGained
         if (txt_Nit.getText().equals("INGRESE EL NIT DEL CLIENTE")) txt_Nit.setText("");
@@ -670,8 +703,50 @@ public class Facturacion extends javax.swing.JDialog {
                 dialogo.setVisible(true);
             }
         }
+        
     }//GEN-LAST:event_txt_NitFocusLost
-
+private void Cliente(int id){
+        try {
+            String[] Cliente = Conexion_DB.obtenerCliente(id);
+            txt_Nit.setText(Cliente[1]);
+            txt_Nombre.setText(Cliente[2]);
+            txt_Apellido.setText(Cliente[3]);
+            txt_Descuento.setText(Cliente[4]);
+            txt_Direccion.setText(Cliente[5]);
+            if (Float.parseFloat(Cliente[6]) > 0) {
+                rbtn_Credito.setEnabled(true);
+                rbtn_Credito.setSelected(true);
+            }else {
+                rbtn_Credito.setEnabled(false);
+                rbtn_Credito.setSelected(false);
+            }
+            
+        } catch (SQLException ex) {
+            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
+            dialogo.setVisible(true);
+        }
+    }
+    private void Cliente(String nit){
+        try {
+            String[] Cliente = Conexion_DB.obtenerCliente(nit);
+            txt_Nit.setText(Cliente[1]);
+            txt_Nombre.setText(Cliente[2]);
+            txt_Apellido.setText(Cliente[3]);
+            txt_Descuento.setText(Cliente[4]);
+            txt_Direccion.setText(Cliente[5]);
+            if (Float.parseFloat(Cliente[6]) > 0) {
+                rbtn_Credito.setEnabled(true);
+                rbtn_Credito.setSelected(true);
+            }else {
+                rbtn_Credito.setEnabled(false);
+                rbtn_Credito.setSelected(false);
+            }
+            
+        } catch (SQLException ex) {
+            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
+            dialogo.setVisible(true);
+        }
+    }
     private void txt_NitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_NitMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_NitMousePressed
@@ -681,7 +756,7 @@ public class Facturacion extends javax.swing.JDialog {
     }//GEN-LAST:event_txt_NitActionPerformed
 
     private void btn_SeleccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_SeleccionMouseClicked
-        
+
     }//GEN-LAST:event_btn_SeleccionMouseClicked
 
     private void btn_SeleccionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_SeleccionMouseEntered
@@ -753,11 +828,11 @@ public class Facturacion extends javax.swing.JDialog {
     }//GEN-LAST:event_tabla_detalleKeyPressed
 
     private void tabla_detalleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyReleased
-       if (evt.getKeyCode() == 112) {
-                selectorProductofac selector = new selectorProductofac(null, true, Sucursal[0]);
-                selector.setProductos(Productos);
-                selector.setVisible(true);
-            }
+        if (evt.getKeyCode() == 112) {
+            selectorProductofac selector = new selectorProductofac(null, true, Sucursal[0]);
+            selector.setProductos(Productos);
+            selector.setVisible(true);
+        }
     }//GEN-LAST:event_tabla_detalleKeyReleased
 
     private void txt_Nombre4FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Nombre4FocusGained
@@ -782,48 +857,7 @@ public class Facturacion extends javax.swing.JDialog {
         id = selector.getCodigo();
         Cliente(id);
     }//GEN-LAST:event_btn_SeleccionclienteMouseClicked
-    private void Cliente(int id){
-        try {
-            String[] Cliente = Conexion_DB.obtenerCliente(id);
-            txt_Nit.setText(Cliente[1]);
-            txt_Nombre.setText(Cliente[2]);
-            txt_Apellido.setText(Cliente[3]);
-            txt_Descuento.setText(Cliente[4]);
-            txt_Direccion.setText(Cliente[5]);
-            if (Float.parseFloat(Cliente[6]) > 0) {
-                rbtn_Credito.setEnabled(true);
-                rbtn_Credito.setSelected(true);
-            }else {
-                rbtn_Credito.setEnabled(false);
-                rbtn_Credito.setSelected(false);
-            }
-            
-        } catch (SQLException ex) {
-            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
-            dialogo.setVisible(true);
-        }
-    }
-    private void Cliente(String nit){
-        try {
-            String[] Cliente = Conexion_DB.obtenerCliente(nit);
-            txt_Nit.setText(Cliente[1]);
-            txt_Nombre.setText(Cliente[2]);
-            txt_Apellido.setText(Cliente[3]);
-            txt_Descuento.setText(Cliente[4]);
-            txt_Direccion.setText(Cliente[5]);
-            if (Float.parseFloat(Cliente[6]) > 0) {
-                rbtn_Credito.setEnabled(true);
-                rbtn_Credito.setSelected(true);
-            }else {
-                rbtn_Credito.setEnabled(false);
-                rbtn_Credito.setSelected(false);
-            }
-            
-        } catch (SQLException ex) {
-            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
-            dialogo.setVisible(true);
-        }
-    }
+
     private void btn_SeleccionclienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_SeleccionclienteMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_SeleccionclienteMouseEntered
@@ -860,6 +894,16 @@ public class Facturacion extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_DescuentoActionPerformed
 
+    private void txt_DescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_DescuentoKeyReleased
+
+    }//GEN-LAST:event_txt_DescuentoKeyReleased
+
+    private void txt_DescuentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_DescuentoKeyTyped
+        if ((evt.getKeyCode()>= 48) && (evt.getKeyCode()<=57)/* || !(evt.getKeyCode() == 46)*/) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txt_DescuentoKeyTyped
+
     private void txt_ComentarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_ComentarioFocusGained
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_ComentarioFocusGained
@@ -884,62 +928,22 @@ public class Facturacion extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_Seleccion3MouseEntered
 
-    private void btn_FacturaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_FacturaMouseEntered
+    private void btn_Seleccion4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Seleccion4MouseClicked
+        panel_Coti.setVisible(false);
+    }//GEN-LAST:event_btn_Seleccion4MouseClicked
+
+    private void btn_Seleccion4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Seleccion4MouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn_FacturaMouseEntered
+    }//GEN-LAST:event_btn_Seleccion4MouseEntered
 
-    private void txt_DescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_DescuentoKeyReleased
-        
-        
-    }//GEN-LAST:event_txt_DescuentoKeyReleased
+    private void btn_Seleccion5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Seleccion5MouseClicked
+        panel_Coti.setVisible(true);
+    }//GEN-LAST:event_btn_Seleccion5MouseClicked
 
-    private void txt_DescuentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_DescuentoKeyTyped
-        if ((evt.getKeyCode()>= 48) && (evt.getKeyCode()<=57)/* || !(evt.getKeyCode() == 46)*/) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txt_DescuentoKeyTyped
+    private void btn_Seleccion5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Seleccion5MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_Seleccion5MouseEntered
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Facturacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Facturacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Facturacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Facturacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Facturacion dialog = new Facturacion(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_Cotizacion;
@@ -947,11 +951,14 @@ public class Facturacion extends javax.swing.JDialog {
     private javax.swing.JLabel btn_Seleccion;
     private javax.swing.JLabel btn_Seleccion1;
     private javax.swing.JLabel btn_Seleccion3;
+    private javax.swing.JLabel btn_Seleccion4;
+    private javax.swing.JLabel btn_Seleccion5;
     private javax.swing.JLabel btn_Seleccioncliente;
     private javax.swing.JLabel btn_Sucursal;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbl_Correlativo;
     private javax.swing.JLabel lbl_Fecha;
     private javax.swing.JLabel lbl_Nombre;
@@ -964,6 +971,7 @@ public class Facturacion extends javax.swing.JDialog {
     private javax.swing.JLabel lbl_Nombre7;
     private javax.swing.JLabel lbl_Nombre8;
     private javax.swing.JLabel lbl_Nombre9;
+    private javax.swing.JPanel panel_Coti;
     private javax.swing.JRadioButton rbtn_Credito;
     private javax.swing.JSeparator sep_Nombre;
     private javax.swing.JSeparator sep_Nombre1;

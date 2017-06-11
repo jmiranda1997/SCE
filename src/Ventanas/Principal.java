@@ -33,12 +33,14 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);  
         panel_Compras = new Compras();
+        panel_Ventas = new Ventas();
     }
     public Principal(Conexion con){
         initComponents();
         setLocationRelativeTo(null);
         this.conexion=con;
         panel_Compras = new Compras();
+        panel_Ventas = new Ventas();
     }
     public void setEtiqueta(JLabel etiqueta){
         etiqueta.setBackground(Color.BLACK);
@@ -59,7 +61,7 @@ public class Principal extends javax.swing.JFrame {
         btn_Inventario = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btn_Compras = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        btn_Ventas = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -103,13 +105,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/price-tag.png"))); // NOI18N
-        jLabel5.setOpaque(true);
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_Ventas.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Ventas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/price-tag.png"))); // NOI18N
+        btn_Ventas.setOpaque(true);
+        btn_Ventas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
+                btn_VentasMouseClicked(evt);
             }
         });
 
@@ -139,7 +141,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btn_Inventario, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
             .addComponent(btn_Compras, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_Ventas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -151,7 +153,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(90, 90, 90)
                 .addComponent(btn_Compras, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_Ventas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(90, 90, 90)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(90, 90, 90)
@@ -187,11 +189,11 @@ public class Principal extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(880, 880, 880)
+                .addGap(867, 867, 867)
                 .addComponent(Minimizar)
                 .addGap(6, 6, 6)
                 .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1928, 1928, 1928))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,7 +206,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(650, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 950, 690));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 940, 690));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -219,7 +221,7 @@ public class Principal extends javax.swing.JFrame {
         setEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel3);
         resetEtiqueta(btn_Compras);
-        resetEtiqueta(jLabel5);
+        resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
         JPanel j = new Productos();
@@ -231,12 +233,12 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.repaint();
         jPanel2.repaint();           
     }//GEN-LAST:event_btn_InventarioMouseClicked
-    private Compras panel_Compras;
+    private Compras panel_Compras; private Ventas panel_Ventas;
     private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
         setEtiqueta(btn_Compras);
         resetEtiqueta(jLabel3);
         resetEtiqueta(btn_Inventario);
-        resetEtiqueta(jLabel5);
+        resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
         panel_Compras.setLocation(0, 0);
@@ -249,20 +251,27 @@ public class Principal extends javax.swing.JFrame {
 //        panel_Compras.inicializarPedido();
     }//GEN-LAST:event_btn_ComprasMouseClicked
 
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        setEtiqueta(jLabel5);
+    private void btn_VentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_VentasMouseClicked
+        setEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel3);
         resetEtiqueta(btn_Compras);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
-    }//GEN-LAST:event_jLabel5MouseClicked
+        panel_Ventas.setLocation(0, 0);
+        panel_Ventas.setSize(jPanel2.getSize());
+        jPanel2.removeAll();
+        jPanel2.add(panel_Ventas, BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel1.repaint();
+        jPanel2.repaint();
+    }//GEN-LAST:event_btn_VentasMouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         setEtiqueta(jLabel6);
         resetEtiqueta(jLabel3);
         resetEtiqueta(btn_Compras);
-        resetEtiqueta(jLabel5);
+        resetEtiqueta(btn_Ventas);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel7);
         JPanel j = new Seguridad(conexion);
@@ -279,7 +288,7 @@ public class Principal extends javax.swing.JFrame {
         setEtiqueta(jLabel7);
         resetEtiqueta(jLabel3);
         resetEtiqueta(btn_Compras);
-        resetEtiqueta(jLabel5);
+        resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(btn_Inventario);
     }//GEN-LAST:event_jLabel7MouseClicked
@@ -288,7 +297,7 @@ public class Principal extends javax.swing.JFrame {
         setEtiqueta(jLabel3);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(btn_Compras);
-        resetEtiqueta(jLabel5);
+        resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(jLabel7);
     }//GEN-LAST:event_jLabel3MouseClicked
@@ -338,8 +347,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel Salir;
     private javax.swing.JLabel btn_Compras;
     private javax.swing.JLabel btn_Inventario;
+    private javax.swing.JLabel btn_Ventas;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;

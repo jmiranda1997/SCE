@@ -44,7 +44,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="btn_Inventario" pref="50" max="32767" attributes="0"/>
               <Component id="btn_Compras" alignment="1" max="32767" attributes="0"/>
-              <Component id="jLabel5" alignment="1" max="32767" attributes="0"/>
+              <Component id="btn_Ventas" alignment="1" max="32767" attributes="0"/>
               <Component id="jLabel6" alignment="1" max="32767" attributes="0"/>
               <Component id="jLabel7" max="32767" attributes="0"/>
               <Component id="jLabel3" alignment="1" max="32767" attributes="0"/>
@@ -57,7 +57,7 @@
                   <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                   <Component id="btn_Compras" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace pref="93" max="32767" attributes="0"/>
-                  <Component id="jLabel5" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btn_Ventas" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                   <Component id="jLabel6" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
@@ -114,7 +114,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_ComprasMouseClicked"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="btn_Ventas">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="ff" type="rgb"/>
@@ -126,7 +126,7 @@
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel5MouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_VentasMouseClicked"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
@@ -175,19 +175,19 @@
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="40" y="0" width="950" height="690"/>
+          <AbsoluteConstraints x="50" y="0" width="940" height="690"/>
         </Constraint>
       </Constraints>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="880" pref="880" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="867" max="-2" attributes="0"/>
                   <Component id="Minimizar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                   <Component id="Salir" min="-2" pref="40" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="1928" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
