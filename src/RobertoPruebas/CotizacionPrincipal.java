@@ -72,16 +72,20 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
         txt_nit.setText("");
         txt_numero.setText("");
     }
+    /**
+     * Metodo que añade paneles al scrollPane de cotizaciones
+     * 
+     */
     public void añadir_panel(){
-        if(cotizacionActual!=null && cotizacionActual.size()>3)
+        if(cotizacionActual!=null && cotizacionActual.size()>3)//Comprueba que exista una cotizacion cargada en la ventan
         {
-            pn_cotizacion p=new pn_cotizacion(this);
-            p.setName(cotizacionActual.get(0).toString());
+            pn_cotizacion p=new pn_cotizacion(this);//Crea el nuevo panel
+            p.setName(cotizacionActual.get(0).toString());//le asigna como nombre la id de la cotizacion
             p.lbl_numero.setText(cotizacionActual.get(1).toString());
             p.lbl_nombre.setText(cotizacionActual.get(2).toString());
             p.lbl_total.setText(String.format("%.2f",Double.parseDouble(cotizacionActual.get(3).toString())));
-            p.setSize(254,133);
-            p.setLocation(0,133*cotizacionesActivas);
+            p.setSize(254,133);//Le da tamaño
+            p.setLocation(0,133*cotizacionesActivas);//Y localizacion
             scp_listado.add(p);
             pn_cotizaciones.add(p);
             pn_cotizaciones.setPreferredSize(new Dimension(pn_cotizaciones.getWidth(),(cotizacionesActivas+1)*133));
@@ -89,7 +93,7 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
             scp_cotizaciones.repaint();
             scp_listado.revalidate();
             scp_listado.repaint();
-            cotizacionesActivas++;
+            cotizacionesActivas++;//aumenta las cotizaciones activas
         }
     }
     /**

@@ -217,6 +217,7 @@ public class Conexion {
     public DefaultTableModel obtenerProductos() throws SQLException{
          Productos = null;
          iniciarTablaProductos();
+        iniciarTablaProveedores();
         
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -636,6 +637,24 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
+      public ArrayList obtener_detalleProducto(String des, String codigo, String codigo_barras) throws SQLException{
+        ArrayList atributo=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("select p.id, p.codigo, codigo_barras,descripcion, precio_venta, "+
+                "precio_costo,estanteria, columna, fila,u.id ,m.Nombre from producto p left join "+
+                "unidad u on u.id=p.Unidad_id left join marca m ON m.id=p.Marca_id where p.codigo='"+codigo+
+                "' and p.codigo_barras='"+codigo_barras+"' and p.descripcion='"+des+"';"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        if(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            for(int i=1;i<12;i++)
+            {
+                atributo.add(resultado.getString(i));
+            }
+        }   
+        conexion.close();
+        return atributo;
+    }
    /**
     * metodo que deshabilita productos en la base de datos
     * @param id del producto a deshabilitar
@@ -711,17 +730,6 @@ public class Conexion {
         return lista;
    }
 
-   private void iniciarTablaClientes() {
-//        
-        Clientes = new DefaultTableModel(null, new String[]{"Nit", "Nombre", "Apellido","id"}){
-            boolean[] canEdit = new boolean [] {
-        false, false, false, false
-            };
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return canEdit [columnIndex];
-            }
-        };
-    }
     public DefaultTableModel obtenerClientes_venta() throws SQLException{
         Clientes=null;
         iniciarTablaClientes();
@@ -752,6 +760,64 @@ public class Conexion {
             existencia=resultado.getInt(1);
         }
         return existencia;
+
+
+   /**
+     * Metodo que regresa la lista de clientes como un arreglo
+     * @return
+     * @throws SQLException 
+     */
+    public DefaultTableModel obtenerClientes() throws SQLException{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaClientes(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito, Saldo, Cheque FROM cliente;");
+        while(resultado.next()){
+            
+            modelo.addRow(new String[] {resultado.getString("NIT"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Descuento"),resultado.getString("Direccion"),resultado.getString("LimiteCredito"),resultado.getString("Saldo"), (resultado.getString("Cheque").equals("1")? "SI": "NO")});
+        }
+        conexion.close();
+        return modelo;
+    }
+    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false,false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
+    
+    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    
+    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("UPDATE Clientes SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+") WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+
     }
 
    public ArrayList[] obtenerSucursales() throws SQLException{
@@ -825,6 +891,19 @@ public class Conexion {
        return false;   
    }
 
+    public DefaultTableModel obtenerProductos_vista() throws SQLException{
+         Productos = null;
+         iniciarTablaProductos();
+        Productos.setColumnCount(3);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
+        while(resultado.next()){
+            Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion")});
+        }
+        conexion.close();
+        return Productos;
+
    /**
      * Metodo que regresa la lista de clientes como un arreglo
      * @return
@@ -880,6 +959,7 @@ public class Conexion {
         }
         conexion.close();
         return res;
+
     }
 
 }
