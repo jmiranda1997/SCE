@@ -684,7 +684,7 @@ public class Conexion {
         Statement instruccion=conexion.createStatement();
         instruccion.executeUpdate("insert into ventas (Cliente_id,Usuario_id) values ("+idCliente+","+id_usuario+");");//se inseta el cloente
         int id=0;
-        ResultSet resultado=instruccion.executeQuery("select id from ventas where Nombre="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW()=date(fecha);");//se obtiene el cliente insertado
+        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW()=date(fecha);");//se obtiene el cliente insertado
         while(resultado.next())
         { 
            id=resultado.getInt(1);
@@ -905,5 +905,81 @@ public class Conexion {
         conexion.close();
         return Productos;
     }
-
+    
+    public DefaultTableModel obtenerFacturasConsulta(String fecha,String nombre,String dpi) throws SQLException
+    {
+        DefaultTableModel facturas=null;
+        facturas = new DefaultTableModel(null, new String[]{"Numero","Nombre","Apellido","NIT","Vendedor","Serie","Fecha","Sucursal"}){
+                boolean[] canEdit = new boolean [] {
+            false, false, false, false, false, false,false,false
+                };
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit [columnIndex];
+                }
+            };
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select f.Numero,c.Nombre,c.Apellido,"+
+                "c.NIT,u.Usuario,f.Serie,date(f.Fecha),s.Nombre from factura f left join usuario u "+
+                "on u.id=f.Usuario_id left join cliente c on c.id=f.Cliente_id left join"+
+                " sucursales s on s.id=f.Sucursales_id;");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2),resultado.getString(3),
+                resultado.getString(4),resultado.getString(5),resultado.getString(6),
+                resultado.getString(7),resultado.getString(8)};
+            if(fila[2]==null)
+                fila[2]="N/A";
+            if(fila[3]==null)
+                fila[3]="N/A";
+            facturas.addRow(fila);
+        }
+        conexion.close();
+        return facturas;
+    }
+    public ArrayList id_ventas(String fecha,String nombre,String dpi) throws SQLException{
+        ArrayList ids=new ArrayList();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select v.id from factura f left join usuario u "+
+                "on u.id=f.Usuario_id left join cliente c on c.id=f.Cliente_id left join"+
+                " sucursales s on s.id=f.Sucursales_id left join ventas v on v.Usuario_id=u.id;");
+        while(resultado.next())
+        {
+            ids.add(resultado.getInt(1));
+        }
+        conexion.close();
+        return ids;
+    }
+    public DefaultTableModel obtenerDetalleFactura(int id) throws SQLException
+    {
+        DefaultTableModel facturas=null;
+        facturas = new DefaultTableModel(null, new String[]{"Producto","Cantidad","Descuento","Precio Venta","Sub-total"}){
+                boolean[] canEdit = new boolean [] {
+            false, false, false, false, false, false,false,false
+                };
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit [columnIndex];
+                }
+            };
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select p.Descripcion,d.Cantidad,"+
+                "d.Descuento,d.PrecioVenta from detalledeventa d left join ventas v on "+
+                "d.Ventas_id=v.id left join producto p on p.id=d.Producto_id where v.id="+id+"; ");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2),resultado.getString(3),
+                resultado.getString(4),((double)resultado.getInt(2)*resultado.getDouble(4)*(100-resultado.getInt(3))/100)+""};
+            if(fila[2]==null)
+                fila[2]="N/A";
+            if(fila[3]==null)
+                fila[3]="N/A";
+            facturas.addRow(fila);
+        }
+        conexion.close();
+        return facturas;
+    }
 }
