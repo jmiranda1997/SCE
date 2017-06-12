@@ -29,30 +29,47 @@ public class Clientes extends javax.swing.JPanel {
     public Clientes() {
         initComponents();
     }
+    /**
+     * Crea un nuevo panel de clientes
+     * @param conexion objeto para conectarse a la BD
+     */
     public Clientes(Conexion conexion){
         initComponents();
         this.conexion=conexion;
+        //Inicia los paneles invisibles, para que se seleccione una opcion
         listadoPanel.setVisible(false);
         generalPanel.setVisible(false);
+        //Limpia el formulario
         limpiar();
     }
+    /**
+     * Limpia el formulario
+     */
     private void limpiar(){
+        //Pone los botones de opcion como negros
         ingresarButton.setBackground(Color.BLACK);
         modificarButton.setBackground(Color.BLACK);
         eliminarButton.setBackground(Color.BLACK);
         verButton.setBackground(Color.BLACK);
+        //Limpia los JFields
         nombreField.setText("");
         apellidoField.setText("");
         nitField.setText("");
+        //Inicializa con 0 los campos de numero
         direccionField.setText("");
         descuentoField.setText("0");
         limCreditoField.setText("0");
         saldoField.setText("0.00");
+        //Pone la opción de cheque como falso
         chequeCheck.setSelected(false);
+        //Setea un modelo vacio a la tabla
         listadoTable.setModel(new DefaultTableModel());
         listadoPanel.setEnabled(true);
         
     }
+    /**
+     * Carga los datos de la fila seleccionada en los campos, si se esta en modo modificación
+     */
     private void filaSeleccionada(){
         if(modificarButton.getBackground()==Color.RED){
             int seleccion=listadoTable.getSelectedRow();
@@ -383,9 +400,6 @@ public class Clientes extends javax.swing.JPanel {
             }
         });
         listadoTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                listadoTableKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 listadoTableKeyReleased(evt);
             }
@@ -442,27 +456,38 @@ public class Clientes extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ingresarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresarButtonMouseClicked
+        //Limpia el formulario
         limpiar();
+        //Setea el boton de ingresar como rojo
         ingresarButton.setBackground(Color.RED);
+        //Muestra los paneles
         listadoPanel.setEnabled(false);
         listadoPanel.setVisible(true);
         generalPanel.setVisible(true);
+        //Cambia el texto del botón
         generalButton.setText("Ingresar");
         generalButton.setEnabled(true);
+        //Pone el foco en el texto de nombre
         nombreField.requestFocus();
         
     }//GEN-LAST:event_ingresarButtonMouseClicked
 
     private void modificarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modificarButtonMouseClicked
         try {
+            //limpia el formulario
             limpiar();
+            //Setea el color del boton a rojo
             modificarButton.setBackground(Color.RED);
+            //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
+            //Obtiene la lista de clientes y la setea en la tabla
             listadoTable.setModel(conexion.obtenerClientes());
+            //Setea el texto del boton
             generalButton.setText("Actualizar Datos");
             generalButton.setEnabled(true);
-            nombreField.requestFocus();
+            //Pone el foco en la tabla
+            listadoTable.requestFocus();
         } catch (SQLException ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
@@ -471,13 +496,18 @@ public class Clientes extends javax.swing.JPanel {
 
     private void eliminarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarButtonMouseClicked
         try {
+            //Limpia el formulario
             limpiar();
+            //Pone el color del boton en rojo y muestra los paneles
             eliminarButton.setBackground(Color.RED);
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
+            //Cambia el texto del botón
             generalButton.setText("Eliminar Seleccionado");
             generalButton.setEnabled(true);
+            //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
             listadoTable.setModel(conexion.obtenerClientes());
+            listadoTable.requestFocus();
         } catch (SQLException ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Eliminación", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
@@ -486,11 +516,16 @@ public class Clientes extends javax.swing.JPanel {
 
     private void verButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verButtonMouseClicked
         try {
+            //Limpia el formulario
             limpiar();
+            //Cambia el color del boton a rojo
             verButton.setBackground(Color.RED);
+            //Obtiene la lista de clientes y la pone en la tabla
             listadoTable.setModel(conexion.obtenerClientes());
+            //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
+            //Inhabilita el botón
             generalButton.setEnabled(false);
         } catch (SQLException ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Visualización", "Error:\n"+ex.toString());
@@ -502,10 +537,6 @@ public class Clientes extends javax.swing.JPanel {
         filaSeleccionada();
     }//GEN-LAST:event_listadoTableMousePressed
 
-    private void listadoTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listadoTableKeyPressed
-
-    }//GEN-LAST:event_listadoTableKeyPressed
-
     private void listadoTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listadoTableKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode()== KeyEvent.VK_DOWN)
         {
@@ -515,11 +546,16 @@ public class Clientes extends javax.swing.JPanel {
 
     private void generalButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generalButtonMouseClicked
         try {
+            //Si esta en modo ingreso, modificación o eliminación, hace cosas distintas
+            //Se comprueba en que modo está
             if(ingresarButton.getBackground()==Color.RED){
+                //Valida los datos de los textos de numero
                 descuentoField.commitEdit();
                 limCreditoField.commitEdit();
                 saldoField.commitEdit();
+                //Hace un ingreso a la BD
                 int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
                 if(resultado==1){
                     DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
                     dialogo.setVisible(true);
@@ -528,24 +564,40 @@ public class Clientes extends javax.swing.JPanel {
                     DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
                     dialogo.setVisible(true);
                 }
+                //Limpia el formulario
+                limpiar();
             }else if(modificarButton.getBackground()==Color.RED){
+                //Valida los datos de los campos de numero
                 descuentoField.commitEdit();
                 limCreditoField.commitEdit();
                 saldoField.commitEdit();
+                //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
                 int filasMod=conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
                 DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
                 dialogo.setVisible(true);
+                //Limpia el formulario
+                limpiar();
             }else if(eliminarButton.getBackground()==Color.RED)
             {
-                int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
-                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                //Muestra un dialogo para confirmar si se quiere borrar el cliente
+                DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminación", "¿Esta seguro de eliminar al cliente seleccionado?");
                 dialogo.setVisible(true);
+                //Si se acepta, entonces lo borra
+                if(dialogo.isAceptar()){
+                    //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
+                    int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
+                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                    dialogo.setVisible(true);
+                    //Limpia el formulario
+                    limpiar();
+                }
             }
         } catch (SQLException|ParseException ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
+            limpiar();
         }
-        limpiar();
+        
     }//GEN-LAST:event_generalButtonMouseClicked
 
     private void MinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MinimizarMouseClicked

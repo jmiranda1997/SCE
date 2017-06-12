@@ -539,8 +539,8 @@ public class Conexion {
    }
    /**
      * Metodo que regresa la lista de clientes como un arreglo
-     * @return
-     * @throws SQLException 
+     * @return una DefaultTableModel con los clientes en la BD
+     * @throws SQLException en caso de error
      */
     public DefaultTableModel obtenerClientes() throws SQLException{
         DefaultTableModel modelo = null;
@@ -555,6 +555,11 @@ public class Conexion {
         conexion.close();
         return modelo;
     }
+    /**
+     * Crea una nuevo DefaultTableModel para clientes
+     * @param modelo el modelo para la JTable, vacio o con otros datos
+     * @return el modelo para la JTable, inicializado
+     */
     private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
 //        
         modelo = new DefaultTableModel(null, new String[]{"ID", "NIT", "Nombre", "Apellido", "% descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
@@ -567,7 +572,19 @@ public class Conexion {
         };
         return modelo;
     } 
-    
+    /**
+     * Invoca a una funcion almacenada en la BD para crear un nuevo cliente
+     * @param nombre nombre del cliente
+     * @param apellido apellido del cliente
+     * @param descuento % de descuento del cliente
+     * @param direccion dirección del cliente
+     * @param limCredito limite de credito del cliente
+     * @param saldo saldo inicial del cliente
+     * @param NIT NIT del cliente
+     * @param cheque si se le acepta cheque al cliente o no
+     * @return 1 en caso de que se inserte, 0 de lo contrario
+     * @throws SQLException en caso de error
+     */
     public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -580,7 +597,20 @@ public class Conexion {
         conexion.close();
         return res;
     }
-    
+    /**
+     * Actualiza los datos de un cliente
+     * @param id ID del cliente a actualizar
+     * @param nombre nuevo nombre
+     * @param apellido nuevo apellido
+     * @param descuento nuevo descuento
+     * @param direccion nueva dirección
+     * @param limCredito nuevo limite de credito
+     * @param saldo nuevo saldo
+     * @param NIT nuevo NIT del cliente
+     * @param cheque si se le acepta cheque al cliente, o no
+     * @return numero de filas en la BD que han sido modificadas (Debe ser 1)
+     * @throws SQLException en caso de error
+     */
     public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -588,6 +618,12 @@ public class Conexion {
         conexion.close();
         return resultado;
     }
+    /**
+     * Elimina un cliente de la BD
+     * @param id id del cliente a borrar
+     * @return el numero de filas afectadas (debe ser 1)
+     * @throws SQLException en caso de error
+     */
     public int eliminarCliente(int id) throws SQLException{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos

@@ -187,7 +187,7 @@ public class DialogoOpcion extends javax.swing.JDialog {
     *funcion booleana que retorna el valor de la opcion elegida en el cuadro de dialogo     
     * @return TRUE si se clickeo aceptar - FALSE si se cerro o se clickeo cancelar
     */
-    public static boolean isAceptar() {
+    public boolean isAceptar() {
         return aceptar;
     }
 
