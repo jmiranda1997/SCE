@@ -457,11 +457,12 @@ public class Clientes extends javax.swing.JPanel {
         try {
             limpiar();
             verButton.setBackground(Color.RED);
-            listadoTable.setModel(conexion.obtenerClientes());
+            listadoTable.setModel(conexion.obtenerClientesJP());
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(Clientes.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
+            dialogo.setVisible(true);
         }
     }//GEN-LAST:event_verButtonMouseClicked
 

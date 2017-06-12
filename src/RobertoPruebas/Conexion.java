@@ -387,6 +387,18 @@ public class Conexion {
         conexion.close();
         return cant;
     }
+    public int siguienteCotizacion() throws SQLException{
+        int cant = 0;
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT MAX(Numero) max FROM ventas;");
+        while(resultado.next()){
+            cant = resultado.getInt("max") +1;
+        }
+        conexion.close();
+        return cant;
+    } 
     /**
      * EJEMPLO DE COMO USAR ESTA CLASE
      * @throws SQLException en caso de error
@@ -760,14 +772,14 @@ public class Conexion {
             existencia=resultado.getInt(1);
         }
         return existencia;
-
+    }
 
    /**
      * Metodo que regresa la lista de clientes como un arreglo
      * @return
      * @throws SQLException 
      */
-    public DefaultTableModel obtenerClientes() throws SQLException{
+    public DefaultTableModel obtenerClientesJP() throws SQLException{
         DefaultTableModel modelo = null;
         modelo=inicializarTablaClientes(modelo);
         conectar();
@@ -780,6 +792,7 @@ public class Conexion {
         conexion.close();
         return modelo;
     }
+
     private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
 //        
         modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
@@ -875,6 +888,18 @@ public class Conexion {
         conexion.close();
         return Cliente;
    }
+   public String[] obtenerProducto(String Codigo) throws SQLException{
+        String[] Cliente = null;
+
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Descripcion, Precio_Venta Precio, Descuento FROM producto WHERE Codigo = '" + Codigo+ "';");
+        while(resultado.next()){
+            Cliente = (new String[] {resultado.getInt("id")+ "", Codigo,resultado.getString("Descripcion"), resultado.getFloat("Precio") + "", resultado.getString("Descuento")});
+        }
+        conexion.close();
+        return Cliente;
+   }
    public boolean existeCliente(String nit) throws SQLException{      
        conectar();
        Statement instruccion = conexion.createStatement();
@@ -903,63 +928,5 @@ public class Conexion {
         }
         conexion.close();
         return Productos;
-
-   /**
-     * Metodo que regresa la lista de clientes como un arreglo
-     * @return
-     * @throws SQLException 
-     */
-    public DefaultTableModel obtenerClientes() throws SQLException{
-        DefaultTableModel modelo = null;
-        modelo=inicializarTablaClientes(modelo);
-        conectar();
-        Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito, Saldo, Cheque FROM cliente;");
-        while(resultado.next()){
-            
-            modelo.addRow(new String[] {resultado.getString("NIT"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Descuento"),resultado.getString("Direccion"),resultado.getString("LimiteCredito"),resultado.getString("Saldo"), (resultado.getString("Cheque").equals("1")? "SI": "NO")});
-        }
-        conexion.close();
-        return modelo;
     }
-    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
-//        
-        modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
-            boolean[] canEdit = new boolean [] {
-        false, false, false, false,false,false,false
-            };
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        };
-        return modelo;
-    } 
-    
-    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
-        conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
-        int res=-1;
-        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
-        {
-            res= resultado.getInt(1);
-        }
-        conexion.close();
-        return res;
-    }
-    
-    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
-        conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("UPDATE Clientes SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+") WHERE id="+id+";"); //se guarda el resultado de la instruccion
-        int res=-1;
-        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
-        {
-            res= resultado.getInt(1);
-        }
-        conexion.close();
-        return res;
-
-    }
-
 }

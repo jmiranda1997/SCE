@@ -9,6 +9,8 @@ import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -37,7 +39,7 @@ public class Factura extends javax.swing.JPanel {
         inicializarTabla();
         Productos.addRow(new String[] {});
         tabla_detalle.setModel(Productos);
-        
+        panel_Coti.setVisible(false);
         try {
             lbl_Fecha.setText(Conexion_DB.fecha());
         } catch (SQLException ex) {
@@ -49,7 +51,7 @@ public class Factura extends javax.swing.JPanel {
     private void inicializarTabla(){
         Productos = new DefaultTableModel(null, new String[]{"Codigo", "Descripcion",  "Cantidad",  "Descuento", "Precio U", "Precio T"}){
             boolean[] canEdit = new boolean [] {
-        true, false, true, true, false, false
+        false, false, true, true, false, false
             };
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -647,9 +649,9 @@ public class Factura extends javax.swing.JPanel {
         panel_Coti.add(btn_Seleccion4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 10, 550));
 
         jScrollPane2.setBackground(new java.awt.Color(0, 0, 0));
-        panel_Coti.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 220, 470));
+        panel_Coti.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 270, 470));
 
-        jPanel1.add(panel_Coti, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, 230, 550));
+        jPanel1.add(panel_Coti, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 60, 280, 550));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -726,9 +728,10 @@ private void Cliente(int id){
             dialogo.setVisible(true);
         }
     }
+    private String[] Cliente;
     private void Cliente(String nit){
         try {
-            String[] Cliente = Conexion_DB.obtenerCliente(nit);
+            Cliente = Conexion_DB.obtenerCliente(nit);
             txt_Nit.setText(Cliente[1]);
             txt_Nombre.setText(Cliente[2]);
             txt_Apellido.setText(Cliente[3]);
@@ -829,12 +832,49 @@ private void Cliente(int id){
 
     private void tabla_detalleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyReleased
         if (evt.getKeyCode() == 112) {
-            selectorProductofac selector = new selectorProductofac(null, true, Sucursal[0]);
-            selector.setProductos(Productos);
+            selectorProductofac selector = new selectorProductofac(null, true, Sucursal[0]);            
             selector.setVisible(true);
+            if (selector.isAceptar()) {
+                String Codigo = selector.getCodigo();float Cantidad = selector.getCantidad();
+                try {  
+                    int seleccion = tabla_detalle.getRowCount() - 1;
+                    String [] Producto = Conexion_DB.obtenerProducto(Codigo);
+                    tabla_detalle.setValueAt(Producto[1], seleccion, 0);
+                    tabla_detalle.setValueAt(Producto[2], seleccion, 1);
+                    tabla_detalle.setValueAt(Cantidad, seleccion, 2);
+                    float descuento = Float.parseFloat(((!Producto[4].equals("0"))? Producto[4]: txt_Descuento.getText()));
+                    tabla_detalle.setValueAt(descuento + "", seleccion, 3);
+                    float precio = Float.parseFloat(Producto[3]);                    
+                    float PrecioDes = (precio - (precio * (descuento/100)));
+                    float total = Cantidad * PrecioDes;                    
+                    tabla_detalle.setValueAt(PrecioDes + "", seleccion, 4);
+                    tabla_detalle.setValueAt(total + "", seleccion, 5);
+                    Productos.addRow(new String[]{});
+                    total();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+                }                
+            }
+        }
+         if (evt.getKeyCode() == 114) {
+                if (Productos.getRowCount()>1) {
+                    Productos.removeRow(tabla_detalle.getSelectedRow());
+                    total();
+                }
+
+            }
+        if (evt.getKeyCode() == 10) {
+            
         }
     }//GEN-LAST:event_tabla_detalleKeyReleased
-
+    public void total(){
+        float total = 0;
+        for (int i = 0; i < tabla_detalle.getRowCount() - 1; i++) {
+            total += Float.parseFloat(tabla_detalle.getValueAt(i, 5).toString());
+        }
+        tabla_detalle.setValueAt("Total", tabla_detalle.getRowCount()-1, 4);
+        tabla_detalle.setValueAt(total, tabla_detalle.getRowCount()-1, 5);
+    }
     private void txt_Nombre4FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_Nombre4FocusGained
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_Nombre4FocusGained

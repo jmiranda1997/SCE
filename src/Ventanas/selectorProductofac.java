@@ -21,6 +21,21 @@ public class selectorProductofac extends javax.swing.JDialog {
     /**
      * Creates new form selectorProductofac
      */
+    private boolean Aceptar = false;
+    private String Codigo; private float Cantidad;
+    private Conexion Conexion_DB = new Conexion();
+
+    public boolean isAceptar() {
+        return Aceptar;
+    }
+
+    public String getCodigo() {
+        return Codigo;
+    }
+
+    public float getCantidad() {
+        return Cantidad;
+    }
     public selectorProductofac(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -36,11 +51,10 @@ public class selectorProductofac extends javax.swing.JDialog {
             dialogo.setVisible(true);
         }
     }
-    private DefaultTableModel Productos;
-    private Conexion Conexion_DB = new Conexion();
-    public void setProductos(DefaultTableModel Productos) {
-        this.Productos = Productos;
-    }
+    
+
+
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -220,16 +234,19 @@ public class selectorProductofac extends javax.swing.JDialog {
     private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
         // TODO add your handling code here:
 
-        int seleccion = tabla_produc.getSelectedRow(), seleccion2 = Productos.getRowCount()-1;
+        int seleccion = tabla_produc.getSelectedRow();
         if (seleccion != -1) {
-            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), seleccion2, 0);
-            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), seleccion2, 1);
-            Productos.setValueAt(txt_Cantidad.getText(), seleccion2, 2);
-            Productos.setValueAt("0.00", seleccion2, 3);
-            Productos.setValueAt("0.00", seleccion2, 4);
-            Productos.addRow(new String[]{});
-        }
-        this.setVisible(false);
+//            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), seleccion2, 0);
+//            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), seleccion2, 1);
+//            Productos.setValueAt(txt_Cantidad.getText(), seleccion2, 2);
+//            Productos.setValueAt("0.00", seleccion2, 3);
+//            Productos.setValueAt("0.00", seleccion2, 4);
+//            Productos.addRow(new String[]{});
+            Codigo = tabla_produc.getValueAt(seleccion, 0).toString();
+            Cantidad = Float.parseFloat(txt_Cantidad.getText());
+            Aceptar = true;
+           this.setVisible(false);
+        }         
     }//GEN-LAST:event_btn_AceptarMouseClicked
 
     private void tabla_producMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_producMousePressed
