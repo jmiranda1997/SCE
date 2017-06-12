@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.*;
 import Ventanas.selectorProductofac;
 import Ventanas.selectorSucursal;
 import java.awt.Color;
@@ -51,7 +52,7 @@ public class consultaFactura extends javax.swing.JPanel {
                 rbtn_Credito.setSelected(false);
             }
             
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -574,7 +575,7 @@ public class consultaFactura extends javax.swing.JPanel {
                     txt_Direccion.setEditable(true);
                     txt_Descuento.setText("0");
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                 dialogo.setVisible(true);
             }
@@ -761,7 +762,7 @@ public class consultaFactura extends javax.swing.JPanel {
                 DefaultTableModel detalle=Conexion_DB.obtenerDetalleFactura(Integer.parseInt(datos[0]));
                 if(detalle!=null)
                     tabla_detalle.setModel(detalle);
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 Logger.getLogger(consultaFactura.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

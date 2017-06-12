@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class selectorSucursal extends javax.swing.JDialog {
                 Tabla.addRow(new String[] {Sucursales[0].get(i).toString(), Sucursales[1].get(i).toString(), Sucursales[2].get(i).toString()});
             }
             tabla_Sucursales.setModel(Tabla);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogodeMensaje men = new DialogodeMensaje();
             men.setContenido("ERROR", ex.getMessage(), DialogodeConfrimacion.ICONO_ERROR);
             men.setVisible(true);

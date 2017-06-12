@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.sql.SQLException;
@@ -55,7 +56,7 @@ public class Productos extends javax.swing.JPanel {
             llenarListado();
             setJTexFieldChanged(txt_codigo1);
             scp_listado.getViewport().setBackground(Color.red);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -915,7 +916,7 @@ public class Productos extends javax.swing.JPanel {
                     pn_listado.getParent().repaint();
                     }
                     //}*/
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -938,7 +939,7 @@ public class Productos extends javax.swing.JPanel {
     {
         try {
             productoActual=conexion.obtener_detalleProducto(i,0);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
         if(productoActual.size()>0)
@@ -950,7 +951,7 @@ public class Productos extends javax.swing.JPanel {
     {
         try {
             productoActual=conexion.obtener_detalleProducto(descripcion,codigo,codigo_barras);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
         if(productoActual.size()>0)
@@ -1217,7 +1218,7 @@ public class Productos extends javax.swing.JPanel {
                  btn_verMouseClicked(evt);
                  llenarListado();
             }
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
                 Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_Guardar_AceptarMouseClicked
@@ -1292,7 +1293,7 @@ public class Productos extends javax.swing.JPanel {
                         dialogo.setVisible(true);
                     }
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
             }
             btn_eliminar.setBackground(Color.black);

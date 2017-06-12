@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import Ventanas.DialogodeConfrimacion;
 import Ventanas.DialogodeMensaje;
@@ -38,7 +39,7 @@ public class selectorFactura extends javax.swing.JDialog {
             }
             else
                 this.setVisible(false);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(selectorFactura.class.getName()).log(Level.SEVERE, null, ex);
         }
         

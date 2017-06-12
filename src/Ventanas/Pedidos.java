@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public class Pedidos extends javax.swing.JPanel {
         initComponents();
         try {
             lbl_Orden.setText(Conexion_DB.numeroPedido()+"");
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
             dialogo.setVisible(true);
         }
@@ -408,7 +409,7 @@ public class Pedidos extends javax.swing.JPanel {
             btn_Editar.setText("CANCELAR");
             try {
             lbl_Orden.setText(Conexion_DB.numeroPedido()+"");
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
             dialogo.setVisible(true);
         }
@@ -432,7 +433,7 @@ public class Pedidos extends javax.swing.JPanel {
                     dialogo.setVisible(true);
                 }
                 
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
                 dialogo.setVisible(true);
             }

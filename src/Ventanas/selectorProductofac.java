@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
 import java.sql.SQLException;
@@ -46,7 +47,7 @@ public class selectorProductofac extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         try {
             tabla_produc.setModel(Conexion_DB.obtenerProductosfac(Sucursal));
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -235,8 +236,8 @@ public class selectorProductofac extends javax.swing.JDialog {
     private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
         // TODO add your handling code here:
 
-        int seleccion = tabla_produc.getSelectedRow();
-        if (seleccion != -1) {
+       int seleccion = tabla_produc.getSelectedRow();
+        if (seleccion != -1 && Float.parseFloat(txt_Cantidad.getText()) <= Float.parseFloat(tabla_produc.getValueAt(seleccion, 3).toString())) {
 //            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), seleccion2, 0);
 //            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), seleccion2, 1);
 //            Productos.setValueAt(txt_Cantidad.getText(), seleccion2, 2);
@@ -247,7 +248,10 @@ public class selectorProductofac extends javax.swing.JDialog {
             Cantidad = Float.parseFloat(txt_Cantidad.getText());
             Aceptar = true;
            this.setVisible(false);
-        }         
+        }     else if(Float.parseFloat(txt_Cantidad.getText()) > Float.parseFloat(tabla_produc.getValueAt(seleccion, 3).toString())){
+             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", "EXISTENCIA INSUFICIENTE, VERIFIQUE LA CANTIDAD");
+             dialogo.setVisible(true);
+        }      
     }//GEN-LAST:event_btn_AceptarMouseClicked
 
     private void tabla_producMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_producMousePressed
@@ -256,7 +260,7 @@ public class selectorProductofac extends javax.swing.JDialog {
             btn_Aceptar.setEnabled(true);
             try {
                 lbl_Total.setText("TOTAL: " + Conexion_DB.existencias(tabla_produc.getValueAt(seleccion, 0).toString()) + "     F10");
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                 dialogo.setVisible(true);
             }

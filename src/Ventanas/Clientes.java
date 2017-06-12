@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.NoSePuedeConectar;
 import RobertoPruebas.*;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
@@ -488,7 +489,7 @@ public class Clientes extends javax.swing.JPanel {
             generalButton.setEnabled(true);
             //Pone el foco en la tabla
             listadoTable.requestFocus();
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
         }
@@ -508,7 +509,7 @@ public class Clientes extends javax.swing.JPanel {
             //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
             listadoTable.setModel(conexion.obtenerClientesJP());
             listadoTable.requestFocus();
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Eliminación", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
         }
@@ -527,7 +528,7 @@ public class Clientes extends javax.swing.JPanel {
             generalPanel.setVisible(true);
             //Inhabilita el botón
             generalButton.setEnabled(false);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Visualización", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
         }
@@ -592,7 +593,7 @@ public class Clientes extends javax.swing.JPanel {
                     limpiar();
                 }
             }
-        } catch (SQLException|ParseException ex) {
+        } catch (SQLException|ParseException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
             limpiar();

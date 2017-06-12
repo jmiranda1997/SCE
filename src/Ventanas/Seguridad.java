@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.NoSePuedeConectar;
 import Excepciones.NoSePuedeEscribirArchivo;
 import JP.*;
 import RobertoPruebas.*;
@@ -582,7 +583,7 @@ public class Seguridad extends javax.swing.JPanel {
             usuariosCombo1.setSelectedIndex(-1);
             eliminarPanel.setVisible(true);
             usuariosPanel1.setVisible(false);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
         }
@@ -690,7 +691,7 @@ public class Seguridad extends javax.swing.JPanel {
                     diag= new DialogoOpcion(null,true,DialogoOpcion.ICONO_INFORMACION,"Eliminar usuarios","Usuario eliminado");
                     diag.setVisible(true);
                     limpiar();
-                } catch (SQLException ex) {
+                } catch (SQLException|NoSePuedeConectar ex) {
                     DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
                     dialogo.setVisible(true);
                 }
@@ -719,7 +720,7 @@ public class Seguridad extends javax.swing.JPanel {
                     userIField.setText("");
                     limpiar();
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
                 dialogo.setVisible(true);
             }

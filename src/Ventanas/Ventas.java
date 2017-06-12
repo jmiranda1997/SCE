@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -32,7 +33,7 @@ public class Ventas extends javax.swing.JPanel {
         try {
             panel_Factura = new Factura(Conexion_DB.siguienteCotizacion() + "");
           consulta=new consultaFactura();
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }

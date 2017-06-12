@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.*;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.SQLException;
@@ -671,7 +672,7 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
             cambiarModo();
             cambiarCampos();
             añadir_panel();
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(CotizacionPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_guardarMouseClicked

@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import static RobertoPruebas.CotizacionPrincipal.scp_listado;
 import RobertoPruebas.DialogoOpcion;
@@ -48,7 +49,7 @@ public class Factura extends javax.swing.JPanel {
         panel_Coti.setVisible(false);
         try {
             lbl_Fecha.setText(Conexion_DB.fecha());
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -446,6 +447,11 @@ public class Factura extends javax.swing.JPanel {
                 btn_GuardarMouseEntered(evt);
             }
         });
+        btn_Guardar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_GuardarKeyPressed(evt);
+            }
+        });
         jPanel1.add(btn_Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 610, 90, 40));
 
         tabla_detalle.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -763,7 +769,7 @@ public class Factura extends javax.swing.JPanel {
                     txt_Direccion.setEditable(true);
                     txt_Descuento.setText("0");
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                 dialogo.setVisible(true);
             }
@@ -791,7 +797,7 @@ private void Cliente(int id){
                 }
             }  
             
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -813,7 +819,7 @@ private void Cliente(int id){
                 rbtn_Credito.setSelected(false);
             }
             
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -942,7 +948,7 @@ private void Cliente(int id){
                          + "GUARDADA EXITOSAMENTE CON EL NUMERO DE COTIZACION: " + nuevoPanel.get(1).toString());
                 dialogo.setVisible(true);
             }
-              } catch (SQLException ex) {
+              } catch (SQLException|NoSePuedeConectar ex) {
                     DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                     dialogo.setVisible(true);
               }
@@ -951,8 +957,8 @@ private void Cliente(int id){
             try {
                 String[] Sucu = Conexion_DB.obtenerSucursal(Sucursal[0]);
                 Conexion_DB.crearFactura(Sucu[1], Sucu[2], Float.parseFloat(tabla_detalle.getValueAt(tabla_detalle.getRowCount()-1, 5).toString()), Float.parseFloat(tabla_detalle.getValueAt(tabla_detalle.getRowCount()-1, 5).toString()), Integer.parseInt(Cliente[0]), 1, Integer.parseInt(Sucu[0]), Integer.parseInt(nuevoPanel.get(0).toString()), (txt_Comentario.getText().equals("INGRESE UN NUMERO DE ORDEN O UN COMENTARIO"))?"":txt_Comentario.getText());
-                
-            } catch (SQLException ex) {
+                Conexion_DB.facturar(Integer.parseInt(nuevoPanel.get(0).toString()));
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                     dialogo.setVisible(true);
             }
@@ -960,7 +966,11 @@ private void Cliente(int id){
     }//GEN-LAST:event_btn_GuardarMouseClicked
     private void insertarDetalles(int Ventas_id) throws SQLException{
         for (int i = 0; i < tabla_detalle.getRowCount() - 1; i++) {
-            Conexion_DB.insertarDetalleCompra(Conexion_DB.obtenerProductoID(tabla_detalle.getValueAt(i, 0).toString()), Ventas_id, Float.parseFloat(tabla_detalle.getValueAt(i, 2).toString()), Float.parseFloat(tabla_detalle.getValueAt(i, 4).toString()), Float.parseFloat(tabla_detalle.getValueAt(i, 3).toString()));
+            try {
+                Conexion_DB.insertarDetalleCompra(Conexion_DB.obtenerProductoID(tabla_detalle.getValueAt(i, 0).toString()), Ventas_id, Float.parseFloat(tabla_detalle.getValueAt(i, 2).toString()), Float.parseFloat(tabla_detalle.getValueAt(i, 4).toString()), Float.parseFloat(tabla_detalle.getValueAt(i, 3).toString()));
+            } catch (NoSePuedeConectar ex) {
+                Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     private void btn_GuardarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GuardarMouseEntered
@@ -996,7 +1006,7 @@ private void Cliente(int id){
                     tabla_detalle.setValueAt(total + "", seleccion, 5);
                     Productos.addRow(new String[]{});
                     total();
-                } catch (SQLException ex) {
+                } catch (SQLException|NoSePuedeConectar ex) {
                     Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
                 }                
             }
@@ -1144,6 +1154,10 @@ private void Cliente(int id){
     private void txt_DiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_DiasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_DiasActionPerformed
+
+    private void btn_GuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_GuardarKeyPressed
+         // TODO add your handling code here:
+    }//GEN-LAST:event_btn_GuardarKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

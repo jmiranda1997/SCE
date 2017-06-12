@@ -8,6 +8,7 @@ package Ventanas;
 
 import Excepciones.ArchivoNoExiste;
 import Excepciones.FormatoInvalido;
+import Excepciones.NoSePuedeConectar;
 import Excepciones.NoSePuedeEscribirArchivo;
 import JP.*;
 import RobertoPruebas.*;
@@ -398,7 +399,7 @@ public class Login extends javax.swing.JFrame {
                 jPasswordField1.setText("");
                 jTextField2.requestFocus();
                 
-            } catch (SQLException|NoSuchAlgorithmException|NoSuchPaddingException|InvalidKeyException|IllegalBlockSizeException|BadPaddingException|NoSePuedeEscribirArchivo ex) {
+            } catch (NoSePuedeConectar|SQLException|NoSuchAlgorithmException|NoSuchPaddingException|InvalidKeyException|IllegalBlockSizeException|BadPaddingException|NoSePuedeEscribirArchivo ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Log In", "Error:\n"+ex.toString());  
                 dialogo.setVisible(true);
             }

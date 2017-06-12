@@ -184,30 +184,30 @@ public class Conexion {
             }
         };
     }
-    private void iniciarTablaClientes() {
-//        
-        Clientes = new DefaultTableModel(null, new String[]{"Codigo", "Nit",  "Nombre",  "Descuento", "Credito", "Saldo"}){
-            boolean[] canEdit = new boolean [] {
-        false, false, false, false, false, false
-            };
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return canEdit [columnIndex];
-            }
-        };
-    }
-    private void iniciarTablaExistencias() {
-//        
-        Existencias = new DefaultTableModel(null, new String[]{"Sucursal", "Cantidad"}){
-            boolean[] canEdit = new boolean [] {
-        false, false
-            };
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return canEdit [columnIndex];
-            }
-        };
-    }
+//    private void iniciarTablaClientes() {
+////        
+//        Clientes = new DefaultTableModel(null, new String[]{"Codigo", "Nit",  "Nombre",  "Descuento", "Credito", "Saldo"}){
+//            boolean[] canEdit = new boolean [] {
+//        false, false, false, false, false, false
+//            };
+//            @Override
+//            public boolean isCellEditable(int rowIndex, int columnIndex) {
+//        return canEdit [columnIndex];
+//            }
+//        };
+//    }
+//    private void iniciarTablaExistencias() {
+////        
+//        Existencias = new DefaultTableModel(null, new String[]{"Sucursal", "Cantidad"}){
+//            boolean[] canEdit = new boolean [] {
+//        false, false
+//            };
+//            @Override
+//            public boolean isCellEditable(int rowIndex, int columnIndex) {
+//        return canEdit [columnIndex];
+//            }
+//        };
+//    }
     public void desHabilitarProvedor(String Nombre) throws SQLException, NoSePuedeConectar{
         conectar();
         
@@ -348,7 +348,7 @@ public class Conexion {
         
         conexion.close();
     }
-     public void insertarDetalleCompra(int Producto_id, int Ventas_id, float Cantidad, float PrecioVenta, float Descuento) throws SQLException{
+     public void insertarDetalleCompra(int Producto_id, int Ventas_id, float Cantidad, float PrecioVenta, float Descuento) throws SQLException, NoSePuedeConectar{
         conectar();
         Statement instruccion = conexion.createStatement();
         
@@ -416,7 +416,7 @@ public class Conexion {
         conexion.close();
         return cant;
     }
-    public int siguienteCotizacion() throws SQLException{
+    public int siguienteCotizacion() throws SQLException, NoSePuedeConectar{
         int cant = 0;
         
         conectar();
@@ -687,7 +687,7 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
-    public ArrayList obtener_detalleProducto(String des, String codigo, String codigo_barras) throws SQLException{
+    public ArrayList obtener_detalleProducto(String des, String codigo, String codigo_barras) throws SQLException, NoSePuedeConectar{
         ArrayList atributo=new ArrayList();
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -720,7 +720,7 @@ public class Conexion {
            conexion.close();
        }
    }
-   public void crearFactura(String Numero, String Serie, float sub, float iva, int cliente_id, int Usuario_id, int Sucursal_id, int Ventas_id, String comentario) throws SQLException{
+   public void crearFactura(String Numero, String Serie, float sub, float iva, int cliente_id, int Usuario_id, int Sucursal_id, int Ventas_id, String comentario) throws SQLException, NoSePuedeConectar{
       conectar();
        Statement instruccion = conexion.createStatement();
        instruccion.executeUpdate("INSERT INTO factura (Numero, Serie, Subtotal, IVA, Total, Cliente_id, Usuario_id, Sucursales_id, Ventas_id, Comentario) VALUES ('" + Numero + "', '"+ Serie+ "', "+sub+ ", " + iva + ", " + (sub+iva) +", "
@@ -736,13 +736,13 @@ public class Conexion {
     * @return ArrayList que contiene 0.-id de cotizacion, 1.-numero de cotizacion, 2.- id del cliente.- 3 total
     * @throws SQLException 
     */
-   public ArrayList insertarCotizacion(int idCliente,int id_usuario) throws SQLException{
+   public ArrayList insertarCotizacion(int idCliente,int id_usuario) throws SQLException, NoSePuedeConectar{
        ArrayList lista=new ArrayList();
         conectar();
         Statement instruccion=conexion.createStatement();
         instruccion.executeUpdate("insert into ventas (Cliente_id,Usuario_id) values ("+idCliente+","+id_usuario+");");//se inseta el cloente
         int id=0;
-        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW()=date(fecha);");//se obtiene el cliente insertado
+        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW())=date(fecha);");//se obtiene el cliente insertado
         while(resultado.next())
         { 
            id=resultado.getInt(1);
@@ -758,7 +758,7 @@ public class Conexion {
         conexion.close();
         return lista;
    }
-   public void modificarCotizacion(int id, int tiempo, float total) throws SQLException{
+   public void modificarCotizacion(int id, int tiempo, float total) throws SQLException, NoSePuedeConectar{
        conectar();
        Statement instruccion = conexion.createStatement();
        instruccion.executeUpdate("UPDATE ventas SET Tiempo = " + tiempo + ", Total = " + total + ", Fecha = NOW() WHERE id = " + id + ";");
@@ -772,7 +772,7 @@ public class Conexion {
     * @param id_usuario usuario que realizo la cotizacion
     * @return ArrayList que contiene 0.-id de cotizacion, 1.-numero de cotizacion, 2.- nombre del cliente.- 3 total
     */
-   public ArrayList insertarCotizacion(String nombre,int id_usuario) throws SQLException
+   public ArrayList insertarCotizacion(String nombre,int id_usuario) throws SQLException, NoSePuedeConectar
    {
         ArrayList lista=new ArrayList();
         conectar();
@@ -796,7 +796,7 @@ public class Conexion {
         return lista;
    }
 
-    public DefaultTableModel obtenerClientes_venta() throws SQLException{
+    public DefaultTableModel obtenerClientes_venta() throws SQLException, NoSePuedeConectar{
         Clientes=null;
         iniciarTablaClientes();
         conectar();
@@ -808,7 +808,7 @@ public class Conexion {
         conexion.close();
         return Clientes;
     }
-    public int obtenerExistencia(int sucursalId, int productoId) throws SQLException{
+    public int obtenerExistencia(int sucursalId, int productoId) throws SQLException, NoSePuedeConectar{
         int existencia=0;
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -827,47 +827,7 @@ public class Conexion {
         }
         return existencia;
         }
-    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
-//        
-        modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
-            boolean[] canEdit = new boolean [] {
-        false, false, false, false,false,false,false
-            };
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        };
-        return modelo;
-    } 
-    
-    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
-        conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
-        int res=-1;
-        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
-        {
-            res= resultado.getInt(1);
-        }
-        conexion.close();
-        return res;
-    }
-    
-    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
-        conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("UPDATE Clientes SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+") WHERE id="+id+";"); //se guarda el resultado de la instruccion
-        int res=-1;
-        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
-        {
-            res= resultado.getInt(1);
-        }
-        conexion.close();
-        return res;
-
-    }
-
-   public ArrayList[] obtenerSucursales() throws SQLException{
+   public ArrayList[] obtenerSucursales() throws SQLException, NoSePuedeConectar{
       
        ArrayList[] Sucursales = new ArrayList[3];
        Sucursales[0] = new ArrayList();
@@ -886,7 +846,8 @@ public class Conexion {
        conexion.close();
        return Sucursales;
    }
-   public String[] obtenerSucursal(String Nombre) throws SQLException{
+   
+   public String[] obtenerSucursal(String Nombre) throws SQLException, NoSePuedeConectar{
       
        String[] Sucursales = null;
 
@@ -902,7 +863,7 @@ public class Conexion {
        return Sucursales;
    }
    
-   public String fecha()throws SQLException{
+   public String fecha()throws SQLException, NoSePuedeConectar{
        String Fecha = "";
        conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -914,7 +875,7 @@ public class Conexion {
        conexion.close();
        return Fecha;
    }
-   public String[] obtenerCliente(int id) throws SQLException{
+   public String[] obtenerCliente(int id) throws SQLException, NoSePuedeConectar{
         String[]  Cliente= null;
                
         conectar();
@@ -926,7 +887,7 @@ public class Conexion {
         conexion.close();
         return Cliente;
    }
-   public String[] obtenerCliente(String nit) throws SQLException{
+   public String[] obtenerCliente(String nit) throws SQLException, NoSePuedeConectar{
         String[] Cliente = null;
 
         conectar();
@@ -938,7 +899,7 @@ public class Conexion {
         conexion.close();
         return Cliente;
    }
-   public String[] obtenerProducto(String Codigo) throws SQLException{
+   public String[] obtenerProducto(String Codigo) throws SQLException, NoSePuedeConectar{
         String[] Cliente = null;
 
         conectar();
@@ -950,7 +911,7 @@ public class Conexion {
         conexion.close();
         return Cliente;
    }
-   public int obtenerProductoID(String Codigo) throws SQLException{
+   public int obtenerProductoID(String Codigo) throws SQLException, NoSePuedeConectar{
         int id = 0;
 
         conectar();
@@ -963,7 +924,7 @@ public class Conexion {
         return id;
    }
    
-   public boolean existeCliente(String nit) throws SQLException{      
+   public boolean existeCliente(String nit) throws SQLException, NoSePuedeConectar{      
        conectar();
        Statement instruccion = conexion.createStatement();
        ResultSet resultado = instruccion.executeQuery("SELECT COUNT(*) cant FROM cliente WHERE NIT = '" + nit + "';");
@@ -979,7 +940,7 @@ public class Conexion {
        return false;   
    }
 
-    public DefaultTableModel obtenerProductos_vista(int filtro, String criterio) throws SQLException{
+    public DefaultTableModel obtenerProductos_vista(int filtro, String criterio) throws SQLException, NoSePuedeConectar{
          Productos = null;
          String texto_busqueda="";
          if(!criterio.isEmpty())
@@ -1010,7 +971,7 @@ public class Conexion {
         conexion.close();
         return Productos;
     }    
-    public DefaultTableModel obtenerFacturasConsulta(String fecha,String nombre,String dpi) throws SQLException
+    public DefaultTableModel obtenerFacturasConsulta(String fecha,String nombre,String dpi) throws SQLException, NoSePuedeConectar
     {
         DefaultTableModel facturas=null;
         facturas = new DefaultTableModel(null, new String[]{"Numero","Nombre","Apellido","NIT","Vendedor","Serie","Fecha","Sucursal"}){
@@ -1042,7 +1003,7 @@ public class Conexion {
         conexion.close();
         return facturas;
     }
-    public ArrayList id_ventas(String fecha,String nombre,String dpi) throws SQLException{
+    public ArrayList id_ventas(String fecha,String nombre,String dpi) throws SQLException, NoSePuedeConectar{
         ArrayList ids=new ArrayList();
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -1056,7 +1017,7 @@ public class Conexion {
         conexion.close();
         return ids;
     }
-    public DefaultTableModel obtenerDetalleFactura(int id) throws SQLException
+    public DefaultTableModel obtenerDetalleFactura(int id) throws SQLException, NoSePuedeConectar
     {
         DefaultTableModel facturas=null;
         facturas = new DefaultTableModel(null, new String[]{"Producto","Cantidad","Descuento","Precio Venta","Sub-total"}){
@@ -1207,74 +1168,27 @@ public class Conexion {
         }
         
     }
-   public ArrayList[] obtenerSucursales() throws SQLException, NoSePuedeConectar{
-      
-       ArrayList[] Sucursales = new ArrayList[3];
-       Sucursales[0] = new ArrayList();
-       Sucursales[1] = new ArrayList();
-       Sucursales[2] = new ArrayList();
-       
-       conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT Nombre, NumeroFac, SerieFact FROM sucursales");
-       while (resultado.next()) {     
-           Sucursales[0].add(resultado.getString("Nombre"));
-           Sucursales[1].add(resultado.getString("NumeroFac"));
-           Sucursales[2].add((resultado.getString("SerieFact") == null) ? "": resultado.getString("SerieFact"));
-       }
-       
-       conexion.close();
-       return Sucursales;
-   }
-   public String fecha()throws SQLException, NoSePuedeConectar{
-       String Fecha = "";
-       conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT obtenerFecha() Fecha;");
-       while (resultado.next()) {     
-           Fecha = resultado.getString("Fecha");
-       }
-       
-       conexion.close();
-       return Fecha;
-   }
-   public String[] obtenerCliente(int id) throws SQLException, NoSePuedeConectar{
-        String[]  Cliente= null;
-               
+    
+     public void facturar(int id) throws SQLException, NoSePuedeConectar{
         conectar();
+        
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito FROM cliente WHERE id = " + id + ";");
-        while(resultado.next()){
-             Cliente = (new String[] {id + "", resultado.getString("NIT"), resultado.getString("Nombre"), (resultado.getString("Apellido") == null) ? "" : resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("Direccion"), resultado.getFloat("LimiteCredito") + ""});
-        }
+        instruccion.executeUpdate("UPDATE ventas SET Vendida = 1 WHERE id =" + id + ";");
         conexion.close();
-        return Cliente;
-   }
-   public String[] obtenerCliente(String nit) throws SQLException, NoSePuedeConectar{
-        String[] Cliente = null;
+    }
 
-        conectar();
-        Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Descuento, Direccion, LimiteCredito FROM cliente WHERE NIT = '" + nit + "';");
-        while(resultado.next()){
-            Cliente = (new String[] {resultado.getInt("id")+ "", nit, resultado.getString("Nombre"), (resultado.getString("Apellido") == null) ? "" : resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("Direccion"), resultado.getFloat("LimiteCredito") + ""});
-        }
-        conexion.close();
-        return Cliente;
-   }
-   public boolean existeCliente(String nit) throws SQLException, NoSePuedeConectar{      
-       conectar();
-       Statement instruccion = conexion.createStatement();
-       ResultSet resultado = instruccion.executeQuery("SELECT COUNT(*) cant FROM cliente WHERE NIT = '" + nit + "';");
-       
-       while (resultado.next()) {           
-           if (resultado.getInt("cant") > 0) {
-               conexion.close();
-               return true;
-           }
-       }
-       
-       conexion.close();
-       return false;   
-   }
+  
+//   public String fecha()throws SQLException, NoSePuedeConectar{
+//       String Fecha = "";
+//       conectar(); //permite la conexion con la base de datos
+//        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+//        ResultSet resultado = instruccion.executeQuery("SELECT obtenerFecha() Fecha;");
+//       while (resultado.next()) {     
+//           Fecha = resultado.getString("Fecha");
+//       }
+//       
+//       conexion.close();
+//       return Fecha;
+//   }
+   
 }
