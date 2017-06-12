@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import RobertoPruebas.consultaFactura;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -19,9 +20,11 @@ public class Ventas extends javax.swing.JPanel {
      * Creates new form Ventas
      */
     private  Factura panel_Factura;
+    private consultaFactura consulta;
     public Ventas() {
         initComponents();
         panel_Factura = new Factura();
+        consulta=new consultaFactura();
     }
     private void setBoton(JLabel boton){
         boton.setBackground(Color.RED);
@@ -160,7 +163,12 @@ public class Ventas extends javax.swing.JPanel {
         resetBoton(btn_Pagos);
         setBoton(btn_Consulta);
         resetBoton(btn_Reportes);
-       
+        consulta.setLocation(0, 0);
+        consulta.setSize(panel_Contenido.getSize());
+        panel_Contenido.removeAll();
+        panel_Contenido.add(consulta, BorderLayout.CENTER);
+        panel_Contenido.revalidate();
+        panel_Contenido.repaint();
     }//GEN-LAST:event_btn_ConsultaMouseClicked
     
     private void btn_FacturaccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_FacturaccionMouseClicked
