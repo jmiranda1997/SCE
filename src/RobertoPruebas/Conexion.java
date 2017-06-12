@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package RobertoPruebas;
+import RobertoPruebas.*;
 import Ventanas.DialogodeMensaje;
 import Excepciones.*;
 import java.sql.*;
@@ -151,6 +152,30 @@ public class Conexion {
         Productos = new DefaultTableModel(null, new String[]{"Numero", "Proveedor", "Fecha", "Total", "Saldo"}){
             boolean[] canEdit = new boolean [] {
         false, false, false, false
+            };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
+    private void iniciarTablaClientes() {
+//        
+        Clientes = new DefaultTableModel(null, new String[]{"Codigo", "Nit",  "Nombre",  "Descuento", "Credito", "Saldo"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false, false, false
+            };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
+    private void iniciarTablaExistencias() {
+//        
+        Existencias = new DefaultTableModel(null, new String[]{"Sucursal", "Cantidad"}){
+            boolean[] canEdit = new boolean [] {
+        false, false
             };
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -641,16 +666,273 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
+    public ArrayList obtener_detalleProducto(String des, String codigo, String codigo_barras) throws SQLException{
+        ArrayList atributo=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("select p.id, p.codigo, codigo_barras,descripcion, precio_venta, "+
+                "precio_costo,estanteria, columna, fila,u.id ,m.Nombre from producto p left join "+
+                "unidad u on u.id=p.Unidad_id left join marca m ON m.id=p.Marca_id where p.codigo='"+codigo+
+                "' and p.codigo_barras='"+codigo_barras+"' and p.descripcion='"+des+"';"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
+        if(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            for(int i=1;i<12;i++)
+            {
+                atributo.add(resultado.getString(i));
+            }
+        }   
+        conexion.close();
+        return atributo;
+    }
+   /**
+    * metodo que deshabilita productos en la base de datos
+    * @param id del producto a deshabilitar
+    * @throws SQLException 
+    */
    public void deshabilitarProducto(int id) throws SQLException, NoSePuedeConectar
    {
        if(id>0)
        {
            conectar();
            Statement instruccion=conexion.createStatement();
-           instruccion.executeUpdate("update producto set habilitado=0 where id="+id+";");
+           instruccion.executeUpdate("update producto set habilitado=0 where id="+id+";");//se actualiza el campo habilitado como 0
            conexion.close();
        }
+   }/**
+    * Funcion que ingresa una nueva cotizacion para un cliente ya registrado
+    * retorna un arreglo con la información principal del cliente
+    * @param idCliente id del cliente
+    * @param id_usuario id del usuario que ingreso la cotizacion
+    * @return ArrayList que contiene 0.-id de cotizacion, 1.-numero de cotizacion, 2.- id del cliente.- 3 total
+    * @throws SQLException 
+    */
+   public ArrayList insertarCotizacion(int idCliente,int id_usuario) throws SQLException{
+       ArrayList lista=new ArrayList();
+        conectar();
+        Statement instruccion=conexion.createStatement();
+        instruccion.executeUpdate("insert into ventas (Cliente_id,Usuario_id) values ("+idCliente+","+id_usuario+");");//se inseta el cloente
+        int id=0;
+        ResultSet resultado=instruccion.executeQuery("select id from ventas where Nombre="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW()=date(fecha);");//se obtiene el cliente insertado
+        while(resultado.next())
+        { 
+           id=resultado.getInt(1);
+        }
+        lista.add(id);
+        resultado=instruccion.executeQuery("select numero,cliente_id,total from ventas where id="+id+";");//se guardan los datos de la cotizacion
+        if(resultado.next())
+        {
+            lista.add(resultado.getInt(1));
+            lista.add(resultado.getString(2));
+            lista.add(resultado.getDouble(3));
+        }
+        conexion.close();
+        return lista;
    }
+   /**
+    * Funcion que Inserta una nueva cotizacion para un cliente no registrado
+    * y retorna los datos de la nueva cotizacion
+    * @param nombre Nombre que tendra la cotizacion
+    * @param id_usuario usuario que realizo la cotizacion
+    * @return ArrayList que contiene 0.-id de cotizacion, 1.-numero de cotizacion, 2.- nombre del cliente.- 3 total
+    */
+   public ArrayList insertarCotizacion(String nombre,int id_usuario) throws SQLException
+   {
+        ArrayList lista=new ArrayList();
+        conectar();
+        Statement instruccion=conexion.createStatement();
+        instruccion.executeUpdate("insert into ventas (Nombre,Usuario_id) values ('"+nombre+"',"+id_usuario+");");//se inseta el cloente
+        int id=0;
+        ResultSet resultado=instruccion.executeQuery("select id from ventas where Nombre='"+nombre+"' and Usuario_id="+id_usuario+" and date(NOW())=date(fecha);");//se obtiene el cliente insertado
+        while(resultado.next())
+        { 
+           id=resultado.getInt(1);
+        }
+        lista.add(id);
+        resultado=instruccion.executeQuery("select numero,nombre,total from ventas where id="+id+";");//se guardan los datos de la cotizacion
+        if(resultado.next())
+        {
+            lista.add(resultado.getInt(1));
+            lista.add(resultado.getString(2));
+            lista.add(resultado.getDouble(3));
+        }
+        conexion.close();
+        return lista;
+   }
+
+    public DefaultTableModel obtenerClientes_venta() throws SQLException{
+        Clientes=null;
+        iniciarTablaClientes();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT Nombre, Apellido, Nit from cliente;");
+        while(resultado.next()){
+            Clientes.addRow(new String[] {resultado.getString(1), resultado.getString(2), resultado.getString(3)});
+        }
+        conexion.close();
+        return Clientes;
+    }
+    public int obtenerExistencia(int sucursalId, int productoId) throws SQLException{
+        int existencia=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+         ResultSet resultado;
+        if(sucursalId>0)
+        {
+            resultado = instruccion.executeQuery("select e.Existencia from existencia e where e.Sucursales_id="+sucursalId+" e.Producto_id="+productoId+";");
+        }
+        else
+        {
+            resultado = instruccion.executeQuery("select SUM(e.Existencia) from existencia e where  e.Producto_id="+productoId+";");
+        }
+        if(resultado.next())
+        {
+            existencia=resultado.getInt(1);
+        }
+        return existencia;
+
+
+   /**
+     * Metodo que regresa la lista de clientes como un arreglo
+     * @return
+     * @throws SQLException 
+     */
+    public DefaultTableModel obtenerClientes() throws SQLException{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaClientes(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito, Saldo, Cheque FROM cliente;");
+        while(resultado.next()){
+            
+            modelo.addRow(new String[] {resultado.getString("NIT"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Descuento"),resultado.getString("Direccion"),resultado.getString("LimiteCredito"),resultado.getString("Saldo"), (resultado.getString("Cheque").equals("1")? "SI": "NO")});
+        }
+        conexion.close();
+        return modelo;
+    }
+    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false,false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
+    
+    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    
+    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("UPDATE Clientes SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+") WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+
+    }
+
+   public ArrayList[] obtenerSucursales() throws SQLException{
+      
+       ArrayList[] Sucursales = new ArrayList[3];
+       Sucursales[0] = new ArrayList();
+       Sucursales[1] = new ArrayList();
+       Sucursales[2] = new ArrayList();
+       
+       conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT Nombre, NumeroFac, SerieFact FROM sucursales");
+       while (resultado.next()) {     
+           Sucursales[0].add(resultado.getString("Nombre"));
+           Sucursales[1].add(resultado.getString("NumeroFac"));
+           Sucursales[2].add((resultado.getString("SerieFact") == null) ? "": resultado.getString("SerieFact"));
+       }
+       
+       conexion.close();
+       return Sucursales;
+   }
+   public String fecha()throws SQLException{
+       String Fecha = "";
+       conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT obtenerFecha() Fecha;");
+       while (resultado.next()) {     
+           Fecha = resultado.getString("Fecha");
+       }
+       
+       conexion.close();
+       return Fecha;
+   }
+   public String[] obtenerCliente(int id) throws SQLException{
+        String[]  Cliente= null;
+               
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito FROM cliente WHERE id = " + id + ";");
+        while(resultado.next()){
+             Cliente = (new String[] {id + "", resultado.getString("NIT"), resultado.getString("Nombre"), (resultado.getString("Apellido") == null) ? "" : resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("Direccion"), resultado.getFloat("LimiteCredito") + ""});
+        }
+        conexion.close();
+        return Cliente;
+   }
+   public String[] obtenerCliente(String nit) throws SQLException{
+        String[] Cliente = null;
+
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Descuento, Direccion, LimiteCredito FROM cliente WHERE NIT = '" + nit + "';");
+        while(resultado.next()){
+            Cliente = (new String[] {resultado.getInt("id")+ "", nit, resultado.getString("Nombre"), (resultado.getString("Apellido") == null) ? "" : resultado.getString("Apellido"), resultado.getString("Descuento"), resultado.getString("Direccion"), resultado.getFloat("LimiteCredito") + ""});
+        }
+        conexion.close();
+        return Cliente;
+   }
+   public boolean existeCliente(String nit) throws SQLException{      
+       conectar();
+       Statement instruccion = conexion.createStatement();
+       ResultSet resultado = instruccion.executeQuery("SELECT COUNT(*) cant FROM cliente WHERE NIT = '" + nit + "';");
+       
+       while (resultado.next()) {           
+           if (resultado.getInt("cant") > 0) {
+               conexion.close();
+               return true;
+           }
+       }
+       
+       conexion.close();
+       return false;   
+   }
+
+    public DefaultTableModel obtenerProductos_vista() throws SQLException{
+         Productos = null;
+         iniciarTablaProductos();
+        Productos.setColumnCount(3);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
+        while(resultado.next()){
+            Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion")});
+        }
+        conexion.close();
+        return Productos;
+
    /**
      * Metodo que regresa la lista de clientes como un arreglo
      * @return una DefaultTableModel con los clientes en la BD
