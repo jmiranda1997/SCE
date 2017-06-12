@@ -11,6 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -741,7 +742,7 @@ public class Conexion {
         Statement instruccion=conexion.createStatement();
         instruccion.executeUpdate("insert into ventas (Cliente_id,Usuario_id) values ("+idCliente+","+id_usuario+");");//se inseta el cloente
         int id=0;
-        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW())=date(fecha);");//se obtiene el cliente insertado
+        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW()=date(fecha);");//se obtiene el cliente insertado
         while(resultado.next())
         { 
            id=resultado.getInt(1);
@@ -825,7 +826,7 @@ public class Conexion {
             existencia=resultado.getInt(1);
         }
         return existencia;
-    }
+        }
     private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
 //        
         modelo = new DefaultTableModel(null, new String[]{"NIT", "Nombre", "Apellido", "Descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
@@ -978,18 +979,112 @@ public class Conexion {
        return false;   
    }
 
-    public DefaultTableModel obtenerProductos_vista() throws SQLException{
+    public DefaultTableModel obtenerProductos_vista(int filtro, String criterio) throws SQLException{
          Productos = null;
+         String texto_busqueda="";
+         if(!criterio.isEmpty())
+         {
+             texto_busqueda="and ";
+             switch(filtro){
+                 case 0:
+                     texto_busqueda+="codigo ";
+                     break;
+                 case 1:
+                     texto_busqueda+="codigo_barras ";
+                     break;
+                 default:
+                     texto_busqueda+="descripcion ";
+                     break;
+             }
+             texto_busqueda+="like concat('%','"+criterio+"','%')";
+                     
+         }
          iniciarTablaProductos();
         Productos.setColumnCount(3);
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
+        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1 "+texto_busqueda+";");
         while(resultado.next()){
             Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion")});
         }
         conexion.close();
         return Productos;
+    }    
+    public DefaultTableModel obtenerFacturasConsulta(String fecha,String nombre,String dpi) throws SQLException
+    {
+        DefaultTableModel facturas=null;
+        facturas = new DefaultTableModel(null, new String[]{"Numero","Nombre","Apellido","NIT","Vendedor","Serie","Fecha","Sucursal"}){
+                boolean[] canEdit = new boolean [] {
+            false, false, false, false, false, false,false,false
+                };
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit [columnIndex];
+                }
+            };
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select f.Numero,c.Nombre,c.Apellido,"+
+                "c.NIT,u.Usuario,f.Serie,date(f.Fecha),s.Nombre from factura f left join usuario u "+
+                "on u.id=f.Usuario_id left join cliente c on c.id=f.Cliente_id left join"+
+                " sucursales s on s.id=f.Sucursales_id;");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2),resultado.getString(3),
+                resultado.getString(4),resultado.getString(5),resultado.getString(6),
+                resultado.getString(7),resultado.getString(8)};
+            if(fila[2]==null)
+                fila[2]="N/A";
+            if(fila[3]==null)
+                fila[3]="N/A";
+            facturas.addRow(fila);
+        }
+        conexion.close();
+        return facturas;
+    }
+    public ArrayList id_ventas(String fecha,String nombre,String dpi) throws SQLException{
+        ArrayList ids=new ArrayList();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select v.id from factura f left join usuario u "+
+                "on u.id=f.Usuario_id left join cliente c on c.id=f.Cliente_id left join"+
+                " sucursales s on s.id=f.Sucursales_id left join ventas v on v.Usuario_id=u.id;");
+        while(resultado.next())
+        {
+            ids.add(resultado.getInt(1));
+        }
+        conexion.close();
+        return ids;
+    }
+    public DefaultTableModel obtenerDetalleFactura(int id) throws SQLException
+    {
+        DefaultTableModel facturas=null;
+        facturas = new DefaultTableModel(null, new String[]{"Producto","Cantidad","Descuento","Precio Venta","Sub-total"}){
+                boolean[] canEdit = new boolean [] {
+            false, false, false, false, false, false,false,false
+                };
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit [columnIndex];
+                }
+            };
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select p.Descripcion,d.Cantidad,"+
+                "d.Descuento,d.PrecioVenta from detalledeventa d left join ventas v on "+
+                "d.Ventas_id=v.id left join producto p on p.id=d.Producto_id where v.id="+id+"; ");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2),resultado.getString(3),
+                resultado.getString(4),((double)resultado.getInt(2)*resultado.getDouble(4)*(100-resultado.getInt(3))/100)+""};
+            if(fila[2]==null)
+                fila[2]="N/A";
+            if(fila[3]==null)
+                fila[3]="N/A";
+            facturas.addRow(fila);
+        }
+        conexion.close();
+        return facturas;
     }
    /**
      * Metodo que regresa la lista de clientes como un arreglo

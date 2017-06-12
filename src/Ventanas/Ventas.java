@@ -5,8 +5,7 @@
  */
 package Ventanas;
 
-import RobertoPruebas.Conexion;
-import RobertoPruebas.DialogoOpcion;
+import RobertoPruebas.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.SQLException;
@@ -24,15 +23,20 @@ public class Ventas extends javax.swing.JPanel {
      * Creates new form Ventas
      */
     private  Factura panel_Factura;
+
+    private consultaFactura consulta;
+
     private Conexion Conexion_DB = new Conexion();
     public Ventas() {
         initComponents();
         try {
             panel_Factura = new Factura(Conexion_DB.siguienteCotizacion() + "");
+          consulta=new consultaFactura();
         } catch (SQLException ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
+
     }
     private void setBoton(JLabel boton){
         boton.setBackground(Color.RED);
@@ -171,7 +175,12 @@ public class Ventas extends javax.swing.JPanel {
         resetBoton(btn_Pagos);
         setBoton(btn_Consulta);
         resetBoton(btn_Reportes);
-       
+        consulta.setLocation(0, 0);
+        consulta.setSize(panel_Contenido.getSize());
+        panel_Contenido.removeAll();
+        panel_Contenido.add(consulta, BorderLayout.CENTER);
+        panel_Contenido.revalidate();
+        panel_Contenido.repaint();
     }//GEN-LAST:event_btn_ConsultaMouseClicked
     
     private void btn_FacturaccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_FacturaccionMouseClicked
