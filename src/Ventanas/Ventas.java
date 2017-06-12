@@ -5,8 +5,13 @@
  */
 package Ventanas;
 
+import RobertoPruebas.Conexion;
+import RobertoPruebas.DialogoOpcion;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
@@ -19,9 +24,15 @@ public class Ventas extends javax.swing.JPanel {
      * Creates new form Ventas
      */
     private  Factura panel_Factura;
+    private Conexion Conexion_DB = new Conexion();
     public Ventas() {
         initComponents();
-        panel_Factura = new Factura();
+        try {
+            panel_Factura = new Factura(Conexion_DB.siguienteCotizacion() + "");
+        } catch (SQLException ex) {
+            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
+            dialogo.setVisible(true);
+        }
     }
     private void setBoton(JLabel boton){
         boton.setBackground(Color.RED);

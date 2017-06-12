@@ -482,7 +482,7 @@ public class Clientes extends javax.swing.JPanel {
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
             //Obtiene la lista de clientes y la setea en la tabla
-            listadoTable.setModel(conexion.obtenerClientes());
+            listadoTable.setModel(conexion.obtenerClientesJP());
             //Setea el texto del boton
             generalButton.setText("Actualizar Datos");
             generalButton.setEnabled(true);
@@ -506,7 +506,7 @@ public class Clientes extends javax.swing.JPanel {
             generalButton.setText("Eliminar Selección");
             generalButton.setEnabled(true);
             //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
-            listadoTable.setModel(conexion.obtenerClientes());
+            listadoTable.setModel(conexion.obtenerClientesJP());
             listadoTable.requestFocus();
         } catch (SQLException ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Eliminación", "Error:\n"+ex.toString());
@@ -521,7 +521,7 @@ public class Clientes extends javax.swing.JPanel {
             //Cambia el color del boton a rojo
             verButton.setBackground(Color.RED);
             //Obtiene la lista de clientes y la pone en la tabla
-            listadoTable.setModel(conexion.obtenerClientes());
+            listadoTable.setModel(conexion.obtenerClientesJP());
             //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);

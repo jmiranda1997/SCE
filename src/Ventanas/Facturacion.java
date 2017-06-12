@@ -755,7 +755,7 @@ public class Facturacion extends javax.swing.JDialog {
     private void tabla_detalleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyReleased
        if (evt.getKeyCode() == 112) {
                 selectorProductofac selector = new selectorProductofac(null, true, Sucursal[0]);
-                selector.setProductos(Productos);
+               // selector.setProductos(Productos);
                 selector.setVisible(true);
             }
     }//GEN-LAST:event_tabla_detalleKeyReleased

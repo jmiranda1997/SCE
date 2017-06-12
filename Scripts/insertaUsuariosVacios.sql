@@ -1,4 +1,4 @@
-DELIMITER //
+﻿DELIMITER //
 DROP FUNCTION IF EXISTS creacionUsuarioVacio//
 CREATE FUNCTION creacionUsuarioVacio (vNombreUsuario VARCHAR(45), vContraUsuario VARCHAR(45), vPass VARCHAR(45)) RETURNS INT
 BEGIN
