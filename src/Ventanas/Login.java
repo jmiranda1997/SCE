@@ -10,7 +10,7 @@ import Excepciones.ArchivoNoExiste;
 import Excepciones.FormatoInvalido;
 import Excepciones.NoSePuedeEscribirArchivo;
 import JP.*;
-import RobertoPruebas.Conexion;
+import RobertoPruebas.*;
 import static Ventanas.Seguridad.claveCifrado;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -257,6 +257,11 @@ public class Login extends javax.swing.JFrame {
                 jPasswordField1FocusGained(evt);
             }
         });
+        jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jPasswordField1KeyReleased(evt);
+            }
+        });
         jPanel3.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 371, 30));
 
         jTextField3.setBackground(new java.awt.Color(0, 0, 0));
@@ -288,12 +293,6 @@ public class Login extends javax.swing.JFrame {
         jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox1.setText("GUARDAR CONTRASEÑA");
         jCheckBox1.setBorder(null);
-
-      
-      
-      
-      
-      
         jPanel3.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, -1, -1));
 
         jLabel10.setBackground(new java.awt.Color(0, 0, 0));
@@ -305,10 +304,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(416, 11, -1, -1));
-
-      
-      
-      
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 450, 690));
 
@@ -347,7 +342,15 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());     
+        if(!jTextField2.getText().trim().equals("")&&!new String(jPasswordField1.getPassword()).trim().equals(""))
+            logueo(jTextField2.getText().trim(),new String(jPasswordField1.getPassword()).trim(),jCheckBox1.isSelected());
+        else{
+            DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Debe llenar los campos", "Por favor ingrese todos los campos");  
+            dialogo.setVisible(true);
+            jTextField2.setText("");
+            jPasswordField1.setText("");
+            jTextField2.requestFocus();
+        }
     }//GEN-LAST:event_jLabel9MouseClicked
     /**
      * Función que hace login o no, dependiendo de los datos enviados
@@ -376,7 +379,8 @@ public class Login extends javax.swing.JFrame {
                     this.setVisible(false);
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "Datos inválidos","Error de login",JOptionPane.WARNING_MESSAGE);
+                    DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Usuario o contraseña incorrecta", "Error");  
+                    dialogo.setVisible(true);
                 }
                 jTextField2.setText("");
                 jPasswordField1.setText("");
@@ -403,6 +407,21 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jPasswordField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyReleased
+        int code = evt.getKeyCode();
+        if(code==10){
+            if(!jTextField2.getText().trim().equals("")&&!new String(jPasswordField1.getPassword()).trim().equals(""))
+                logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());
+            else{
+                DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Debe llenar los campos", "Por favor ingrese todos los campos");  
+                dialogo.setVisible(true);
+                jTextField2.setText("");
+                jPasswordField1.setText("");
+                jTextField2.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_jPasswordField1KeyReleased
 
     /**
      * @param args the command line arguments
