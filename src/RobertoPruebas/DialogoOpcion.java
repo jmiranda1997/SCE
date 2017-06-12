@@ -5,6 +5,8 @@
  */
 package RobertoPruebas;
 
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author Roberto
@@ -27,6 +29,7 @@ public class DialogoOpcion extends javax.swing.JDialog {
         this.mensaje=mensaje;
         cargar_icono(icono);
         this.setLocationRelativeTo(null);
+        btn_Aceptar.requestFocus();
     }
     public DialogoOpcion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -142,10 +145,16 @@ public class DialogoOpcion extends javax.swing.JDialog {
         btn_Aceptar.setForeground(new java.awt.Color(255, 255, 255));
         btn_Aceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_Aceptar.setText("ACEPTAR");
+        btn_Aceptar.setNextFocusableComponent(btn_Cancelar);
         btn_Aceptar.setOpaque(true);
         btn_Aceptar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_AceptarMouseClicked(evt);
+            }
+        });
+        btn_Aceptar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                btn_AceptarKeyReleased(evt);
             }
         });
         jPanel1.add(btn_Aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 160, 40));
@@ -209,6 +218,14 @@ public class DialogoOpcion extends javax.swing.JDialog {
         this.setVisible(false);
         
     }//GEN-LAST:event_Salir1MouseClicked
+
+    private void btn_AceptarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_AceptarKeyReleased
+        int codigo=evt.getKeyCode();
+        if(codigo==KeyEvent.VK_ENTER||codigo==KeyEvent.VK_SPACE){
+            aceptar=true;
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_btn_AceptarKeyReleased
 
     /**
      * @param args the command line arguments
