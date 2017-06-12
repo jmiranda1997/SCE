@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -832,17 +833,35 @@ public class Conexion {
        return false;   
    }
 
-    public DefaultTableModel obtenerProductos_vista() throws SQLException{
+    public DefaultTableModel obtenerProductos_vista(int filtro, String criterio) throws SQLException{
          Productos = null;
+         String texto_busqueda="";
+         if(!criterio.isEmpty())
+         {
+             texto_busqueda="and ";
+             switch(filtro){
+                 case 0:
+                     texto_busqueda+="codigo ";
+                     break;
+                 case 1:
+                     texto_busqueda+="codigo_barras ";
+                     break;
+                 default:
+                     texto_busqueda+="descripcion ";
+                     break;
+             }
+             texto_busqueda+="like concat('%','"+criterio+"','%')";
+                     
+         }
          iniciarTablaProductos();
         Productos.setColumnCount(3);
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1;");
+        ResultSet resultado = instruccion.executeQuery("SELECT Codigo, Codigo_Barras, Descripcion FROM producto where habilitado=1 "+texto_busqueda+";");
         while(resultado.next()){
             Productos.addRow(new String[] {resultado.getString("Codigo"), resultado.getString("Codigo_Barras"), resultado.getString("Descripcion")});
         }
         conexion.close();
         return Productos;
-    }
+    }   
 }
