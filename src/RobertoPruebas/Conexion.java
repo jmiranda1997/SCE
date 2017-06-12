@@ -643,6 +643,101 @@ public class Conexion {
            conexion.close();
        }
    }
+   /**
+     * Metodo que regresa la lista de clientes como un arreglo
+     * @return una DefaultTableModel con los clientes en la BD
+     * @throws SQLException en caso de error
+     */
+    public DefaultTableModel obtenerClientes() throws SQLException{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaClientes(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, NIT, Nombre, Apellido, Descuento, Direccion, LimiteCredito, Saldo, Cheque, Habilitado FROM cliente;");
+        while(resultado.next()){
+            if(resultado.getString("Habilitado").equals("1"))
+                modelo.addRow(new String[] {resultado.getString("id"),resultado.getString("NIT"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Descuento"),resultado.getString("Direccion"),resultado.getString("LimiteCredito"),resultado.getString("Saldo"), (resultado.getString("Cheque").equals("1")? "SI": "NO")});
+        }
+        conexion.close();
+        return modelo;
+    }
+    /**
+     * Crea una nuevo DefaultTableModel para clientes
+     * @param modelo el modelo para la JTable, vacio o con otros datos
+     * @return el modelo para la JTable, inicializado
+     */
+    private DefaultTableModel inicializarTablaClientes(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"ID", "NIT", "Nombre", "Apellido", "% descuento","Dirección","Limite de Crédito","Saldo Actual","¿Puede darnos cheque?"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false,false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
+    /**
+     * Invoca a una funcion almacenada en la BD para crear un nuevo cliente
+     * @param nombre nombre del cliente
+     * @param apellido apellido del cliente
+     * @param descuento % de descuento del cliente
+     * @param direccion dirección del cliente
+     * @param limCredito limite de credito del cliente
+     * @param saldo saldo inicial del cliente
+     * @param NIT NIT del cliente
+     * @param cheque si se le acepta cheque al cliente o no
+     * @return 1 en caso de que se inserte, 0 de lo contrario
+     * @throws SQLException en caso de error
+     */
+    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    /**
+     * Actualiza los datos de un cliente
+     * @param id ID del cliente a actualizar
+     * @param nombre nuevo nombre
+     * @param apellido nuevo apellido
+     * @param descuento nuevo descuento
+     * @param direccion nueva dirección
+     * @param limCredito nuevo limite de credito
+     * @param saldo nuevo saldo
+     * @param NIT nuevo NIT del cliente
+     * @param cheque si se le acepta cheque al cliente, o no
+     * @return numero de filas en la BD que han sido modificadas (Debe ser 1)
+     * @throws SQLException en caso de error
+     */
+    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("UPDATE Cliente SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+    /**
+     * Elimina un cliente de la BD
+     * @param id id del cliente a borrar
+     * @return el numero de filas afectadas (debe ser 1)
+     * @throws SQLException en caso de error
+     */
+    public int eliminarCliente(int id) throws SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("UPDATE Cliente SET habilitado=0 WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
    public ArrayList[] obtenerSucursales() throws SQLException{
       
        ArrayList[] Sucursales = new ArrayList[3];

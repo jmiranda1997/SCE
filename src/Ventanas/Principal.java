@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -26,6 +27,7 @@ import javax.swing.JPanel;
  */
 public class Principal extends javax.swing.JFrame {
     Conexion conexion;
+    JPanel compras,productos,seguridad, clientes;
     /**
      * Creates new form Principal
      */
@@ -183,6 +185,11 @@ public class Principal extends javax.swing.JFrame {
 
         Minimizar.setForeground(new java.awt.Color(255, 255, 255));
         Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
+        Minimizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MinimizarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -274,11 +281,12 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(btn_Ventas);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel7);
-        JPanel j = new Seguridad(conexion);
-        j.setLocation(0,0);
-        j.setSize(jPanel2.getSize());
+        if(seguridad==null)
+            seguridad= new Seguridad(conexion);
+        seguridad.setLocation(0,0);
+        seguridad.setSize(jPanel2.getSize());
         jPanel2.removeAll();
-        jPanel2.add(j,BorderLayout.CENTER);
+        jPanel2.add(seguridad,BorderLayout.CENTER);
         jPanel2.revalidate();
         jPanel2.repaint();
         jPanel1.repaint();
@@ -291,6 +299,15 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(btn_Inventario);
+        if(clientes==null)
+            clientes= new Clientes(conexion);
+        clientes.setLocation(0,0);
+        clientes.setSize(jPanel2.getSize());
+        jPanel2.removeAll();
+        jPanel2.add(clientes,BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+        jPanel1.repaint();
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
@@ -306,6 +323,13 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_SalirMouseClicked
+
+    private void MinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MinimizarMouseClicked
+        //Obtenemos los contenedores padres, hasta obtener el JFrame donde se está trabajando
+        JFrame padre= this;
+        //Se le manda la orden de minimizar
+        padre.setExtendedState(1);
+    }//GEN-LAST:event_MinimizarMouseClicked
 
     /**
      * @param args the command line arguments
