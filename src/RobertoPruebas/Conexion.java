@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 import Ventanas.DialogodeMensaje;
+import Excepciones.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -47,19 +48,17 @@ public class Conexion {
      * Metodo que genera la conexion utilizando los atributos de esta clase
      * @param nombreBD el nombre de la base de datos a conectarse
      */
-    private void conectar()
+    private void conectar() throws NoSePuedeConectar
     {
        conexion=null;
         try{
-            try {
-                Class.forName(driver);//Se utiliza el driver de conexion
-            }catch (ClassNotFoundException ex) {
-                System.out.println("Error al registrar el driver de MySQL: " + ex);
-            }
+            Class.forName(driver);//Se utiliza el driver de conexion
             conexion=DriverManager.getConnection(url+ip+"/"+nombreBD,user,pass);//Se conecta con la base de datos enviando
             //los parametros url, user, pass,
         }catch (SQLException|NullPointerException ex) {
-            System.out.println("Error al registrar el driver de MySQL: " + ex);
+            throw new NoSePuedeConectar("No puede conectarse a la BD, error:\n"+ex.toString());
+        } catch (ClassNotFoundException ex) {
+            throw new NoSePuedeConectar("Error al registrar el driver de MySQL, error:\n" + ex.toString());
         }
     }
     /**
@@ -69,7 +68,7 @@ public class Conexion {
      * @param Credito
      * @throws SQLException 
      */
-    public void crearProveedor(String Nombre, String Nit, boolean Credito) throws SQLException{
+    public void crearProveedor(String Nombre, String Nit, boolean Credito) throws SQLException, NoSePuedeConectar{
         conectar();
         Statement instruccion = conexion.createStatement();
         int credito = 0;
@@ -88,14 +87,14 @@ public class Conexion {
         }
         conexion.close();
     }
-    public void crearPedido(String Factura, float Total, boolean credito) throws SQLException{
+    public void crearPedido(String Factura, float Total, boolean credito) throws SQLException, NoSePuedeConectar{
         conectar();
         Statement instruccion = conexion.createStatement();
         instruccion.executeUpdate("INSERT INTO compra (Factura, Total, Credito) VALUES ('" + Factura + "', " + Total + ", " + ((credito) ? 1: 0) +");");
               
         conexion.close();
     }
-    private boolean existeProveedor(String Nombre, String Nit) throws SQLException{
+    private boolean existeProveedor(String Nombre, String Nit) throws SQLException, NoSePuedeConectar{
         int cantNombre, cantNit;
         cantNit = cantNombre = 0;
         conectar();
@@ -154,7 +153,7 @@ public class Conexion {
             }
         };
     }
-    public void desHabilitarProvedor(String Nombre) throws SQLException{
+    public void desHabilitarProvedor(String Nombre) throws SQLException, NoSePuedeConectar{
         conectar();
         
         Statement instruccion = conexion.createStatement();
@@ -167,7 +166,7 @@ public class Conexion {
      * @return
      * @throws SQLException 
      */
-    public DefaultTableModel obtenerProceedores() throws SQLException{
+    public DefaultTableModel obtenerProceedores() throws SQLException, NoSePuedeConectar{
          Proveedores = null;
         iniciarTablaProveedores();
         
@@ -181,7 +180,7 @@ public class Conexion {
         conexion.close();
         return Proveedores;
     }
-    public DefaultTableModel obtenerProductos() throws SQLException{
+    public DefaultTableModel obtenerProductos() throws SQLException, NoSePuedeConectar{
          Productos = null;
          iniciarTablaProductos();
         iniciarTablaProveedores();
@@ -195,7 +194,7 @@ public class Conexion {
         conexion.close();
         return Productos;
     }
-    public DefaultTableModel obtenerPedidos() throws SQLException{
+    public DefaultTableModel obtenerPedidos() throws SQLException, NoSePuedeConectar{
         Pedidos = null;
         iniciarTablaProveedores();
         
@@ -209,7 +208,7 @@ public class Conexion {
         conexion.close();
         return Pedidos;
     }
-    public int numeroPedido() throws SQLException{
+    public int numeroPedido() throws SQLException, NoSePuedeConectar{
         int numero = 0;
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -220,7 +219,7 @@ public class Conexion {
         conexion.close();
         return numero;
     }
-    public void insertarDetallePedido(int idCodigo, int idProve, int Pedido, float Precio, float Cantidad) throws SQLException{
+    public void insertarDetallePedido(int idCodigo, int idProve, int Pedido, float Precio, float Cantidad) throws SQLException, NoSePuedeConectar{
         conectar();
         Statement instruccion = conexion.createStatement();
         
@@ -228,7 +227,7 @@ public class Conexion {
         
         conexion.close();
     }
-    public int idCodigo(String codigo) throws SQLException{
+    public int idCodigo(String codigo) throws SQLException, NoSePuedeConectar{
         int numero = 0;
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -239,7 +238,7 @@ public class Conexion {
         conexion.close();
         return numero;
     }
-    public int idProve(String Nombre) throws SQLException{
+    public int idProve(String Nombre) throws SQLException, NoSePuedeConectar{
         int numero = 0;
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -250,7 +249,7 @@ public class Conexion {
         conexion.close();
         return numero;
     }
-    private float existencias(int id) throws SQLException{
+    private float existencias(int id) throws SQLException, NoSePuedeConectar{
        float existencias = 0;
        
             conectar();
@@ -263,7 +262,7 @@ public class Conexion {
        
        return existencias;
     }
-    public int cantidadProveedores() throws SQLException{
+    public int cantidadProveedores() throws SQLException, NoSePuedeConectar{
         int cant = 0;
         
         conectar();
@@ -279,7 +278,7 @@ public class Conexion {
      * EJEMPLO DE COMO USAR ESTA CLASE
      * @throws SQLException en caso de error
      */
-    public void ejemploDeUso() throws SQLException{
+    public void ejemploDeUso() throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("select * from unidad"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
@@ -298,7 +297,7 @@ public class Conexion {
      * @return retorna 1 si los datos son correctos, 0 de lo contrario
      * @throws SQLException en caso de error
      */
-    public int login(String usuario, String pass) throws SQLException{
+    public int login(String usuario, String pass) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("SELECT login('"+usuario+"','"+claveCifradoBase+"','"+pass+"') R"); //se guarda el resultado de la instruccion
@@ -317,7 +316,7 @@ public class Conexion {
      * @return 1 si se ha creado el usuario, 0 de lo contrario
      * @throws SQLException en caso de error
      */
-    public int crearUsuario(String usuario, String pass) throws SQLException{
+    public int crearUsuario(String usuario, String pass) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("SELECT creacionUsuarioVacio('"+usuario+"','"+pass+"','"+claveCifradoBase+"') R"); //se guarda el resultado de la instruccion
@@ -334,7 +333,7 @@ public class Conexion {
      * @param usuario usuario a eliminar
      * @throws SQLException en caso de error
      */
-    public void eliminarUsuario(String usuario) throws SQLException{
+    public void eliminarUsuario(String usuario) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         int resultado = instruccion.executeUpdate("DELETE FROM usuario WHERE Usuario='"+usuario+"'"); //se guarda el resultado de la instruccion
@@ -345,7 +344,7 @@ public class Conexion {
      * @return un arreglo con la lista de usuarios
      * @throws SQLException en caso de error
      */
-    public ArrayList obtenerUsuarios() throws SQLException{
+    public ArrayList obtenerUsuarios() throws SQLException, NoSePuedeConectar{
         ArrayList users=new ArrayList();
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -375,7 +374,7 @@ public class Conexion {
      */
     public void insertarProducto (String codigo, String codBarras,String descrip, double venta,
             double costo, String estanteria, String columna, String fila, String marca, String unidad, 
-            int sucursal, double existencia) throws SQLException{
+            int sucursal, double existencia) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         int marcaId=0;
         int fraccion=0;
@@ -414,7 +413,7 @@ public class Conexion {
         conexion.close();
     }
     public void modificarProducto(int id,String codigo, String codBarras,String descrip, double venta, 
-            double costo, String estanteria, String columna, String fila, String marca) throws SQLException{
+            double costo, String estanteria, String columna, String fila, String marca) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         String marcaId;
         //int fraccion=0;
@@ -453,7 +452,7 @@ public class Conexion {
      * @return matriz dinamica de tamaño 2xN que alamcena la sucursal y su id, y esta matriz tambien incluye otra de 2xN
      * @throws SQLException 
      */
-    public ArrayList[] obtener_Sucursales_Unidades() throws SQLException{
+    public ArrayList[] obtener_Sucursales_Unidades() throws SQLException, NoSePuedeConectar{
         ArrayList[] matriz=new ArrayList[4];
         matriz[0]=new ArrayList();
         matriz[1]=new ArrayList();
@@ -483,7 +482,7 @@ public class Conexion {
      * @return un arreglo con todos los atributos del producti
      * @throws SQLException 
      */
-    public ArrayList obtener_detalleProducto(int id,int sucursal) throws SQLException
+    public ArrayList obtener_detalleProducto(int id,int sucursal) throws SQLException, NoSePuedeConectar
     {
         ArrayList atributo=new ArrayList();
         conectar(); //permite la conexion con la base de datos
@@ -506,7 +505,7 @@ public class Conexion {
      * @return Matriz con atributos de todos los productos
      * @throws SQLException 
      */
-   public ArrayList[] obtener_productos() throws SQLException{
+   public ArrayList[] obtener_productos() throws SQLException, NoSePuedeConectar{
         ArrayList[] matriz=new ArrayList[4];
         matriz[0]=new ArrayList();
         matriz[1]=new ArrayList();
@@ -525,7 +524,7 @@ public class Conexion {
         conexion.close();
         return matriz;
     }
-   public void deshabilitarProducto(int id) throws SQLException
+   public void deshabilitarProducto(int id) throws SQLException, NoSePuedeConectar
    {
        if(id>0)
        {
@@ -540,7 +539,7 @@ public class Conexion {
      * @return una DefaultTableModel con los clientes en la BD
      * @throws SQLException en caso de error
      */
-    public DefaultTableModel obtenerClientes() throws SQLException{
+    public DefaultTableModel obtenerClientes() throws SQLException, NoSePuedeConectar{
         DefaultTableModel modelo = null;
         modelo=inicializarTablaClientes(modelo);
         conectar();
@@ -583,7 +582,7 @@ public class Conexion {
      * @return 1 en caso de que se inserte, 0 de lo contrario
      * @throws SQLException en caso de error
      */
-    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+    public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("SELECT creaClientes('"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"',"+descuento+",'"+(direccion.equals("")? "N/A":direccion)+"',"+limCredito+","+saldo+",'"+(NIT.equals("")? "N/A":NIT)+"',"+(cheque? 1:0)+") R"); //se guarda el resultado de la instruccion
@@ -609,7 +608,7 @@ public class Conexion {
      * @return numero de filas en la BD que han sido modificadas (Debe ser 1)
      * @throws SQLException en caso de error
      */
-    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException{
+    public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         int resultado = instruccion.executeUpdate("UPDATE Cliente SET nombre='"+(nombre.equals("")? "N/A":nombre)+"', apellido='"+(apellido.equals("")? "N/A":apellido)+"',descuento="+descuento+",direccion='"+(direccion.equals("")? "N/A":direccion)+"',limitecredito="+limCredito+",saldo="+saldo+",nit='"+(NIT.equals("")? "N/A":NIT)+"',cheque="+(cheque? 1:0)+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
@@ -622,7 +621,7 @@ public class Conexion {
      * @return el numero de filas afectadas (debe ser 1)
      * @throws SQLException en caso de error
      */
-    public int eliminarCliente(int id) throws SQLException{
+    public int eliminarCliente(int id) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
