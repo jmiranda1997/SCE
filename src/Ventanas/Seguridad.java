@@ -49,8 +49,8 @@ public class Seguridad extends javax.swing.JPanel {
         //ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
         conexionPanel.setBounds(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y,conexionPanel.getBounds().width,conexionPanel.getBounds().height);
         //conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
-        this.validate();
-        this.repaint();
+//        this.validate();
+//        this.repaint();
     }
 
     /**
@@ -74,10 +74,12 @@ public class Seguridad extends javax.swing.JPanel {
         guardarDBButton = new javax.swing.JLabel();
         passField1 = new javax.swing.JPasswordField();
         jLabel9 = new javax.swing.JLabel();
+        cancelarGesButton = new javax.swing.JLabel();
         eliminarPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         usuariosCombo1 = new javax.swing.JComboBox<>();
         userEButton = new javax.swing.JLabel();
+        cancelarElButton = new javax.swing.JLabel();
         ingresarPanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         userIField = new javax.swing.JTextField();
@@ -86,6 +88,7 @@ public class Seguridad extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         userIButtton = new javax.swing.JLabel();
+        cancelarInButton = new javax.swing.JLabel();
         gesConButton = new javax.swing.JLabel();
         gesUsuariosButton = new javax.swing.JLabel();
         usuariosPanel1 = new javax.swing.JPanel();
@@ -98,7 +101,7 @@ public class Seguridad extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(0, 0, 0));
         setPreferredSize(new java.awt.Dimension(940, 650));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setLayout(null);
 
         conexionPanel.setBackground(new java.awt.Color(0, 0, 0));
         conexionPanel.setForeground(new java.awt.Color(255, 255, 255));
@@ -146,34 +149,48 @@ public class Seguridad extends javax.swing.JPanel {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Confirme contraseña:");
 
+        cancelarGesButton.setBackground(new java.awt.Color(255, 0, 0));
+        cancelarGesButton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cancelarGesButton.setForeground(new java.awt.Color(255, 255, 255));
+        cancelarGesButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cancelarGesButton.setText("Cancelar");
+        cancelarGesButton.setOpaque(true);
+        cancelarGesButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelarGesButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout conexionPanelLayout = new javax.swing.GroupLayout(conexionPanel);
         conexionPanel.setLayout(conexionPanelLayout);
         conexionPanelLayout.setHorizontalGroup(
             conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(conexionPanelLayout.createSequentialGroup()
                 .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(conexionPanelLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel9)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(passField1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
-                        .addGroup(conexionPanelLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(userField)
-                                .addComponent(bdField)
-                                .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                .addComponent(passField))))
                     .addGroup(conexionPanelLayout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(conexionPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(passField1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
+                            .addGroup(conexionPanelLayout.createSequentialGroup()
+                                .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(userField)
+                                    .addComponent(bdField)
+                                    .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                                    .addComponent(passField)))))
+                    .addGroup(conexionPanelLayout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cancelarGesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         conexionPanelLayout.setVerticalGroup(
@@ -200,11 +217,14 @@ public class Seguridad extends javax.swing.JPanel {
                     .addComponent(bdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelarGesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        add(conexionPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 220, 390, -1));
+        add(conexionPanel);
+        conexionPanel.setBounds(430, 220, 390, 217);
 
         eliminarPanel.setOpaque(false);
 
@@ -226,31 +246,47 @@ public class Seguridad extends javax.swing.JPanel {
             }
         });
 
+        cancelarElButton.setBackground(new java.awt.Color(255, 0, 0));
+        cancelarElButton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cancelarElButton.setForeground(new java.awt.Color(255, 255, 255));
+        cancelarElButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cancelarElButton.setText("Cancelar");
+        cancelarElButton.setOpaque(true);
+        cancelarElButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelarElButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout eliminarPanelLayout = new javax.swing.GroupLayout(eliminarPanel);
         eliminarPanel.setLayout(eliminarPanelLayout);
         eliminarPanelLayout.setHorizontalGroup(
             eliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(eliminarPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(userEButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cancelarElButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         eliminarPanelLayout.setVerticalGroup(
             eliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(eliminarPanelLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addGroup(eliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(userEButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(userEButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelarElButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        add(eliminarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 142, 380, -1));
+        add(eliminarPanel);
+        eliminarPanel.setBounds(220, 150, 470, 56);
 
         ingresarPanel.setOpaque(false);
 
@@ -284,6 +320,18 @@ public class Seguridad extends javax.swing.JPanel {
             }
         });
 
+        cancelarInButton.setBackground(new java.awt.Color(255, 0, 0));
+        cancelarInButton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        cancelarInButton.setForeground(new java.awt.Color(255, 255, 255));
+        cancelarInButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cancelarInButton.setText("Cancelar");
+        cancelarInButton.setOpaque(true);
+        cancelarInButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelarInButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout ingresarPanelLayout = new javax.swing.GroupLayout(ingresarPanel);
         ingresarPanel.setLayout(ingresarPanelLayout);
         ingresarPanelLayout.setHorizontalGroup(
@@ -302,8 +350,10 @@ public class Seguridad extends javax.swing.JPanel {
                             .addComponent(passIField)
                             .addComponent(userIField)))
                     .addGroup(ingresarPanelLayout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(60, 60, 60)
+                        .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cancelarInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ingresarPanelLayout.setVerticalGroup(
@@ -322,11 +372,14 @@ public class Seguridad extends javax.swing.JPanel {
                     .addComponent(passIField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ingresarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelarInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(ingresarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, -1, -1));
+        add(ingresarPanel);
+        ingresarPanel.setBounds(50, 340, 349, 148);
 
         gesConButton.setBackground(new java.awt.Color(255, 0, 0));
         gesConButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -339,7 +392,8 @@ public class Seguridad extends javax.swing.JPanel {
                 gesConButtonMouseClicked(evt);
             }
         });
-        add(gesConButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(351, 0, 200, 54));
+        add(gesConButton);
+        gesConButton.setBounds(351, 0, 200, 54);
 
         gesUsuariosButton.setBackground(new java.awt.Color(255, 0, 0));
         gesUsuariosButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -352,7 +406,8 @@ public class Seguridad extends javax.swing.JPanel {
                 gesUsuariosButtonMouseClicked(evt);
             }
         });
-        add(gesUsuariosButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 0, 200, 54));
+        add(gesUsuariosButton);
+        gesUsuariosButton.setBounds(145, 0, 200, 54);
 
         usuariosPanel1.setOpaque(false);
 
@@ -411,7 +466,8 @@ public class Seguridad extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(usuariosPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, -1));
+        add(usuariosPanel1);
+        usuariosPanel1.setBounds(150, 60, 612, 76);
 
         logoutButton.setBackground(new java.awt.Color(255, 0, 0));
         logoutButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -424,7 +480,8 @@ public class Seguridad extends javax.swing.JPanel {
                 logoutButtonMouseClicked(evt);
             }
         });
-        add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 0, 200, 54));
+        add(logoutButton);
+        logoutButton.setBounds(557, 0, 200, 54);
 
         Minimizar.setForeground(new java.awt.Color(255, 255, 255));
         Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
@@ -433,7 +490,8 @@ public class Seguridad extends javax.swing.JPanel {
                 MinimizarMouseClicked(evt);
             }
         });
-        add(Minimizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 0, -1, -1));
+        add(Minimizar);
+        Minimizar.setBounds(880, 0, 24, 24);
 
         Salir.setBackground(new java.awt.Color(0, 0, 0));
         Salir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -444,7 +502,8 @@ public class Seguridad extends javax.swing.JPanel {
                 SalirMouseClicked(evt);
             }
         });
-        add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 0, -1, -1));
+        add(Salir);
+        Salir.setBounds(910, 0, 24, 24);
     }// </editor-fold>//GEN-END:initComponents
 
     private void guardarDBButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarDBButtonMouseClicked
@@ -569,6 +628,18 @@ public class Seguridad extends javax.swing.JPanel {
         //Se le manda la orden de minimizar
         padre.setExtendedState(1);
     }//GEN-LAST:event_MinimizarMouseClicked
+
+    private void cancelarInButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelarInButtonMouseClicked
+        limpiar();
+    }//GEN-LAST:event_cancelarInButtonMouseClicked
+
+    private void cancelarGesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelarGesButtonMouseClicked
+        limpiar();
+    }//GEN-LAST:event_cancelarGesButtonMouseClicked
+
+    private void cancelarElButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelarElButtonMouseClicked
+        limpiar();
+    }//GEN-LAST:event_cancelarElButtonMouseClicked
     //Elimina un usuario, seleccionado en el combo
     private void eliminarUser(){
         //Verifica que haya un objeto seleccionado en el combo
@@ -645,6 +716,9 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JLabel Minimizar;
     private javax.swing.JLabel Salir;
     private javax.swing.JTextField bdField;
+    private javax.swing.JLabel cancelarElButton;
+    private javax.swing.JLabel cancelarGesButton;
+    private javax.swing.JLabel cancelarInButton;
     private javax.swing.JPanel conexionPanel;
     private javax.swing.JPanel eliminarPanel;
     private javax.swing.JLabel gesConButton;
