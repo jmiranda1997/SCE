@@ -391,27 +391,16 @@ public class Login extends javax.swing.JFrame {
                     this.setVisible(false);
                 }
                 else{
-                    DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Usuario o contraseña incorrecta", "Error");  
+                    DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Error", "Usuario o contraseña incorrecta");  
                     dialogo.setVisible(true);
                 }
                 jTextField2.setText("");
                 jPasswordField1.setText("");
                 jTextField2.requestFocus();
                 
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSePuedeEscribirArchivo ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException|NoSuchAlgorithmException|NoSuchPaddingException|InvalidKeyException|IllegalBlockSizeException|BadPaddingException|NoSePuedeEscribirArchivo ex) {
+                DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Log In", "Error:\n"+ex.toString());  
+                dialogo.setVisible(true);
             }
         }
     }
