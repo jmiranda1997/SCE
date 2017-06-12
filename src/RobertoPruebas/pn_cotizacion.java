@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Ventanas.Factura;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -15,12 +16,12 @@ import javax.swing.JTextField;
  */
 public class pn_cotizacion extends javax.swing.JPanel {
 
-    private final CotizacionPrincipal padre;
+    private final Factura padre;
     /**
      * Creates new form pn_cotizacion
      * @param padre Panel padre
      */
-    public pn_cotizacion(CotizacionPrincipal padre) {
+    public pn_cotizacion(Factura padre) {
         initComponents();
         this.padre = padre;
     }
