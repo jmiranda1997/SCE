@@ -9,12 +9,8 @@ import Excepciones.NoSePuedeEscribirArchivo;
 import JP.*;
 import RobertoPruebas.*;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -27,9 +23,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import javax.swing.ComboBoxModel;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -51,8 +45,12 @@ public class Seguridad extends javax.swing.JPanel {
         conexionPanel.setVisible(false);
         usuariosPanel1.setVisible(false);
         //Ponemos los paneles en el mismo punto, de tal manera que todos estén en el centro, y no regados en el JFrame
-        ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
-        conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
+        ingresarPanel.setBounds(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y, ingresarPanel.getBounds().width, ingresarPanel.getBounds().height);
+        //ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
+        conexionPanel.setBounds(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y,conexionPanel.getBounds().width,conexionPanel.getBounds().height);
+        //conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
+        this.validate();
+        this.repaint();
     }
 
     /**
@@ -482,7 +480,8 @@ public class Seguridad extends javax.swing.JPanel {
             }
         }
         else{
-            JOptionPane.showMessageDialog(null, "Debe llenar todos los campos","Error",JOptionPane.WARNING_MESSAGE);            
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Debe llenar todos los campos");
+            dialogo.setVisible(true);
         }
     }//GEN-LAST:event_guardarDBButtonMouseClicked
 
@@ -511,7 +510,8 @@ public class Seguridad extends javax.swing.JPanel {
             eliminarPanel.setVisible(true);
             usuariosPanel1.setVisible(false);
         } catch (SQLException ex) {
-            Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
         }
     }//GEN-LAST:event_verUsElButtonMouseClicked
 
@@ -529,12 +529,14 @@ public class Seguridad extends javax.swing.JPanel {
             bw.write("");
             bw.close();
         } catch (IOException ex) {
-            Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
         } finally {
             try {
                 bw.close();
             } catch (IOException ex) {
-                Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
+                dialogo.setVisible(true);
             }
         }
         // (Comentar/Descomentar una opción) Despues de borrar el archivo, mostramos de nuevo la ventana de login, o cerramos el programa
@@ -582,7 +584,8 @@ public class Seguridad extends javax.swing.JPanel {
                     diag.setVisible(true);
                     limpiar();
                 } catch (SQLException ex) {
-                    Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
+                    dialogo.setVisible(true);
                 }
             }
             limpiar();
@@ -602,17 +605,20 @@ public class Seguridad extends javax.swing.JPanel {
                 //Manda la orden de ingreso de usuario, si la función retorna 1 significa que se ingresó correctamente
                 if(conexion.crearUsuario(user, pass1)==1){
                     //Muestra un mensaje de exito, y limpia
-                    JOptionPane.showMessageDialog(null, "Ingreso exitoso","Ingreso",JOptionPane.INFORMATION_MESSAGE);
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Ingreso exitoso");
+                    dialogo.setVisible(true);
                     passIField.setText("");
                     passIField2.setText("");
                     userIField.setText("");
                     limpiar();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(Seguridad.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
+                dialogo.setVisible(true);
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Ingrese adecuadamente los datos","Error",JOptionPane.WARNING_MESSAGE);
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Ingrese adecuadamente los datos");
+            dialogo.setVisible(true);
         }
     }
     /**

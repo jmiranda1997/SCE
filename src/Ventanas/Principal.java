@@ -27,7 +27,7 @@ import javax.swing.JPanel;
  */
 public class Principal extends javax.swing.JFrame {
     Conexion conexion;
-    JPanel compras,productos,seguridad;
+    JPanel compras,productos,seguridad, clientes;
     /**
      * Creates new form Principal
      */
@@ -267,8 +267,8 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel7);
-        //if(seguridad==null)
-            seguridad= new Clientes(conexion);
+        if(seguridad==null)
+            seguridad= new Seguridad(conexion);
         seguridad.setLocation(0,0);
         seguridad.setSize(jPanel2.getSize());
         jPanel2.removeAll();
@@ -285,6 +285,15 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(jLabel5);
         resetEtiqueta(jLabel6);
         resetEtiqueta(btn_Inventario);
+        if(clientes==null)
+            clientes= new Clientes(conexion);
+        clientes.setLocation(0,0);
+        clientes.setSize(jPanel2.getSize());
+        jPanel2.removeAll();
+        jPanel2.add(clientes,BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+        jPanel1.repaint();
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked

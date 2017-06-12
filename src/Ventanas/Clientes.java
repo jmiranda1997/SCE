@@ -6,11 +6,13 @@
 package Ventanas;
 
 import RobertoPruebas.*;
+import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.input.KeyCode;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -45,16 +47,26 @@ public class Clientes extends javax.swing.JPanel {
         direccionField.setText("");
         descuentoField.setText("0");
         limCreditoField.setText("0");
-        creditoField.setText("0.00");
+        saldoField.setText("0.00");
         chequeCheck.setSelected(false);
         listadoTable.setModel(new DefaultTableModel());
         listadoPanel.setEnabled(true);
         
     }
     private void filaSeleccionada(){
-        int seleccion=listadoTable.getSelectedRow();
-        if(seleccion!=-1){
-            
+        if(modificarButton.getBackground()==Color.RED){
+            int seleccion=listadoTable.getSelectedRow();
+            if(seleccion!=-1){
+                nitField.setText((String)listadoTable.getValueAt(seleccion, 1));
+                nombreField.setText((String)listadoTable.getValueAt(seleccion, 2));
+                apellidoField.setText((String)listadoTable.getValueAt(seleccion, 3));
+                descuentoField.setText((String)listadoTable.getValueAt(seleccion, 4));
+                direccionField.setText((String)listadoTable.getValueAt(seleccion, 5));
+                limCreditoField.setText((String)listadoTable.getValueAt(seleccion, 6));
+                saldoField.setText((String)listadoTable.getValueAt(seleccion, 7));
+                chequeCheck.setSelected(((String)listadoTable.getValueAt(seleccion, 8)).equals("SI"));
+                
+            }
         }
     }
     /**
@@ -80,11 +92,11 @@ public class Clientes extends javax.swing.JPanel {
         lbl_codigo4 = new javax.swing.JLabel();
         lbl_codigo5 = new javax.swing.JLabel();
         chequeCheck = new javax.swing.JCheckBox();
-        guardarButton = new javax.swing.JLabel();
+        generalButton = new javax.swing.JLabel();
         descuentoField = new javax.swing.JFormattedTextField();
         limCreditoField = new javax.swing.JFormattedTextField();
         lbl_codigo7 = new javax.swing.JLabel();
-        creditoField = new javax.swing.JFormattedTextField();
+        saldoField = new javax.swing.JFormattedTextField();
         eliminarButton = new javax.swing.JLabel();
         verButton = new javax.swing.JLabel();
         listadoPanel = new javax.swing.JPanel();
@@ -194,19 +206,19 @@ public class Clientes extends javax.swing.JPanel {
         chequeCheck.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         chequeCheck.setForeground(new java.awt.Color(255, 255, 255));
         chequeCheck.setText("¿Se le acepta cheque?");
-        chequeCheck.setNextFocusableComponent(guardarButton);
+        chequeCheck.setNextFocusableComponent(generalButton);
         chequeCheck.setOpaque(false);
 
-        guardarButton.setBackground(new java.awt.Color(255, 0, 0));
-        guardarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        guardarButton.setForeground(new java.awt.Color(255, 255, 255));
-        guardarButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        guardarButton.setText("GUARDAR");
-        guardarButton.setName(""); // NOI18N
-        guardarButton.setOpaque(true);
-        guardarButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        generalButton.setBackground(new java.awt.Color(255, 0, 0));
+        generalButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        generalButton.setForeground(new java.awt.Color(255, 255, 255));
+        generalButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        generalButton.setText("GUARDAR");
+        generalButton.setName(""); // NOI18N
+        generalButton.setOpaque(true);
+        generalButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                guardarButtonMouseClicked(evt);
+                generalButtonMouseClicked(evt);
             }
         });
 
@@ -223,7 +235,7 @@ public class Clientes extends javax.swing.JPanel {
         limCreditoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         limCreditoField.setText("0");
         limCreditoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        limCreditoField.setNextFocusableComponent(creditoField);
+        limCreditoField.setNextFocusableComponent(saldoField);
         limCreditoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 limCreditoFieldFocusGained(evt);
@@ -232,15 +244,15 @@ public class Clientes extends javax.swing.JPanel {
 
         lbl_codigo7.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo7.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo7.setText("Crédito actual:");
+        lbl_codigo7.setText("Saldo actual:");
 
-        creditoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        creditoField.setText("0");
-        creditoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        creditoField.setNextFocusableComponent(chequeCheck);
-        creditoField.addFocusListener(new java.awt.event.FocusAdapter() {
+        saldoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        saldoField.setText("0.00");
+        saldoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        saldoField.setNextFocusableComponent(chequeCheck);
+        saldoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                creditoFieldFocusGained(evt);
+                saldoFieldFocusGained(evt);
             }
         });
 
@@ -277,12 +289,12 @@ public class Clientes extends javax.swing.JPanel {
                             .addComponent(lbl_codigo7))
                         .addGap(7, 7, 7)
                         .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(creditoField)
+                            .addComponent(saldoField)
                             .addComponent(limCreditoField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(guardarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(277, 277, 277))
         );
         generalPanelLayout.setVerticalGroup(
@@ -304,7 +316,7 @@ public class Clientes extends javax.swing.JPanel {
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbl_codigo7)
-                        .addComponent(creditoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(saldoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbl_codigo4)
                         .addComponent(nitField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -314,7 +326,7 @@ public class Clientes extends javax.swing.JPanel {
                     .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chequeCheck))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(guardarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -435,20 +447,41 @@ public class Clientes extends javax.swing.JPanel {
         listadoPanel.setEnabled(false);
         listadoPanel.setVisible(true);
         generalPanel.setVisible(true);
+        generalButton.setText("Ingresar");
+        generalButton.setEnabled(true);
+        nombreField.requestFocus();
         
     }//GEN-LAST:event_ingresarButtonMouseClicked
 
     private void modificarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modificarButtonMouseClicked
-        limpiar();
-        modificarButton.setBackground(Color.RED);
-        listadoPanel.setVisible(true);
-        generalPanel.setVisible(true);
+        try {
+            limpiar();
+            modificarButton.setBackground(Color.RED);
+            listadoPanel.setVisible(true);
+            generalPanel.setVisible(true);
+            listadoTable.setModel(conexion.obtenerClientes());
+            generalButton.setText("Actualizar Datos");
+            generalButton.setEnabled(true);
+            nombreField.requestFocus();
+        } catch (SQLException ex) {
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
+        }
     }//GEN-LAST:event_modificarButtonMouseClicked
 
     private void eliminarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarButtonMouseClicked
-        limpiar();
-        listadoPanel.setVisible(true);
-        generalPanel.setVisible(true);
+        try {
+            limpiar();
+            eliminarButton.setBackground(Color.RED);
+            listadoPanel.setVisible(true);
+            generalPanel.setVisible(true);
+            generalButton.setText("Eliminar Seleccionado");
+            generalButton.setEnabled(true);
+            listadoTable.setModel(conexion.obtenerClientes());
+        } catch (SQLException ex) {
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Eliminación", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
+        }
     }//GEN-LAST:event_eliminarButtonMouseClicked
 
     private void verButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verButtonMouseClicked
@@ -458,8 +491,10 @@ public class Clientes extends javax.swing.JPanel {
             listadoTable.setModel(conexion.obtenerClientes());
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
+            generalButton.setEnabled(false);
         } catch (SQLException ex) {
-            Logger.getLogger(Clientes.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Visualización", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
         }
     }//GEN-LAST:event_verButtonMouseClicked
 
@@ -472,19 +507,19 @@ public class Clientes extends javax.swing.JPanel {
     }//GEN-LAST:event_listadoTableKeyPressed
 
     private void listadoTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listadoTableKeyReleased
-        if (evt.getKeyCode() == 38 || evt.getKeyCode()== 40)
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode()== KeyEvent.VK_DOWN)
         {
             filaSeleccionada();
         }
     }//GEN-LAST:event_listadoTableKeyReleased
 
-    private void guardarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarButtonMouseClicked
+    private void generalButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generalButtonMouseClicked
         try {
             if(ingresarButton.getBackground()==Color.RED){
                 descuentoField.commitEdit();
                 limCreditoField.commitEdit();
-                creditoField.commitEdit();
-                int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(creditoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                saldoField.commitEdit();
+                int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
                 if(resultado==1){
                     DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
                     dialogo.setVisible(true);
@@ -494,15 +529,24 @@ public class Clientes extends javax.swing.JPanel {
                     dialogo.setVisible(true);
                 }
             }else if(modificarButton.getBackground()==Color.RED){
-                
+                descuentoField.commitEdit();
+                limCreditoField.commitEdit();
+                saldoField.commitEdit();
+                int filasMod=conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                dialogo.setVisible(true);
+            }else if(eliminarButton.getBackground()==Color.RED)
+            {
+                int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
+                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                dialogo.setVisible(true);
             }
         } catch (SQLException|ParseException ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
         }
         limpiar();
-        
-    }//GEN-LAST:event_guardarButtonMouseClicked
+    }//GEN-LAST:event_generalButtonMouseClicked
 
     private void MinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MinimizarMouseClicked
         //Obtenemos los contenedores padres, hasta obtener el JFrame donde se está trabajando
@@ -523,9 +567,9 @@ public class Clientes extends javax.swing.JPanel {
         limCreditoField.selectAll();
     }//GEN-LAST:event_limCreditoFieldFocusGained
 
-    private void creditoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_creditoFieldFocusGained
-        creditoField.selectAll();
-    }//GEN-LAST:event_creditoFieldFocusGained
+    private void saldoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_saldoFieldFocusGained
+        saldoField.selectAll();
+    }//GEN-LAST:event_saldoFieldFocusGained
 
     private void nombreFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreFieldFocusGained
         nombreField.selectAll();
@@ -549,12 +593,11 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JLabel Salir;
     private javax.swing.JTextField apellidoField;
     private javax.swing.JCheckBox chequeCheck;
-    private javax.swing.JFormattedTextField creditoField;
     private javax.swing.JFormattedTextField descuentoField;
     private javax.swing.JTextField direccionField;
     private javax.swing.JLabel eliminarButton;
+    private javax.swing.JLabel generalButton;
     private javax.swing.JPanel generalPanel;
-    private javax.swing.JLabel guardarButton;
     private javax.swing.JLabel ingresarButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_codigo;
@@ -571,6 +614,7 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JLabel modificarButton;
     private javax.swing.JTextField nitField;
     private javax.swing.JTextField nombreField;
+    private javax.swing.JFormattedTextField saldoField;
     private javax.swing.JLabel verButton;
     // End of variables declaration//GEN-END:variables
 }
