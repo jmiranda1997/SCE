@@ -503,7 +503,7 @@ public class Clientes extends javax.swing.JPanel {
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
             //Cambia el texto del botón
-            generalButton.setText("Eliminar Seleccionado");
+            generalButton.setText("Eliminar Selección");
             generalButton.setEnabled(true);
             //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
             listadoTable.setModel(conexion.obtenerClientes());
@@ -586,7 +586,7 @@ public class Clientes extends javax.swing.JPanel {
                 if(dialogo.isAceptar()){
                     //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
                     int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
-                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al cliente\nRegistros actualizados: "+filasMod);
                     dialogo.setVisible(true);
                     //Limpia el formulario
                     limpiar();

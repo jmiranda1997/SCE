@@ -52,16 +52,14 @@ public class Conexion {
        conexion=null;
         try{
             try {
-            Class.forName(driver);//Se utiliza el driver de conexion
-            } catch (ClassNotFoundException ex) {
-            System.out.println("Error al registrar el driver de MySQL: " + ex);
-        }
+                Class.forName(driver);//Se utiliza el driver de conexion
+            }catch (ClassNotFoundException ex) {
+                System.out.println("Error al registrar el driver de MySQL: " + ex);
+            }
             conexion=DriverManager.getConnection(url+ip+"/"+nombreBD,user,pass);//Se conecta con la base de datos enviando
             //los parametros url, user, pass,
-            
-        } catch (SQLException ex) {
-//            Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
-//            Dialogo.setVisible(true);
+        }catch (SQLException|NullPointerException ex) {
+            System.out.println("Error al registrar el driver de MySQL: " + ex);
         }
     }
     /**
@@ -737,6 +735,28 @@ public class Conexion {
         int resultado = instruccion.executeUpdate("UPDATE Cliente SET habilitado=0 WHERE id="+id+";"); //se guarda el resultado de la instruccion
         conexion.close();
         return resultado;
+    }
+    /**
+     * Metodo que genera la conexion para saber si puede conectarse a la BD
+     * @return true si se puede conectar a la base con los datos ingresados, false de lo contrario
+     */
+    public boolean probarConexion ()
+    {
+       conexion=null;
+        try{
+            try {
+                Class.forName(driver);//Se utiliza el driver de conexion
+            }catch (ClassNotFoundException ex) {
+                return false;
+            }
+            conexion=DriverManager.getConnection(url+ip+"/"+nombreBD,user,pass);//Se conecta con la base de datos enviando
+            //los parametros url, user, pass,
+            conexion.close();
+            return true;
+        }catch (SQLException ex) {
+            return false;
+        }
+        
     }
    public ArrayList[] obtenerSucursales() throws SQLException{
       

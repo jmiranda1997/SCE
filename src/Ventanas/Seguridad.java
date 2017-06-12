@@ -71,10 +71,11 @@ public class Seguridad extends javax.swing.JPanel {
         bdField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         userField = new javax.swing.JTextField();
-        guardarDBButton = new javax.swing.JLabel();
         passField1 = new javax.swing.JPasswordField();
         jLabel9 = new javax.swing.JLabel();
         cancelarGesButton = new javax.swing.JLabel();
+        probarDBButton = new javax.swing.JLabel();
+        guardarDBButton = new javax.swing.JLabel();
         eliminarPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         usuariosCombo1 = new javax.swing.JComboBox<>();
@@ -131,18 +132,6 @@ public class Seguridad extends javax.swing.JPanel {
 
         userField.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
 
-        guardarDBButton.setBackground(new java.awt.Color(255, 0, 0));
-        guardarDBButton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        guardarDBButton.setForeground(new java.awt.Color(255, 255, 255));
-        guardarDBButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        guardarDBButton.setText("Guardar");
-        guardarDBButton.setOpaque(true);
-        guardarDBButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                guardarDBButtonMouseClicked(evt);
-            }
-        });
-
         passField1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
@@ -161,37 +150,61 @@ public class Seguridad extends javax.swing.JPanel {
             }
         });
 
+        probarDBButton.setBackground(new java.awt.Color(255, 0, 0));
+        probarDBButton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        probarDBButton.setForeground(new java.awt.Color(255, 255, 255));
+        probarDBButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        probarDBButton.setText("Probar");
+        probarDBButton.setOpaque(true);
+        probarDBButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                probarDBButtonMouseClicked(evt);
+            }
+        });
+
+        guardarDBButton.setBackground(new java.awt.Color(255, 0, 0));
+        guardarDBButton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        guardarDBButton.setForeground(new java.awt.Color(255, 255, 255));
+        guardarDBButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        guardarDBButton.setText("Guardar");
+        guardarDBButton.setOpaque(true);
+        guardarDBButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                guardarDBButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout conexionPanelLayout = new javax.swing.GroupLayout(conexionPanel);
         conexionPanel.setLayout(conexionPanelLayout);
         conexionPanelLayout.setHorizontalGroup(
             conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(conexionPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(conexionPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(conexionPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(passField1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
-                            .addGroup(conexionPanelLayout.createSequentialGroup()
-                                .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(userField)
-                                    .addComponent(bdField)
-                                    .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                    .addComponent(passField)))))
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(passField1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
                     .addGroup(conexionPanelLayout.createSequentialGroup()
-                        .addGap(100, 100, 100)
+                        .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(userField)
+                            .addComponent(bdField)
+                            .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                            .addComponent(passField))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, conexionPanelLayout.createSequentialGroup()
+                        .addComponent(probarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cancelarGesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         conexionPanelLayout.setVerticalGroup(
             conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,13 +231,14 @@ public class Seguridad extends javax.swing.JPanel {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(conexionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelarGesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancelarGesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(probarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(guardarDBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         add(conexionPanel);
-        conexionPanel.setBounds(430, 220, 390, 217);
+        conexionPanel.setBounds(430, 220, 370, 217);
 
         eliminarPanel.setOpaque(false);
 
@@ -640,6 +654,28 @@ public class Seguridad extends javax.swing.JPanel {
     private void cancelarElButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelarElButtonMouseClicked
         limpiar();
     }//GEN-LAST:event_cancelarElButtonMouseClicked
+
+    private void probarDBButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_probarDBButtonMouseClicked
+        if(!ipField.getText().trim().equals("")&&!userField.getText().trim().equals("")&&!new String(passField.getPassword()).trim().equals("")&&!bdField.getText().equals("")){
+            if(new String(passField.getPassword()).trim().equals(new String(passField1.getPassword()).trim())){
+                Conexion prueba= new Conexion(userField.getText(), ipField.getText(), new String(passField.getPassword()),bdField.getText());
+                if(prueba.probarConexion()){
+                    DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Conexion Exitosa", "Esta configuración es correcta\nSE PUEDE CONECTAR AL SGBD");  
+                    dialogo.setVisible(true);
+                }else{
+                    DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Conexion Fallida", "Esta configuración NO es correcta\nNO se puede conectar al SGBD");  
+                    dialogo.setVisible(true);
+                }
+            }else{
+                DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Llene los campos correctamente", "Las contraseñas no coinciden");  
+                dialogo.setVisible(true);
+                passField.setText("");
+                passField1.setText("");
+                passField.requestFocus();
+            }
+        }
+        
+    }//GEN-LAST:event_probarDBButtonMouseClicked
     //Elimina un usuario, seleccionado en el combo
     private void eliminarUser(){
         //Verifica que haya un objeto seleccionado en el combo
@@ -740,6 +776,7 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JPasswordField passField1;
     private javax.swing.JPasswordField passIField;
     private javax.swing.JPasswordField passIField2;
+    private javax.swing.JLabel probarDBButton;
     private javax.swing.JLabel userEButton;
     private javax.swing.JTextField userField;
     private javax.swing.JLabel userIButtton;
