@@ -67,6 +67,7 @@ public class Conexion {
      * @param Nit
      * @param Credito
      * @throws SQLException 
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public void crearProveedor(String Nombre, String Nit, boolean Credito) throws SQLException, NoSePuedeConectar{
         conectar();
@@ -165,6 +166,7 @@ public class Conexion {
      * Metodo que regresa la lista de proveedores como un arreglo
      * @return
      * @throws SQLException 
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public DefaultTableModel obtenerProceedores() throws SQLException, NoSePuedeConectar{
          Proveedores = null;
@@ -277,6 +279,7 @@ public class Conexion {
     /**
      * EJEMPLO DE COMO USAR ESTA CLASE
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public void ejemploDeUso() throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
@@ -296,6 +299,7 @@ public class Conexion {
      * @param pass contraeña
      * @return retorna 1 si los datos son correctos, 0 de lo contrario
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public int login(String usuario, String pass) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
@@ -315,6 +319,7 @@ public class Conexion {
      * @param pass contraseña del usuario
      * @return 1 si se ha creado el usuario, 0 de lo contrario
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public int crearUsuario(String usuario, String pass) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
@@ -332,6 +337,7 @@ public class Conexion {
      * Elimina un usuario
      * @param usuario usuario a eliminar
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public void eliminarUsuario(String usuario) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
@@ -343,6 +349,7 @@ public class Conexion {
      * Obtiene la lista de usuarios
      * @return un arreglo con la lista de usuarios
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public ArrayList obtenerUsuarios() throws SQLException, NoSePuedeConectar{
         ArrayList users=new ArrayList();
@@ -371,6 +378,7 @@ public class Conexion {
      * @param sucursal //sucursal a la que se quiere agregar
      * @param existencia
      * @throws SQLException 
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public void insertarProducto (String codigo, String codBarras,String descrip, double venta,
             double costo, String estanteria, String columna, String fila, String marca, String unidad, 
@@ -451,6 +459,7 @@ public class Conexion {
      * registradas en la base de datos y su id
      * @return matriz dinamica de tamaño 2xN que alamcena la sucursal y su id, y esta matriz tambien incluye otra de 2xN
      * @throws SQLException 
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public ArrayList[] obtener_Sucursales_Unidades() throws SQLException, NoSePuedeConectar{
         ArrayList[] matriz=new ArrayList[4];
@@ -481,6 +490,7 @@ public class Conexion {
      * @param sucursal Id de la sucursal en donde se busca
      * @return un arreglo con todos los atributos del producti
      * @throws SQLException 
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public ArrayList obtener_detalleProducto(int id,int sucursal) throws SQLException, NoSePuedeConectar
     {
@@ -504,6 +514,7 @@ public class Conexion {
      * Funcion que obtiene todos los productos contenidos en la base de datos, su descripcion, codiogs y su id en una matriz
      * @return Matriz con atributos de todos los productos
      * @throws SQLException 
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
    public ArrayList[] obtener_productos() throws SQLException, NoSePuedeConectar{
         ArrayList[] matriz=new ArrayList[4];
@@ -538,6 +549,7 @@ public class Conexion {
      * Metodo que regresa la lista de clientes como un arreglo
      * @return una DefaultTableModel con los clientes en la BD
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public DefaultTableModel obtenerClientes() throws SQLException, NoSePuedeConectar{
         DefaultTableModel modelo = null;
@@ -581,6 +593,7 @@ public class Conexion {
      * @param cheque si se le acepta cheque al cliente o no
      * @return 1 en caso de que se inserte, 0 de lo contrario
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public int crearCliente(String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
@@ -607,6 +620,7 @@ public class Conexion {
      * @param cheque si se le acepta cheque al cliente, o no
      * @return numero de filas en la BD que han sido modificadas (Debe ser 1)
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public int modificarCliente(int id, String nombre, String apellido, long descuento, String direccion, long limCredito, float saldo, String NIT, boolean cheque) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
@@ -620,6 +634,7 @@ public class Conexion {
      * @param id id del cliente a borrar
      * @return el numero de filas afectadas (debe ser 1)
      * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
     public int eliminarCliente(int id) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
