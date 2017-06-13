@@ -1,3 +1,4 @@
+#NO PONER
 DELIMITER //
 DROP TRIGGER IF EXISTS nuevoCliente //
 

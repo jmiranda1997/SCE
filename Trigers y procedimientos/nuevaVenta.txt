@@ -1,0 +1,43 @@
+delimiter //
+drop trigger if exists nuevaVenta //
+create trigger nuevaVenta
+before insert on ventas
+for each row
+begin
+	set new.Total=0.00;
+	set new.Fecha=now();
+	
+end; //
+delimiter ;
+
+################ CORREGIDO:SOLO PUESTO EN MAYUSCULAS LAS PALABRAS RESERVADAS ##############3
+
+CREATE TRIGGER nuevaVenta
+
+BEFORE INSERT ON ventas
+
+FOR EACH ROW
+
+BEGIN
+
+	DECLARE numero INT DEFAULT 0;
+
+	SELECT MAX(numero) FROM ventas INTO numero;
+
+	IF numero IS NOT NULL THEN
+
+		SET numero=numero+1;
+
+		SET NEW.Numero=numero;
+
+	ELSE
+
+		SET NEW.Numero=1;
+
+	END IF;
+
+	SET NEW.Total=0.00;
+
+	SET NEW.Fecha=now();
+
+END

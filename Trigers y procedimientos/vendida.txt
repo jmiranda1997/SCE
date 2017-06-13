@@ -1,0 +1,23 @@
+CREATE TRIGGER venta
+AFTER UPDATE ON ventas
+FOR EACH ROW
+BEGIN
+	DECLARE id INT DEFAULT 0;
+	DECLARE Cantidad FLOAT;
+	DECLARE sucursal INT DEFAULT 0;
+	DECLARE puntero INT DEFAULT 0;
+	DECLARE cdetalle CURSOR FOR SELECT p.id, dv.Cantidad, f.Sucursales_id  FROM factura f INNER JOIN detalledeventa dv ON dv.Ventas_id = f.Ventas_id INNER JOIN producto p ON p.id = dv.Producto_id WHERE dv.Ventas_id = NEW.id;
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET puntero = 1;
+	
+	IF(OLD.Vendida = 0 AND NEW.Vendida = 1) THEN
+		OPEN cdetalle;
+		FETCH cdetalle INTO id, Cantidad, sucursal;
+		WHILE NOT puntero DO
+		UPDATE Existencia SET Existencia = (Existencia - Cantidad) WHERE Producto_id = id AND  Sucursales_id = sucursal;
+		
+		FETCH cdetalle INTO id, Cantidad, sucursal;
+		END WHILE;
+		
+		CLOSE cdetalle;
+	END IF;
+END
