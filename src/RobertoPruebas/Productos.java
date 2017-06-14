@@ -40,6 +40,7 @@ public class Productos extends javax.swing.JPanel {
         buttonGroup1.add(rbtn_Credito2);
         try {
             sucursales_unidades=new ArrayList[2];
+            cmb_sucursal.addItem("Total");
             sucursales_unidades=conexion.obtener_Sucursales_Unidades();
             for(int i=0; i<sucursales_unidades[0].size();i++)
             {
@@ -437,6 +438,11 @@ public class Productos extends javax.swing.JPanel {
 
         cmb_sucursal.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cmb_sucursal.setBorder(null);
+        cmb_sucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_sucursalActionPerformed(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
@@ -747,9 +753,7 @@ public class Productos extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Guardar_Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 62, Short.MAX_VALUE))
-                    .addGroup(pnDetalleLayout.createSequentialGroup()
-                        .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))))
+                    .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout pnContenidoLayout = new javax.swing.GroupLayout(pnContenido);
@@ -933,6 +937,7 @@ public class Productos extends javax.swing.JPanel {
         txt_codigoBarra.setEnabled(nuevo||modificar);
         cmb_sucursal.setEnabled(nuevo || !modificar);
         tbl_productos.setEnabled(!nuevo);
+        cmb_unidad.setEnabled(true);
     }
     public void cargarProducto(int i)
     {
@@ -961,37 +966,44 @@ public class Productos extends javax.swing.JPanel {
     private void cargarProductoActual()
     {
         if(productoActual.size()>0 && !nuevo){
-            txt_codigo.setText(productoActual.get(1).toString());
-            txt_codigoBarra.setText(productoActual.get(2).toString());
-            txa_descripcion.setText(productoActual.get(3).toString());
-            txt_venta.setText(productoActual.get(4).toString());
-            txt_costo.setText(productoActual.get(5).toString());
-            if(productoActual.get(6)==null)
-                txt_estanteria.setText("");
-            else
-                txt_estanteria.setText(productoActual.get(6).toString());
-            if(productoActual.get(7)==null)
-                txt_columna.setText("");
-            else
-                txt_columna.setText(productoActual.get(7).toString());
-            if(productoActual.get(8)==null)
-                txt_fila.setText("");
-            else
-                txt_fila.setText(productoActual.get(8).toString());
-            if(productoActual.get(9)==null)
-            {
-                cmb_unidad.setSelectedIndex(cmb_unidad.getItemCount()-1);
-                cmb_unidad.setEnabled(false);
+            try {
+                txt_codigo.setText(productoActual.get(1).toString());
+                txt_codigoBarra.setText(productoActual.get(2).toString());
+                txa_descripcion.setText(productoActual.get(3).toString());
+                txt_venta.setText(productoActual.get(4).toString());
+                txt_costo.setText(productoActual.get(5).toString());
+                if(productoActual.get(6)==null)
+                    txt_estanteria.setText("");
+                else
+                    txt_estanteria.setText(productoActual.get(6).toString());
+                if(productoActual.get(7)==null)
+                    txt_columna.setText("");
+                else
+                    txt_columna.setText(productoActual.get(7).toString());
+                if(productoActual.get(8)==null)
+                    txt_fila.setText("");
+                else
+                    txt_fila.setText(productoActual.get(8).toString());
+                if(productoActual.get(9)==null)
+                {
+                    cmb_unidad.setSelectedIndex(cmb_unidad.getItemCount()-1);
+                    cmb_unidad.setEnabled(false);
+                }
+                else
+                {
+                    cmb_unidad.setSelectedIndex(Integer.parseInt(productoActual.get(9).toString())-1);
+                    cmb_unidad.setEnabled(true);
+                }
+                if(productoActual.get(10)==null)
+                    txt_fila.setText("");
+                else
+                    txt_marca.setText(productoActual.get(10).toString());
+                cmb_sucursal.setSelectedIndex(0);
+                    txt_existencia.setText(conexion.obtenerExistencia(0, Integer.parseInt(productoActual.get(0).toString()))+"");
+                    } catch (SQLException ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else
-            {
-                cmb_unidad.setSelectedIndex(Integer.parseInt(productoActual.get(9).toString())-1);
-                cmb_unidad.setEnabled(true);
-            }
-            if(productoActual.get(10)==null)
-                txt_fila.setText("");
-            else
-                txt_marca.setText(productoActual.get(10).toString());
+                
         }
         else
             modoSinDatos();
@@ -1192,7 +1204,7 @@ public class Productos extends javax.swing.JPanel {
     private void btn_Guardar_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Guardar_AceptarMouseClicked
         
         try {
-            if(nuevo){
+            if(nuevo && cmb_sucursal.getSelectedIndex()>0){
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText(), uni=(cmb_unidad.getSelectedIndex()+1)+"";
                 if(Integer.parseInt(uni)== cmb_unidad.getItemCount())
@@ -1202,7 +1214,7 @@ public class Productos extends javax.swing.JPanel {
                 conexion.insertarProducto(txt_codigo.getText(),txt_codigoBarra.getText(),
                     txa_descripcion.getText(),Double.parseDouble(txt_venta.getText()),
                     Double.parseDouble(txt_costo.getText()),est,col,fil,txt_marca.getText(),
-                    uni,Integer.parseInt(sucursales_unidades[0].get(cmb_sucursal.getSelectedIndex()).toString()),
+                    uni,Integer.parseInt(sucursales_unidades[0].get(cmb_sucursal.getSelectedIndex()-1).toString()),
                     Double.parseDouble(txt_existencia.getText()));
                 llenarListado();
                 btn_verMouseClicked(evt); 
@@ -1407,6 +1419,10 @@ public class Productos extends javax.swing.JPanel {
         // TODO add your handling code here:
         llenarListado();
     }//GEN-LAST:event_rbtn_Credito2StateChanged
+
+    private void cmb_sucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_sucursalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_sucursalActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Salir1;

@@ -516,10 +516,10 @@ public class Conexion {
         }
         instruccion=conexion.createStatement();
         instruccion.executeUpdate("insert into producto (codigo,codigo_barras,descripcion,precio_venta,precio_costo,Estanteria,"
-                +"Columna,Fila,marca_id,unidad_id,fraccion) values ('"+codigo+"','"+codBarras+"','"+descrip+"',"+venta+","+costo+","+estanteria+","+
-                columna+","+fila+","+marcaId+","+unidad+","+fraccion+");");
+                +"Columna,Fila,marca_id,unidad_id) values ('"+codigo+"','"+codBarras+"','"+descrip+"',"+venta+","+costo+","+estanteria+","+
+                columna+","+fila+","+marcaId+","+unidad+");");
         instruccion=conexion.createStatement();
-        resultado = instruccion.executeQuery("select max(id) from producto;");
+        resultado = instruccion.executeQuery("select id from producto where codigo='"+codigo+"' and codigo_barras='"+codBarras+"';");
         instruccion=conexion.createStatement();
         if(resultado.next())
             instruccion.executeUpdate("insert into existencia (sucursales_id,producto_id,existencia) values ("
