@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados0
-    private static String user="root", ip="localhost", pass="@Sistemas2017", nombreBD="sce"; //Variables que pueden ser modificadas y por defecto son las que se muestran
+    private static String user="root", ip="localhost", pass="", nombreBD="sce"; //Variables que pueden ser modificadas y por defecto son las que se muestran
     public final static String claveCifradoBase="SCEUser Cifrado AES";
     /**
      * Crea un objeto conexión con datos predeterminados
