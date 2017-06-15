@@ -7,57 +7,35 @@ package JP;
 
 import RobertoPruebas.*;
 import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
 
 /**
  *
  * @author Roberto
  */
 public class TelefonosConf extends javax.swing.JDialog {
-    private static boolean aceptar=false;
-    public static final int ICONO_ERROR = 1;
-    public static final int ICONO_INFORMACION = 2;
-    public static final int ICONO_INTERROGANTE = 3;
+    public static final int INGRESO = 1;
+    public static final int MODIFICACION = 2;
+    public static final int ELIMINACION = 3;
     public static String titulo="",mensaje="";
     /**
-     * Creates new form DialogoOpcion
+     * Crea un nuevo dialogo para gestión de telefonos
+     * @param parent contenedor padre
+     * @param modal modo, true para interrumpir el código hasta cerrar el dialogo, false de lo contrario
+     * @param modo el modo en que va a entrarse al dialogo
      */
-    public TelefonosConf(java.awt.Frame parent, boolean modal, int icono, String titulo, String mensaje) {
-        super(parent, modal);
-        initComponents();
-        lbl_Titulo.setText(titulo);
-        jTextArea1.setText(mensaje);
-        this.titulo=titulo;
-        this.mensaje=mensaje;
-        cargar_icono(icono);
-        this.setLocationRelativeTo(null);
-        btn_Aceptar.requestFocus();
+    public TelefonosConf(java.awt.Frame parent, boolean modal, int modo, int clienteID) {
+        super(parent, true);
+        initComponents();        
     }
-    public TelefonosConf(java.awt.Frame parent, boolean modal) {
+
+    private TelefonosConf(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    /**
-     * Metodo que carga el icono del panel en base a un numero entero
-     * @param Icono numero del icono
-     */
-    private void cargar_icono(int Icono)
-    {
-        switch (Icono) {
-            case 1:
-                this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/error.png")));
-                this.btn_Cancelar.setVisible(false);
-                break;
-            case 2:
-                this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/info.png")));
-                this.btn_Cancelar.setVisible(false);
-                break;
-            default:
-                this.Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/question.png")));
-                this.btn_Cancelar.setVisible(true);
-                break;
-        }
-    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,8 +47,6 @@ public class TelefonosConf extends javax.swing.JDialog {
 
         textArea1 = new java.awt.TextArea();
         jPanel3 = new javax.swing.JPanel();
-        generalButton = new javax.swing.JLabel();
-        ingresarButton = new javax.swing.JLabel();
         nombreField = new javax.swing.JTextField();
         lbl_codigo = new javax.swing.JLabel();
         usuariosCombo1 = new javax.swing.JComboBox<>();
@@ -82,32 +58,6 @@ public class TelefonosConf extends javax.swing.JDialog {
         setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
-
-        generalButton.setBackground(new java.awt.Color(255, 0, 0));
-        generalButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        generalButton.setForeground(new java.awt.Color(255, 255, 255));
-        generalButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        generalButton.setText("GUARDAR");
-        generalButton.setName(""); // NOI18N
-        generalButton.setOpaque(true);
-        generalButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                generalButtonMouseClicked(evt);
-            }
-        });
-
-        ingresarButton.setBackground(new java.awt.Color(0, 0, 0));
-        ingresarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        ingresarButton.setForeground(new java.awt.Color(255, 255, 255));
-        ingresarButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        ingresarButton.setText("INGRESO");
-        ingresarButton.setName(""); // NOI18N
-        ingresarButton.setOpaque(true);
-        ingresarButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ingresarButtonMouseClicked(evt);
-            }
-        });
 
         nombreField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         nombreField.setBorder(null);
@@ -141,46 +91,36 @@ public class TelefonosConf extends javax.swing.JDialog {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(320, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(252, 252, 252))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(ingresarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(244, 244, 244))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(lbl_codigo)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78))))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(238, 238, 238)
-                        .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(109, 109, 109)
-                        .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(238, 238, 238)
+                .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(109, 109, 109)
+                .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_codigo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(ingresarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addComponent(lbl_codigo)
-                .addGap(41, 41, 41)
+                .addGap(284, 284, 284)
                 .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(68, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,90 +144,9 @@ public class TelefonosConf extends javax.swing.JDialog {
         nombreField.selectAll();
     }//GEN-LAST:event_nombreFieldFocusGained
 
-    private void generalButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generalButtonMouseClicked
-        try {
-            //Si esta en modo ingreso, modificación o eliminación, hace cosas distintas
-            //Se comprueba en que modo está
-            if(ingresarButton.getBackground()==Color.RED){
-                //Valida los datos de los textos de numero
-                descuentoField.commitEdit();
-                limCreditoField.commitEdit();
-                saldoField.commitEdit();
-                //Hace un ingreso a la BD
-                int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
-                //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
-                if(resultado==1){
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
-                    dialogo.setVisible(true);
-                }
-                else if(resultado==0){
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
-                    dialogo.setVisible(true);
-                }
-                //Limpia el formulario
-                limpiar();
-            }else if(modificarButton.getBackground()==Color.RED){
-                //Valida los datos de los campos de numero
-                descuentoField.commitEdit();
-                limCreditoField.commitEdit();
-                saldoField.commitEdit();
-                //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
-                int filasMod=conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
-                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
-                dialogo.setVisible(true);
-                //Limpia el formulario
-                limpiar();
-            }else if(eliminarButton.getBackground()==Color.RED)
-            {
-                //Muestra un dialogo para confirmar si se quiere borrar el cliente
-                DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminación", "¿Esta seguro de eliminar al cliente seleccionado?");
-                dialogo.setVisible(true);
-                //Si se acepta, entonces lo borra
-                if(dialogo.isAceptar()){
-                    //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
-                    int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
-                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al cliente\nRegistros actualizados: "+filasMod);
-                    dialogo.setVisible(true);
-                    //Limpia el formulario
-                    limpiar();
-                }
-            }
-        } catch (SQLException|ParseException|NoSePuedeConectar ex) {
-            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
-            dialogo.setVisible(true);
-            limpiar();
-        }
-
-    }//GEN-LAST:event_generalButtonMouseClicked
-
-    private void ingresarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresarButtonMouseClicked
-        //Limpia el formulario
-        limpiar();
-        //Setea el boton de ingresar como rojo
-        ingresarButton.setBackground(Color.RED);
-        //Muestra los paneles
-        listadoPanel.setEnabled(false);
-        listadoPanel.setVisible(true);
-        generalPanel.setVisible(true);
-        //Cambia el texto del botón
-        generalButton.setText("Ingresar");
-        generalButton.setEnabled(true);
-        //Pone el foco en el texto de nombre
-        nombreField.requestFocus();
-
-    }//GEN-LAST:event_ingresarButtonMouseClicked
-
     private void userIButttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userIButttonMouseClicked
-        ingresoUserNuevo();
-    }//GEN-LAST:event_userIButttonMouseClicked
-    /**
-    *funcion booleana que retorna el valor de la opcion elegida en el cuadro de dialogo     
-    * @return TRUE si se clickeo aceptar - FALSE si se cerro o se clickeo cancelar
-    */
-    public boolean isAceptar() {
-        return aceptar;
-    }
 
+    }//GEN-LAST:event_userIButttonMouseClicked
     /**
      * @param args the command line arguments
      */
@@ -334,8 +193,6 @@ public class TelefonosConf extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel generalButton;
-    private javax.swing.JLabel ingresarButton;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lbl_codigo;
     private javax.swing.JTextField nombreField;

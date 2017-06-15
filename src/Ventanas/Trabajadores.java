@@ -18,25 +18,24 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Juampa
  */
-public class Clientes extends javax.swing.JPanel {
+public class Trabajadores extends javax.swing.JPanel {
     Conexion conexion;
     /**
      * Creates new form Clientes
      */
-    public Clientes() {
+    public Trabajadores() {
         initComponents();
     }
     /**
      * Crea un nuevo panel de clientes
      * @param conexion objeto para conectarse a la BD
      */
-    public Clientes(Conexion conexion){
+    public Trabajadores(Conexion conexion){
         initComponents();
         this.conexion=conexion;
         //Inicia los paneles invisibles, para que se seleccione una opcion
         listadoPanel.setVisible(false);
         generalPanel.setVisible(false);
-        telefonosButton.setVisible(false);//CAMBIAR AL FINALIZAR
         //Limpia el formulario
         limpiar();
     }
@@ -52,14 +51,12 @@ public class Clientes extends javax.swing.JPanel {
         //Limpia los JFields
         nombreField.setText("");
         apellidoField.setText("");
-        nitField.setText("");
+        dpiField.setText("");
         //Inicializa con 0 los campos de numero
-        direccionField.setText("");
+        telefonoField.setText("");
         descuentoField.setText("0");
         limCreditoField.setText("0");
         saldoField.setText("0.00");
-        //Pone la opción de cheque como falso
-        chequeCheck.setSelected(false);
         //Setea un modelo vacio a la tabla
         listadoTable.setModel(new DefaultTableModel());
         listadoPanel.setEnabled(true);
@@ -72,15 +69,13 @@ public class Clientes extends javax.swing.JPanel {
         if(modificarButton.getBackground()==Color.RED){
             int seleccion=listadoTable.getSelectedRow();
             if(seleccion!=-1){
-                nitField.setText((String)listadoTable.getValueAt(seleccion, 1));
+                dpiField.setText((String)listadoTable.getValueAt(seleccion, 1));
                 nombreField.setText((String)listadoTable.getValueAt(seleccion, 2));
                 apellidoField.setText((String)listadoTable.getValueAt(seleccion, 3));
                 descuentoField.setText((String)listadoTable.getValueAt(seleccion, 4));
-                direccionField.setText((String)listadoTable.getValueAt(seleccion, 5));
+                telefonoField.setText((String)listadoTable.getValueAt(seleccion, 5));
                 limCreditoField.setText((String)listadoTable.getValueAt(seleccion, 6));
-                saldoField.setText((String)listadoTable.getValueAt(seleccion, 7));
-                chequeCheck.setSelected(((String)listadoTable.getValueAt(seleccion, 8)).equals("SI"));
-                
+                saldoField.setText((String)listadoTable.getValueAt(seleccion, 7));                
             }
         }
     }
@@ -101,18 +96,16 @@ public class Clientes extends javax.swing.JPanel {
         lbl_codigo1 = new javax.swing.JLabel();
         apellidoField = new javax.swing.JTextField();
         lbl_codigo2 = new javax.swing.JLabel();
-        direccionField = new javax.swing.JTextField();
+        telefonoField = new javax.swing.JTextField();
         lbl_codigo3 = new javax.swing.JLabel();
-        nitField = new javax.swing.JTextField();
+        dpiField = new javax.swing.JTextField();
         lbl_codigo4 = new javax.swing.JLabel();
         lbl_codigo5 = new javax.swing.JLabel();
-        chequeCheck = new javax.swing.JCheckBox();
         generalButton = new javax.swing.JLabel();
-        descuentoField = new javax.swing.JFormattedTextField();
-        limCreditoField = new javax.swing.JFormattedTextField();
         lbl_codigo7 = new javax.swing.JLabel();
         saldoField = new javax.swing.JFormattedTextField();
-        telefonosButton = new javax.swing.JLabel();
+        comisionField = new javax.swing.JFormattedTextField();
+        salarioField = new javax.swing.JFormattedTextField();
         eliminarButton = new javax.swing.JLabel();
         verButton = new javax.swing.JLabel();
         listadoPanel = new javax.swing.JPanel();
@@ -176,7 +169,7 @@ public class Clientes extends javax.swing.JPanel {
         apellidoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         apellidoField.setBorder(null);
         apellidoField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        apellidoField.setNextFocusableComponent(nitField);
+        apellidoField.setNextFocusableComponent(dpiField);
         apellidoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 apellidoFieldFocusGained(evt);
@@ -185,45 +178,38 @@ public class Clientes extends javax.swing.JPanel {
 
         lbl_codigo2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo2.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo2.setText("Dirección:");
+        lbl_codigo2.setText("Teléfono:");
 
-        direccionField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        direccionField.setBorder(null);
-        direccionField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        direccionField.setNextFocusableComponent(descuentoField);
-        direccionField.addFocusListener(new java.awt.event.FocusAdapter() {
+        telefonoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        telefonoField.setBorder(null);
+        telefonoField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        telefonoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                direccionFieldFocusGained(evt);
+                telefonoFieldFocusGained(evt);
             }
         });
 
         lbl_codigo3.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo3.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo3.setText("Límite de crédito:");
+        lbl_codigo3.setText("Salario base:");
 
-        nitField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        nitField.setBorder(null);
-        nitField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        nitField.setNextFocusableComponent(direccionField);
-        nitField.addFocusListener(new java.awt.event.FocusAdapter() {
+        dpiField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        dpiField.setBorder(null);
+        dpiField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        dpiField.setNextFocusableComponent(telefonoField);
+        dpiField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                nitFieldFocusGained(evt);
+                dpiFieldFocusGained(evt);
             }
         });
 
         lbl_codigo4.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo4.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo4.setText("NIT:");
+        lbl_codigo4.setText("DPI:");
 
         lbl_codigo5.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo5.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo5.setText("% de descuento:");
-
-        chequeCheck.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        chequeCheck.setForeground(new java.awt.Color(255, 255, 255));
-        chequeCheck.setText("¿Se le acepta cheque?");
-        chequeCheck.setNextFocusableComponent(generalButton);
-        chequeCheck.setOpaque(false);
+        lbl_codigo5.setText("% de comisión:");
 
         generalButton.setBackground(new java.awt.Color(255, 0, 0));
         generalButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -238,50 +224,34 @@ public class Clientes extends javax.swing.JPanel {
             }
         });
 
-        descuentoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        descuentoField.setText("0");
-        descuentoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        descuentoField.setNextFocusableComponent(limCreditoField);
-        descuentoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                descuentoFieldFocusGained(evt);
-            }
-        });
-
-        limCreditoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        limCreditoField.setText("0");
-        limCreditoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        limCreditoField.setNextFocusableComponent(saldoField);
-        limCreditoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                limCreditoFieldFocusGained(evt);
-            }
-        });
-
         lbl_codigo7.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo7.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo7.setText("Saldo actual:");
+        lbl_codigo7.setText("Bono incentivo:");
 
         saldoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         saldoField.setText("0.00");
         saldoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        saldoField.setNextFocusableComponent(chequeCheck);
         saldoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 saldoFieldFocusGained(evt);
             }
         });
 
-        telefonosButton.setBackground(new java.awt.Color(255, 0, 0));
-        telefonosButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        telefonosButton.setForeground(new java.awt.Color(255, 255, 255));
-        telefonosButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        telefonosButton.setText("TELEFONOS");
-        telefonosButton.setName(""); // NOI18N
-        telefonosButton.setOpaque(true);
-        telefonosButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                telefonosButtonMouseClicked(evt);
+        comisionField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        comisionField.setText("0.00");
+        comisionField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        comisionField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                comisionFieldFocusGained(evt);
+            }
+        });
+
+        salarioField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        salarioField.setText("0.00");
+        salarioField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        salarioField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                salarioFieldFocusGained(evt);
             }
         });
 
@@ -293,78 +263,74 @@ public class Clientes extends javax.swing.JPanel {
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(generalPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lbl_codigo1)
-                                .addComponent(lbl_codigo))
-                            .addComponent(lbl_codigo4)
-                            .addComponent(lbl_codigo2))
-                        .addGap(68, 68, 68)
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nitField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_codigo3)
-                                    .addComponent(lbl_codigo7))
-                                .addGap(7, 7, 7)
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(limCreditoField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                                    .addComponent(saldoField)))
-                            .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addComponent(lbl_codigo5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(descuentoField))))
-                    .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addGap(416, 416, 416)
-                        .addComponent(chequeCheck))
-                    .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lbl_codigo2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(generalPanelLayout.createSequentialGroup()
+                                    .addComponent(lbl_codigo4)
+                                    .addGap(125, 125, 125)
+                                    .addComponent(dpiField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
+                                    .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lbl_codigo1)
+                                        .addComponent(lbl_codigo))
+                                    .addGap(79, 79, 79)
+                                    .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(telefonosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_codigo3)
+                            .addComponent(lbl_codigo7)
+                            .addComponent(lbl_codigo5))
+                        .addGap(7, 7, 7)
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comisionField)
+                            .addComponent(saldoField, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(salarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addGap(200, 200, 200)
+                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         generalPanelLayout.setVerticalGroup(
             generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(generalPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_codigo)
-                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_codigo5)
-                    .addComponent(descuentoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl_codigo4)
+                    .addComponent(dpiField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comisionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_codigo1)
-                    .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_codigo3)
-                    .addComponent(limCreditoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lbl_codigo7)
+                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addComponent(salarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(saldoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lbl_codigo4)
-                        .addComponent(nitField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_codigo)
+                            .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_codigo3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_codigo1)
+                            .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_codigo7))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_codigo2)
-                    .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chequeCheck))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(telefonosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 720, 210));
+        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 720, 250));
 
         eliminarButton.setBackground(new java.awt.Color(0, 0, 0));
         eliminarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -384,7 +350,7 @@ public class Clientes extends javax.swing.JPanel {
         verButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         verButton.setForeground(new java.awt.Color(255, 255, 255));
         verButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        verButton.setText("VER CLIENTES");
+        verButton.setText("VER TRABAJADORES");
         verButton.setName(""); // NOI18N
         verButton.setOpaque(true);
         verButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -392,7 +358,7 @@ public class Clientes extends javax.swing.JPanel {
                 verButtonMouseClicked(evt);
             }
         });
-        add(verButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 160, 50));
+        add(verButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 190, 50));
 
         listadoPanel.setOpaque(false);
 
@@ -449,7 +415,7 @@ public class Clientes extends javax.swing.JPanel {
                 .addGap(68, 68, 68))
         );
 
-        add(listadoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 920, 320));
+        add(listadoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 920, 320));
 
         Minimizar.setForeground(new java.awt.Color(255, 255, 255));
         Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
@@ -566,46 +532,34 @@ public class Clientes extends javax.swing.JPanel {
             //Si esta en modo ingreso, modificación o eliminación, hace cosas distintas
             //Se comprueba en que modo está
             if(ingresarButton.getBackground()==Color.RED){
-                if(!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")){
-                    //Valida los datos de los textos de numero
-                    descuentoField.commitEdit();
-                    limCreditoField.commitEdit();
-                    saldoField.commitEdit();
-                    //Hace un ingreso a la BD
-                    int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
-                    //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
-                    if(resultado==1){
-                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
-                        dialogo.setVisible(true);
-                    }
-                    else if(resultado==0){
-                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
-                        dialogo.setVisible(true);
-                    }
-                    //Limpia el formulario
-                    limpiar();
-                }else{
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Debe ingresar al menos el nombre del cliente");
+                //Valida los datos de los textos de numero
+                descuentoField.commitEdit();
+                limCreditoField.commitEdit();
+                saldoField.commitEdit();
+                //Hace un ingreso a la BD
+                int resultado=1;//conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
+                if(resultado==1){
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
                     dialogo.setVisible(true);
-                    nombreField.requestFocus();
                 }
+                else if(resultado==0){
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
+                    dialogo.setVisible(true);
+                }
+                //Limpia el formulario
+                limpiar();
             }else if(modificarButton.getBackground()==Color.RED){
-                if(!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")){
                 //Valida los datos de los campos de numero
                 descuentoField.commitEdit();
                 limCreditoField.commitEdit();
                 saldoField.commitEdit();
                 //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
-                int filasMod=conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                int filasMod=0;//conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
                 DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
                 dialogo.setVisible(true);
                 //Limpia el formulario
                 limpiar();
-                }else{
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificacion", "Debe ingresar al menos el nombre del cliente");
-                    dialogo.setVisible(true);
-                    nombreField.requestFocus();
-                }
             }else if(eliminarButton.getBackground()==Color.RED)
             {
                 //Muestra un dialogo para confirmar si se quiere borrar el cliente
@@ -640,18 +594,6 @@ public class Clientes extends javax.swing.JPanel {
         System.exit(0);
     }//GEN-LAST:event_SalirMouseClicked
 
-    private void descuentoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_descuentoFieldFocusGained
-        descuentoField.selectAll();
-    }//GEN-LAST:event_descuentoFieldFocusGained
-
-    private void limCreditoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_limCreditoFieldFocusGained
-        limCreditoField.selectAll();
-    }//GEN-LAST:event_limCreditoFieldFocusGained
-
-    private void saldoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_saldoFieldFocusGained
-        saldoField.selectAll();
-    }//GEN-LAST:event_saldoFieldFocusGained
-
     private void nombreFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreFieldFocusGained
         nombreField.selectAll();
     }//GEN-LAST:event_nombreFieldFocusGained
@@ -660,26 +602,33 @@ public class Clientes extends javax.swing.JPanel {
         apellidoField.selectAll();
     }//GEN-LAST:event_apellidoFieldFocusGained
 
-    private void nitFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nitFieldFocusGained
-        nitField.selectAll();
-    }//GEN-LAST:event_nitFieldFocusGained
+    private void dpiFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dpiFieldFocusGained
+        dpiField.selectAll();
+    }//GEN-LAST:event_dpiFieldFocusGained
 
-    private void direccionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_direccionFieldFocusGained
-        direccionField.selectAll();
-    }//GEN-LAST:event_direccionFieldFocusGained
+    private void telefonoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_telefonoFieldFocusGained
+        telefonoField.selectAll();
+    }//GEN-LAST:event_telefonoFieldFocusGained
 
-    private void telefonosButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_telefonosButtonMouseClicked
-        
-    }//GEN-LAST:event_telefonosButtonMouseClicked
+    private void comisionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_comisionFieldFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comisionFieldFocusGained
+
+    private void saldoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_saldoFieldFocusGained
+        saldoField.selectAll();
+    }//GEN-LAST:event_saldoFieldFocusGained
+
+    private void salarioFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_salarioFieldFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_salarioFieldFocusGained
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Minimizar;
     private javax.swing.JLabel Salir;
     private javax.swing.JTextField apellidoField;
-    private javax.swing.JCheckBox chequeCheck;
-    private javax.swing.JFormattedTextField descuentoField;
-    private javax.swing.JTextField direccionField;
+    private javax.swing.JFormattedTextField comisionField;
+    private javax.swing.JTextField dpiField;
     private javax.swing.JLabel eliminarButton;
     private javax.swing.JLabel generalButton;
     private javax.swing.JPanel generalPanel;
@@ -693,14 +642,13 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_codigo5;
     private javax.swing.JLabel lbl_codigo6;
     private javax.swing.JLabel lbl_codigo7;
-    private javax.swing.JFormattedTextField limCreditoField;
     private javax.swing.JPanel listadoPanel;
     private javax.swing.JTable listadoTable;
     private javax.swing.JLabel modificarButton;
-    private javax.swing.JTextField nitField;
     private javax.swing.JTextField nombreField;
+    private javax.swing.JFormattedTextField salarioField;
     private javax.swing.JFormattedTextField saldoField;
-    private javax.swing.JLabel telefonosButton;
+    private javax.swing.JTextField telefonoField;
     private javax.swing.JLabel verButton;
     // End of variables declaration//GEN-END:variables
 }
