@@ -115,6 +115,7 @@ public class Clientes extends javax.swing.JPanel {
         limCreditoField = new javax.swing.JFormattedTextField();
         lbl_codigo7 = new javax.swing.JLabel();
         saldoField = new javax.swing.JFormattedTextField();
+        telefonosButton = new javax.swing.JLabel();
         eliminarButton = new javax.swing.JLabel();
         verButton = new javax.swing.JLabel();
         listadoPanel = new javax.swing.JPanel();
@@ -274,6 +275,19 @@ public class Clientes extends javax.swing.JPanel {
             }
         });
 
+        telefonosButton.setBackground(new java.awt.Color(255, 0, 0));
+        telefonosButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        telefonosButton.setForeground(new java.awt.Color(255, 255, 255));
+        telefonosButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        telefonosButton.setText("TELEFONOS");
+        telefonosButton.setName(""); // NOI18N
+        telefonosButton.setOpaque(true);
+        telefonosButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                telefonosButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout generalPanelLayout = new javax.swing.GroupLayout(generalPanel);
         generalPanel.setLayout(generalPanelLayout);
         generalPanelLayout.setHorizontalGroup(
@@ -304,15 +318,19 @@ public class Clientes extends javax.swing.JPanel {
                                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(limCreditoField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                                     .addComponent(saldoField)))
-                            .addComponent(chequeCheck)
                             .addGroup(generalPanelLayout.createSequentialGroup()
                                 .addComponent(lbl_codigo5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(descuentoField))))
                     .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addGap(300, 300, 300)
-                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(190, Short.MAX_VALUE))
+                        .addGap(416, 416, 416)
+                        .addComponent(chequeCheck))
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addGap(212, 212, 212)
+                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(telefonosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         generalPanelLayout.setVerticalGroup(
             generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,11 +361,13 @@ public class Clientes extends javax.swing.JPanel {
                     .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chequeCheck))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(telefonosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 900, 210));
+        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 720, 210));
 
         eliminarButton.setBackground(new java.awt.Color(0, 0, 0));
         eliminarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -638,6 +658,10 @@ public class Clientes extends javax.swing.JPanel {
     private void direccionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_direccionFieldFocusGained
         direccionField.selectAll();
     }//GEN-LAST:event_direccionFieldFocusGained
+
+    private void telefonosButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_telefonosButtonMouseClicked
+        
+    }//GEN-LAST:event_telefonosButtonMouseClicked
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -667,6 +691,7 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JTextField nitField;
     private javax.swing.JTextField nombreField;
     private javax.swing.JFormattedTextField saldoField;
+    private javax.swing.JLabel telefonosButton;
     private javax.swing.JLabel verButton;
     // End of variables declaration//GEN-END:variables
 }

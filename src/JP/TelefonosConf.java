@@ -68,131 +68,218 @@ public class TelefonosConf extends javax.swing.JDialog {
     private void initComponents() {
 
         textArea1 = new java.awt.TextArea();
-        jPanel1 = new javax.swing.JPanel();
-        btn_Cancelar = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        lbl_Titulo = new javax.swing.JLabel();
-        Salir1 = new javax.swing.JLabel();
-        Icono = new javax.swing.JLabel();
-        btn_Aceptar = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        generalButton = new javax.swing.JLabel();
+        ingresarButton = new javax.swing.JLabel();
+        nombreField = new javax.swing.JTextField();
+        lbl_codigo = new javax.swing.JLabel();
+        usuariosCombo1 = new javax.swing.JComboBox<>();
+        userIButtton = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 0, 0));
         setUndecorated(true);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.setBackground(new java.awt.Color(0, 0, 0));
 
-        btn_Cancelar.setBackground(new java.awt.Color(255, 0, 0));
-        btn_Cancelar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        btn_Cancelar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_Cancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn_Cancelar.setText("CANCELAR");
-        btn_Cancelar.setOpaque(true);
-        btn_Cancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+        generalButton.setBackground(new java.awt.Color(255, 0, 0));
+        generalButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        generalButton.setForeground(new java.awt.Color(255, 255, 255));
+        generalButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        generalButton.setText("GUARDAR");
+        generalButton.setName(""); // NOI18N
+        generalButton.setOpaque(true);
+        generalButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_CancelarMouseClicked(evt);
-            }
-        });
-        jPanel1.add(btn_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 160, 40));
-
-        jPanel2.setBackground(new java.awt.Color(255, 0, 0));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-
-        lbl_Titulo.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        lbl_Titulo.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_Titulo.setText("TITULO");
-
-        Salir1.setBackground(new java.awt.Color(255, 0, 0));
-        Salir1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Salir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/cancel (2).png"))); // NOI18N
-        Salir1.setOpaque(true);
-        Salir1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Salir1MouseClicked(evt);
+                generalButtonMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_Titulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 270, Short.MAX_VALUE)
-                .addComponent(Salir1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        ingresarButton.setBackground(new java.awt.Color(0, 0, 0));
+        ingresarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        ingresarButton.setForeground(new java.awt.Color(255, 255, 255));
+        ingresarButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ingresarButton.setText("INGRESO");
+        ingresarButton.setName(""); // NOI18N
+        ingresarButton.setOpaque(true);
+        ingresarButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ingresarButtonMouseClicked(evt);
+            }
+        });
+
+        nombreField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        nombreField.setBorder(null);
+        nombreField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        nombreField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                nombreFieldFocusGained(evt);
+            }
+        });
+
+        lbl_codigo.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lbl_codigo.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_codigo.setText("Nombre:");
+
+        usuariosCombo1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+
+        userIButtton.setBackground(new java.awt.Color(255, 0, 0));
+        userIButtton.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        userIButtton.setForeground(new java.awt.Color(255, 255, 255));
+        userIButtton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        userIButtton.setText("Ingreso");
+        userIButtton.setOpaque(true);
+        userIButtton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userIButttonMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(320, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(252, 252, 252))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(ingresarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(244, 244, 244))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(lbl_codigo)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78))))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(238, 238, 238)
+                        .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Salir1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_Titulo))
-                .addGap(0, 0, 0))
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(ingresarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_codigo)
+                .addGap(41, 41, 41)
+                .addComponent(usuariosCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, -1));
-
-        Icono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/info.png"))); // NOI18N
-        jPanel1.add(Icono, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
-
-        btn_Aceptar.setBackground(new java.awt.Color(255, 0, 0));
-        btn_Aceptar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        btn_Aceptar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_Aceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn_Aceptar.setText("ACEPTAR");
-        btn_Aceptar.setNextFocusableComponent(btn_Cancelar);
-        btn_Aceptar.setOpaque(true);
-        btn_Aceptar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_AceptarMouseClicked(evt);
-            }
-        });
-        btn_Aceptar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                btn_AceptarKeyReleased(evt);
-            }
-        });
-        jPanel1.add(btn_Aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 160, 40));
-
-        jScrollPane2.setBackground(new java.awt.Color(0, 0, 0));
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-
-        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(null);
-        jTextArea1.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-        jTextArea1.setEnabled(false);
-        jScrollPane2.setViewportView(jTextArea1);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 290, 90));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void nombreFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreFieldFocusGained
+        nombreField.selectAll();
+    }//GEN-LAST:event_nombreFieldFocusGained
+
+    private void generalButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generalButtonMouseClicked
+        try {
+            //Si esta en modo ingreso, modificación o eliminación, hace cosas distintas
+            //Se comprueba en que modo está
+            if(ingresarButton.getBackground()==Color.RED){
+                //Valida los datos de los textos de numero
+                descuentoField.commitEdit();
+                limCreditoField.commitEdit();
+                saldoField.commitEdit();
+                //Hace un ingreso a la BD
+                int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
+                if(resultado==1){
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
+                    dialogo.setVisible(true);
+                }
+                else if(resultado==0){
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
+                    dialogo.setVisible(true);
+                }
+                //Limpia el formulario
+                limpiar();
+            }else if(modificarButton.getBackground()==Color.RED){
+                //Valida los datos de los campos de numero
+                descuentoField.commitEdit();
+                limCreditoField.commitEdit();
+                saldoField.commitEdit();
+                //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
+                int filasMod=conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                dialogo.setVisible(true);
+                //Limpia el formulario
+                limpiar();
+            }else if(eliminarButton.getBackground()==Color.RED)
+            {
+                //Muestra un dialogo para confirmar si se quiere borrar el cliente
+                DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminación", "¿Esta seguro de eliminar al cliente seleccionado?");
+                dialogo.setVisible(true);
+                //Si se acepta, entonces lo borra
+                if(dialogo.isAceptar()){
+                    //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
+                    int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
+                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al cliente\nRegistros actualizados: "+filasMod);
+                    dialogo.setVisible(true);
+                    //Limpia el formulario
+                    limpiar();
+                }
+            }
+        } catch (SQLException|ParseException|NoSePuedeConectar ex) {
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
+            limpiar();
+        }
+
+    }//GEN-LAST:event_generalButtonMouseClicked
+
+    private void ingresarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresarButtonMouseClicked
+        //Limpia el formulario
+        limpiar();
+        //Setea el boton de ingresar como rojo
+        ingresarButton.setBackground(Color.RED);
+        //Muestra los paneles
+        listadoPanel.setEnabled(false);
+        listadoPanel.setVisible(true);
+        generalPanel.setVisible(true);
+        //Cambia el texto del botón
+        generalButton.setText("Ingresar");
+        generalButton.setEnabled(true);
+        //Pone el foco en el texto de nombre
+        nombreField.requestFocus();
+
+    }//GEN-LAST:event_ingresarButtonMouseClicked
+
+    private void userIButttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userIButttonMouseClicked
+        ingresoUserNuevo();
+    }//GEN-LAST:event_userIButttonMouseClicked
     /**
     *funcion booleana que retorna el valor de la opcion elegida en el cuadro de dialogo     
     * @return TRUE si se clickeo aceptar - FALSE si se cerro o se clickeo cancelar
@@ -200,33 +287,6 @@ public class TelefonosConf extends javax.swing.JDialog {
     public boolean isAceptar() {
         return aceptar;
     }
-
-    private void btn_CancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CancelarMouseClicked
-        // TODO add your handling code here:
-        this.setVisible(false);
-        
-    }//GEN-LAST:event_btn_CancelarMouseClicked
-
-    private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
-        // TODO add your handling code here:
-        aceptar=true;
-        this.setVisible(false);
-
-    }//GEN-LAST:event_btn_AceptarMouseClicked
-
-    private void Salir1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Salir1MouseClicked
-        // TODO add your handling code here:
-        this.setVisible(false);
-        
-    }//GEN-LAST:event_Salir1MouseClicked
-
-    private void btn_AceptarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_AceptarKeyReleased
-        int codigo=evt.getKeyCode();
-        if(codigo==KeyEvent.VK_ENTER||codigo==KeyEvent.VK_SPACE){
-            aceptar=true;
-            this.setVisible(false);
-        }
-    }//GEN-LAST:event_btn_AceptarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -274,15 +334,13 @@ public class TelefonosConf extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Icono;
-    private javax.swing.JLabel Salir1;
-    private javax.swing.JLabel btn_Aceptar;
-    private javax.swing.JLabel btn_Cancelar;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel lbl_Titulo;
+    private javax.swing.JLabel generalButton;
+    private javax.swing.JLabel ingresarButton;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lbl_codigo;
+    private javax.swing.JTextField nombreField;
     private java.awt.TextArea textArea1;
+    private javax.swing.JLabel userIButtton;
+    private javax.swing.JComboBox<String> usuariosCombo1;
     // End of variables declaration//GEN-END:variables
 }
