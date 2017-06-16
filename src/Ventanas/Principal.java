@@ -26,8 +26,11 @@ import javax.swing.JPanel;
  * @author jonathanmiranda
  */
 public class Principal extends javax.swing.JFrame {
-    Conexion conexion;
-    JPanel compras,productos,seguridad, clientes;
+    private Conexion conexion;
+    private Seguridad seguridad;
+    private Clientes clientes;
+    private Compras panel_Compras;
+    private Ventas panel_Ventas;
     /**
      * Creates new form Principal
      */
@@ -240,7 +243,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.repaint();
         jPanel2.repaint();           
     }//GEN-LAST:event_btn_InventarioMouseClicked
-    private Compras panel_Compras; private Ventas panel_Ventas;
+    
     private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
         setEtiqueta(btn_Compras);
         resetEtiqueta(jLabel3);
