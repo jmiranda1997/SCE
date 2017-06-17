@@ -1212,7 +1212,22 @@ public class Conexion {
         };
         return modelo;
     } 
-    
+    /**
+     * Invoca una funcion almacenada que ingresa trabajadores
+     * @param DPI DPI del trabajador
+     * @param nombre nombre del trabajador
+     * @param apellido apellido del trabajador
+     * @param telefono telefono del trabajador
+     * @param comision comisión del trabajador
+     * @param direccion dirección del trabajador
+     * @param salario salario del trabajador
+     * @param bono bono incentivo del trabajador
+     * @param fechaInicio fecha en que inició a trabajar
+     * @param fechaBono fecha para el bono incentivo
+     * @return 1 si se insertó, 0 de lo contrario
+     * @throws SQLException
+     * @throws NoSePuedeConectar 
+     */
     public int crearTrabajador(String DPI, String nombre, String apellido, String telefono, float comision, String direccion, float salario, float bono, String fechaInicio, String fechaBono) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -1225,7 +1240,23 @@ public class Conexion {
         conexion.close();
         return res;
     }
-    
+    /**
+     * Modifica los datos de un trabajador
+     * @param id ID del trabajador
+     * @param DPI DPI del trabajador
+     * @param nombre nombre del trabajador
+     * @param apellido apellido del trabajador
+     * @param telefono telefono del trabajador
+     * @param comision comisión del trabajador
+     * @param direccion dirección del trabajador
+     * @param salario salario del trabajador
+     * @param bono bono incentivo del trabajador
+     * @param fechaInicio fecha en que inició a trabajar
+     * @param fechaBono fecha para el bono incentivo
+     * @return el número de filas afectadas
+     * @throws SQLException en caso de error
+     * @throws NoSePuedeConectar en caso de que no pueda conectarse a la BD
+     */
     public int modificarTrabajador(int id, String DPI, String nombre, String apellido, String telefono, float comision, String direccion, float salario, float bono, String fechaInicio, String fechaBono) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
@@ -1234,8 +1265,8 @@ public class Conexion {
         return resultado;
     }
     /**
-     * Elimina un cliente de la BD
-     * @param id id del cliente a borrar
+     * Elimina un trabajador de la BD
+     * @param id id del trabajador a borrar
      * @return el numero de filas afectadas (debe ser 1)
      * @throws SQLException en caso de error
      * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD

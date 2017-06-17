@@ -9,6 +9,7 @@ import Excepciones.NoSePuedeConectar;
 import RobertoPruebas.*;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import javax.swing.JFrame;
@@ -74,7 +75,16 @@ public class Trabajadores extends javax.swing.JPanel {
             if(seleccion!=-1){
                 dpiField.setText(listadoTable.getValueAt(seleccion,1).toString());
                 nombreField.setText(listadoTable.getValueAt(seleccion,2).toString());
-                
+                apellidoField.setText(listadoTable.getValueAt(seleccion,3).toString());
+                telefonoField.setText(listadoTable.getValueAt(seleccion,4).toString());
+                comisionField.setText(listadoTable.getValueAt(seleccion,5).toString());
+                direccionField.setText(listadoTable.getValueAt(seleccion,6).toString());
+                salarioField.setText(listadoTable.getValueAt(seleccion,7).toString());
+                bonoField.setText(listadoTable.getValueAt(seleccion,8).toString());
+                String fecha=listadoTable.getValueAt(seleccion,9).toString();
+                inicioDate.setDate(new Date(Integer.parseInt(fecha.substring(0, 4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(6,8))));
+                fecha=listadoTable.getValueAt(seleccion,10).toString();
+                bonoDate.setDate(new Date(Integer.parseInt(fecha.substring(0, 4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(6,8))));
             }
         }
     }
@@ -109,6 +119,8 @@ public class Trabajadores extends javax.swing.JPanel {
         lbl_codigo9 = new javax.swing.JLabel();
         inicioDate = new com.toedter.calendar.JDateChooser();
         bonoDate = new com.toedter.calendar.JDateChooser();
+        lbl_codigo10 = new javax.swing.JLabel();
+        direccionField = new javax.swing.JTextField();
         eliminarButton = new javax.swing.JLabel();
         verButton = new javax.swing.JLabel();
         listadoPanel = new javax.swing.JPanel();
@@ -172,7 +184,7 @@ public class Trabajadores extends javax.swing.JPanel {
         apellidoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         apellidoField.setBorder(null);
         apellidoField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        apellidoField.setNextFocusableComponent(dpiField);
+        apellidoField.setNextFocusableComponent(telefonoField);
         apellidoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 apellidoFieldFocusGained(evt);
@@ -186,6 +198,7 @@ public class Trabajadores extends javax.swing.JPanel {
         telefonoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         telefonoField.setBorder(null);
         telefonoField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        telefonoField.setNextFocusableComponent(direccionField);
         telefonoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 telefonoFieldFocusGained(evt);
@@ -199,7 +212,7 @@ public class Trabajadores extends javax.swing.JPanel {
         dpiField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         dpiField.setBorder(null);
         dpiField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        dpiField.setNextFocusableComponent(telefonoField);
+        dpiField.setNextFocusableComponent(nombreField);
         dpiField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 dpiFieldFocusGained(evt);
@@ -234,6 +247,7 @@ public class Trabajadores extends javax.swing.JPanel {
         bonoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         bonoField.setText("0.00");
         bonoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        bonoField.setNextFocusableComponent(inicioDate);
         bonoField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 bonoFieldFocusGained(evt);
@@ -243,6 +257,7 @@ public class Trabajadores extends javax.swing.JPanel {
         comisionField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         comisionField.setText("0.00");
         comisionField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        comisionField.setNextFocusableComponent(salarioField);
         comisionField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 comisionFieldFocusGained(evt);
@@ -252,6 +267,7 @@ public class Trabajadores extends javax.swing.JPanel {
         salarioField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         salarioField.setText("0.00");
         salarioField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        salarioField.setNextFocusableComponent(bonoField);
         salarioField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 salarioFieldFocusGained(evt);
@@ -268,107 +284,137 @@ public class Trabajadores extends javax.swing.JPanel {
 
         inicioDate.setDateFormatString("yyyy/MM/dd");
         inicioDate.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        inicioDate.setNextFocusableComponent(bonoDate);
 
         bonoDate.setDateFormatString("yyyy/MM/dd");
         bonoDate.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        bonoDate.setNextFocusableComponent(generalButton);
+
+        lbl_codigo10.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lbl_codigo10.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_codigo10.setText("Dirección:");
+
+        direccionField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        direccionField.setBorder(null);
+        direccionField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        direccionField.setNextFocusableComponent(comisionField);
+        direccionField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                direccionFieldFocusGained(evt);
+            }
+        });
 
         javax.swing.GroupLayout generalPanelLayout = new javax.swing.GroupLayout(generalPanel);
         generalPanel.setLayout(generalPanelLayout);
         generalPanelLayout.setHorizontalGroup(
             generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(generalPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
+                                .addComponent(lbl_codigo2)
+                                .addGap(11, 11, 11))
+                            .addGroup(generalPanelLayout.createSequentialGroup()
+                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_codigo4)
+                                    .addComponent(lbl_codigo1)
+                                    .addComponent(lbl_codigo))
+                                .addGap(15, 15, 15)))
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dpiField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(apellidoField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nombreField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(telefonoField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addComponent(lbl_codigo10)
+                        .addGap(4, 4, 4)
+                        .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addComponent(lbl_codigo4)
-                                .addGap(125, 125, 125)
-                                .addComponent(dpiField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lbl_codigo1, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_codigo, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_codigo2)
-                                    .addComponent(lbl_codigo5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(comisionField)
-                                    .addComponent(telefonoField, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addComponent(lbl_codigo9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(bonoDate, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_codigo3)
-                                    .addComponent(lbl_codigo7)
-                                    .addComponent(lbl_codigo8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bonoField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(salarioField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inicioDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(lbl_codigo9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addComponent(bonoDate, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addGap(200, 200, 200)
-                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_codigo3)
+                            .addComponent(lbl_codigo7)
+                            .addComponent(lbl_codigo8)
+                            .addComponent(lbl_codigo5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comisionField)
+                            .addComponent(bonoField)
+                            .addComponent(salarioField)
+                            .addComponent(inicioDate, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(113, 113, 113))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(303, 303, 303))
         );
         generalPanelLayout.setVerticalGroup(
             generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(generalPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(generalPanelLayout.createSequentialGroup()
                         .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_codigo4)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(comisionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lbl_codigo5)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lbl_codigo4)
-                                    .addComponent(dpiField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(salarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3))
+                            .addComponent(lbl_codigo3)
+                            .addComponent(lbl_codigo))
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(generalPanelLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lbl_codigo)
-                                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(generalPanelLayout.createSequentialGroup()
-                                    .addComponent(salarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(bonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(generalPanelLayout.createSequentialGroup()
-                                    .addComponent(lbl_codigo3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(lbl_codigo7))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lbl_codigo1)
+                                .addGap(9, 9, 9))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(bonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_codigo7))
+                                .addGap(10, 10, 10)))
                         .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lbl_codigo8))
-                            .addComponent(lbl_codigo1)
-                            .addComponent(inicioDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(generalPanelLayout.createSequentialGroup()
+                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_codigo8)
+                                    .addComponent(inicioDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(8, 8, 8)
+                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_codigo9, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(bonoDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(generalPanelLayout.createSequentialGroup()
+                                .addComponent(lbl_codigo2)
+                                .addGap(5, 5, 5)
+                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(generalPanelLayout.createSequentialGroup()
+                                        .addGap(3, 3, 3)
+                                        .addComponent(lbl_codigo10))
+                                    .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(generalPanelLayout.createSequentialGroup()
+                        .addComponent(dpiField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_codigo2)
-                            .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_codigo9)))
-                    .addComponent(bonoDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comisionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_codigo5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 770, 250));
+        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 770, 240));
 
         eliminarButton.setBackground(new java.awt.Color(0, 0, 0));
         eliminarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -570,30 +616,46 @@ public class Trabajadores extends javax.swing.JPanel {
             //Si esta en modo ingreso, modificación o eliminación, hace cosas distintas
             //Se comprueba en que modo está
             if(ingresarButton.getBackground()==Color.RED){
-                //Valida los datos de los textos de numero
-                bonoField.commitEdit();
-                //Hace un ingreso a la BD
-                int resultado=1;//conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
-                //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
-                if(resultado==1){
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
+                //Comprobamos que hayan al menos ciertos datos
+                if(dpiField.getText().trim().length()>7&&!dpiField.getText().trim().equals("")&&!dpiField.getText().trim().equals("N/A")&&!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")||!apellidoField.getText().trim().equals("")&&!apellidoField.getText().trim().equals("N/A")&&!direccionField.getText().trim().equals("")&&!direccionField.getText().trim().equals("N/A")){
+                    //Valida los datos de los textos de numero
+                    bonoField.commitEdit();
+                    //Hace un ingreso a la BD
+                    String inicio=inicioDate.getDate().toString();
+                    String bono=bonoDate.getDate().toString();
+                    int resultado=conexion.crearTrabajador(dpiField.getText().trim(),nombreField.getText().trim(),apellidoField.getText().trim(),telefonoField.getText().trim(),Float.parseFloat(comisionField.getText()),direccionField.getText().trim(),Float.parseFloat(salarioField.getText()),Float.parseFloat(bonoField.getText()),inicio,bono);
+                    //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
+                    if(resultado==1){
+                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
+                        dialogo.setVisible(true);
+                    }
+                    else if(resultado==0){
+                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
+                        dialogo.setVisible(true);
+                    }
+                    //Limpia el formulario
+                    limpiar();
+                }else{
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono");
                     dialogo.setVisible(true);
+                    nombreField.requestFocus();
                 }
-                else if(resultado==0){
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
-                    dialogo.setVisible(true);
-                }
-                //Limpia el formulario
-                limpiar();
             }else if(modificarButton.getBackground()==Color.RED){
-                //Valida los datos de los campos de numero
-                bonoField.commitEdit();
-                //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
-                int filasMod=0;//conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
-                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
-                dialogo.setVisible(true);
-                //Limpia el formulario
-                limpiar();
+                //compruba que hayan un mínimo de datos ingresados
+                if(dpiField.getText().length()>7&&!dpiField.getText().equals("")&&!dpiField.getText().equals("N/A")&&!nombreField.getText().equals("")&&!nombreField.getText().equals("N/A")||!apellidoField.getText().equals("")&&!apellidoField.getText().equals("N/A")&&!direccionField.getText().equals("")&&!direccionField.getText().equals("N/A")){
+                    //Valida los datos de los campos de numero
+                    bonoField.commitEdit();
+                    //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
+                    int filasMod=0;//conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                    dialogo.setVisible(true);
+                    //Limpia el formulario
+                    limpiar();
+                }else{
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono");
+                    dialogo.setVisible(true);
+                    nombreField.requestFocus();
+                }
             }else if(eliminarButton.getBackground()==Color.RED)
             {
                 //Muestra un dialogo para confirmar si se quiere borrar el cliente
@@ -645,7 +707,7 @@ public class Trabajadores extends javax.swing.JPanel {
     }//GEN-LAST:event_telefonoFieldFocusGained
 
     private void comisionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_comisionFieldFocusGained
-        // TODO add your handling code here:
+        comisionField.selectAll();
     }//GEN-LAST:event_comisionFieldFocusGained
 
     private void bonoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_bonoFieldFocusGained
@@ -653,8 +715,12 @@ public class Trabajadores extends javax.swing.JPanel {
     }//GEN-LAST:event_bonoFieldFocusGained
 
     private void salarioFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_salarioFieldFocusGained
-        // TODO add your handling code here:
+        salarioField.selectAll();
     }//GEN-LAST:event_salarioFieldFocusGained
+
+    private void direccionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_direccionFieldFocusGained
+        direccionField.selectAll();
+    }//GEN-LAST:event_direccionFieldFocusGained
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -664,6 +730,7 @@ public class Trabajadores extends javax.swing.JPanel {
     private com.toedter.calendar.JDateChooser bonoDate;
     private javax.swing.JFormattedTextField bonoField;
     private javax.swing.JFormattedTextField comisionField;
+    private javax.swing.JTextField direccionField;
     private javax.swing.JTextField dpiField;
     private javax.swing.JLabel eliminarButton;
     private javax.swing.JLabel generalButton;
@@ -673,6 +740,7 @@ public class Trabajadores extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_codigo;
     private javax.swing.JLabel lbl_codigo1;
+    private javax.swing.JLabel lbl_codigo10;
     private javax.swing.JLabel lbl_codigo2;
     private javax.swing.JLabel lbl_codigo3;
     private javax.swing.JLabel lbl_codigo4;
