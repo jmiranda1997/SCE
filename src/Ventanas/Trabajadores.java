@@ -652,7 +652,6 @@ public class Trabajadores extends javax.swing.JPanel {
             //Se comprueba en que modo está
             if(ingresarButton.getBackground()==Color.RED){
                 //Comprobamos que hayan al menos ciertos datos
-                boolean dpi=dpiField.getText().trim().length()>10;
                 boolean telefono=telefonoField.getText().trim().length()==8;
                 if((dpiField.getText().trim().length()>10)&&!dpiField.getText().trim().equals("")&&!dpiField.getText().trim().equals("N/A")&&!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")||!apellidoField.getText().trim().equals("")&&!apellidoField.getText().trim().equals("N/A")&&!direccionField.getText().trim().equals("")&&!direccionField.getText().trim().equals("N/A")&&telefono){
                     //Valida los datos de los textos de numero
