@@ -47,9 +47,7 @@ public class Seguridad extends javax.swing.JPanel {
         usuariosPanel1.setVisible(false);
         //Ponemos los paneles en el mismo punto, de tal manera que todos estén en el centro, y no regados en el JFrame
         ingresarPanel.setBounds(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y, ingresarPanel.getBounds().width, ingresarPanel.getBounds().height);
-        //ingresarPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
         conexionPanel.setBounds(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y,conexionPanel.getBounds().width,conexionPanel.getBounds().height);
-        //conexionPanel.setLocation(eliminarPanel.getBounds().x, eliminarPanel.getBounds().y);
 //        this.validate();
 //        this.repaint();
     }

@@ -24,13 +24,13 @@ import javax.swing.table.DefaultTableModel;
 public class Trabajadores extends javax.swing.JPanel {
     Conexion conexion;
     /**
-     * Creates new form Clientes
+     * Creates new form Trabajadores
      */
     public Trabajadores() {
         initComponents();
     }
     /**
-     * Crea un nuevo panel de clientes
+     * Crea un nuevo panel de Trabajadores
      * @param conexion objeto para conectarse a la BD
      */
     public Trabajadores(Conexion conexion){
@@ -583,7 +583,7 @@ public class Trabajadores extends javax.swing.JPanel {
             //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
-            //Obtiene la lista de clientes y la setea en la tabla
+            //Obtiene la lista de Trabajadores y la setea en la tabla
             listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             //Setea el texto del boton
             generalButton.setText("Actualizar Datos");
@@ -607,7 +607,7 @@ public class Trabajadores extends javax.swing.JPanel {
             //Cambia el texto del botón
             generalButton.setText("Eliminar Selección");
             generalButton.setEnabled(true);
-            //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
+            //Obtiene la lista de trabajadores y la pone en la tabla, pone el foco en la misma
             listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             listadoTable.requestFocus();
         } catch (SQLException|NoSePuedeConectar ex) {
@@ -622,7 +622,7 @@ public class Trabajadores extends javax.swing.JPanel {
             limpiar();
             //Cambia el color del boton a rojo
             verButton.setBackground(Color.RED);
-            //Obtiene la lista de clientes y la pone en la tabla
+            //Obtiene la lista de trabajadores y la pone en la tabla
             listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             //Muestra los paneles
             listadoPanel.setVisible(true);
@@ -684,7 +684,8 @@ public class Trabajadores extends javax.swing.JPanel {
                 }
             }else if(modificarButton.getBackground()==Color.RED){
                 //compruba que hayan un mínimo de datos ingresados
-                if(dpiField.getText().length()>10&&!dpiField.getText().equals("")&&!dpiField.getText().equals("N/A")&&!nombreField.getText().equals("")&&!nombreField.getText().equals("N/A")||!apellidoField.getText().equals("")&&!apellidoField.getText().equals("N/A")&&!direccionField.getText().equals("")&&!direccionField.getText().equals("N/A")&&telefonoField.getText().length()<9){
+                boolean telefono=telefonoField.getText().trim().length()==8;
+                if((dpiField.getText().trim().length()>10)&&!dpiField.getText().trim().equals("")&&!dpiField.getText().trim().equals("N/A")&&!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")||!apellidoField.getText().trim().equals("")&&!apellidoField.getText().trim().equals("N/A")&&!direccionField.getText().trim().equals("")&&!direccionField.getText().trim().equals("N/A")&&telefono){
                     //Valida los datos de los campos de numero
                     bonoField.commitEdit();
                     salarioField.commitEdit();
@@ -708,14 +709,14 @@ public class Trabajadores extends javax.swing.JPanel {
                 }
             }else if(eliminarButton.getBackground()==Color.RED)
             {
-                //Muestra un dialogo para confirmar si se quiere borrar el cliente
-                DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminación", "¿Esta seguro de eliminar al cliente seleccionado?");
+                //Muestra un dialogo para confirmar si se quiere borrar el trabajador
+                DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_INTERROGANTE,"Eliminación", "¿Esta seguro de eliminar al trabajador seleccionado?");
                 dialogo.setVisible(true);
                 //Si se acepta, entonces lo borra
                 if(dialogo.isAceptar()){
                     //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
                     int filasMod=conexion.eliminarTrabajador(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
-                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al cliente\nRegistros actualizados: "+filasMod);
+                    dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al trabajador\nRegistros actualizados: "+filasMod);
                     dialogo.setVisible(true);
                     //Limpia el formulario
                     limpiar();

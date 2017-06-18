@@ -1179,7 +1179,7 @@ public class Conexion {
     }
      /**
      * Metodo que regresa la lista de trabajadores como un arreglo
-     * @return una DefaultTableModel con los clientes en la BD
+     * @return una DefaultTableModel con los trabajadores en la BD
      * @throws SQLException en caso de error
      * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
@@ -1283,23 +1283,99 @@ public class Conexion {
         return resultado;
     }
     /**
-     * Obtiene la lista de usuarios
-     * @return un arreglo con la lista de usuarios
+     * Obtiene una lista de todos los trabajadores para el módulo de ausencias
+     * @return ArrayList con los trabajadores habilitados, con el formato "Nombre Apellido-ID"
+     * @throws NoSePuedeConectar error al conectar a la BD
+     * @throws SQLException en caso de error
+     */
+    public ArrayList obtenerTrabajadoresAusencias() throws NoSePuedeConectar, SQLException{
+        ArrayList lista=new ArrayList();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Habilitado FROM Trabajador;");
+        while(resultado.next()){
+            if(resultado.getString("Habilitado").equals("1"))
+                lista.add(resultado.getString("Nombre")+" "+ resultado.getString("Apellido")+"-"+resultado.getString("id"));
+        }
+        conexion.close();
+        return lista;
+    }
+    /**
+     * Ingresa una nueva ausencia en la BD
+     * @param idTrabajador ID del trabajador que se ausentó
+     * @param fecha fecha en que ausentó
+     * @param descripcion el motivo por el cual se ausentó
+     * @param autorizada si su ausencia se autorizó o no
+     * @return número de filas afectadas, debe ser 1
+     * @throws SQLException en caso de error
+     * @throws NoSePuedeConectar en caso de que no pueda conectarse a la BD
+     */
+    public int ingresarAusencia(int idTrabajador, String fecha, String descripcion, boolean autorizada) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("INSERT ON Aucencia (Trabajador_id, Fecha, Descripcion, Autorizada) VALUES ("+idTrabajador+","+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",'"+descripcion+"',"+(autorizada?"1":"0")+");"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+     /**
+     * Modifica una ausencia en la BD
+     * @param id ID de la ausencia
+     * @param idTrabajador ID del trabajador que se ausentó
+     * @param fecha fecha en que ausentó
+     * @param descripcion el motivo por el cual se ausentó
+     * @param autorizada si su ausencia se autorizó o no
+     * @return número de filas afectadas, debe ser 1
+     * @throws SQLException en caso de error
+     * @throws NoSePuedeConectar en caso de que no pueda conectarse a la BD
+     */
+    public int modificarAusencia(int id,int idTrabajador, String fecha, String descripcion, boolean autorizada) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("UPDATE Aucencia SET Trabajador_id="+idTrabajador+",Fecha="+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",Descripcion='"+descripcion+"',Autorizada="+(autorizada?"1":"0")+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+    /**
+     * Metodo que regresa la lista de ausencias como un arreglo
+     * @return una DefaultTableModel con las ausencias en la BD
      * @throws SQLException en caso de error
      * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
-    public ArrayList obtenerUsuariosPTrabajadores() throws SQLException, NoSePuedeConectar{
-        ArrayList users=new ArrayList();
-        conectar(); //permite la conexion con la base de datos
-        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT u.Usuario FROM Usuario u INNER JOIN Trabajador t ON u.id=t.Usuario_id"); //se guarda el resultado de la instruccion
-        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
-        {
-            users.add(resultado.getString(1));
+    public DefaultTableModel obtenerAusencias() throws SQLException, NoSePuedeConectar{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaAusencias(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Trabajador_id, Fecha, Descripción, Autorizada FROM Ausencia;");
+        while(resultado.next()){
+            String trabActualID=resultado.getString("Trabajador_id"), autorizada=resultado.getString("Autorizada");
+            Statement consultaTrabajador=conexion.createStatement();
+            ResultSet resultadoT=consultaTrabajador.executeQuery("SELECT Nombre, Apellido FROM Trabajador WHERE id="+trabActualID);
+            if(resultadoT.next())
+                modelo.addRow(new String[] {resultado.getString("id"),resultadoT.getString(1)+" "+resultadoT.getString(2)+"-"+trabActualID, resultado.getString("Fecha"), resultado.getString("Descripcion"), (autorizada.equals("1")?"SI":"NO")});
         }
         conexion.close();
-        return users;
+        return modelo;
     }
+    /**
+     * Crea una nuevo DefaultTableModel para trabajadores
+     * @param modelo el modelo para la JTable, vacio o con otros datos
+     * @return el modelo para la JTable, inicializado
+     */
+    private DefaultTableModel inicializarTablaAusencias(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"ID", "Trabajador", "Fecha", "Descripción", "Autorizada"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
 //   public String fecha()throws SQLException, NoSePuedeConectar{
 //       String Fecha = "";
 //       conectar(); //permite la conexion con la base de datos

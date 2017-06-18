@@ -9,8 +9,11 @@ import Excepciones.NoSePuedeConectar;
 import RobertoPruebas.*;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -36,7 +39,6 @@ public class Ausencias extends javax.swing.JPanel {
         //Inicia los paneles invisibles, para que se seleccione una opcion
         listadoPanel.setVisible(false);
         generalPanel.setVisible(false);
-        telefonosButton.setVisible(false);//CAMBIAR AL FINALIZAR
         //Limpia el formulario
         limpiar();
     }
@@ -49,21 +51,21 @@ public class Ausencias extends javax.swing.JPanel {
         modificarButton.setBackground(Color.BLACK);
         eliminarButton.setBackground(Color.BLACK);
         verButton.setBackground(Color.BLACK);
-        //Limpia los JFields
-        nombreField.setText("");
-        apellidoField.setText("");
-        nitField.setText("");
-        //Inicializa con 0 los campos de numero
-        direccionField.setText("");
-        descuentoField.setText("0");
-        limCreditoField.setText("0");
-        saldoField.setText("0.00");
-        //Pone la opción de cheque como falso
-        chequeCheck.setSelected(false);
+        //Limpia el JTextArea
+        descripcionArea.setText("");
+        //Limpia el datePicker
+        fechaDate.setDate(null);
+        //Pone la fecha de hoy al datePicker
+        Calendar calendario= Calendar.getInstance();
+        fechaDate.setDate(calendario.getTime());
+        //Limpia el comboBox
+        int tamano=trabajadoresCombo.getModel().getSize();
+        for (int i = 0; i < tamano; i++) {
+            trabajadoresCombo.removeItemAt(0);
+        }
         //Setea un modelo vacio a la tabla
         listadoTable.setModel(new DefaultTableModel());
         listadoPanel.setEnabled(true);
-        
     }
     /**
      * Carga los datos de la fila seleccionada en los campos, si se esta en modo modificación
@@ -71,17 +73,8 @@ public class Ausencias extends javax.swing.JPanel {
     private void filaSeleccionada(){
         if(modificarButton.getBackground()==Color.RED){
             int seleccion=listadoTable.getSelectedRow();
-            if(seleccion!=-1){
-                nitField.setText((String)listadoTable.getValueAt(seleccion, 1));
-                nombreField.setText((String)listadoTable.getValueAt(seleccion, 2));
-                apellidoField.setText((String)listadoTable.getValueAt(seleccion, 3));
-                descuentoField.setText((String)listadoTable.getValueAt(seleccion, 4));
-                direccionField.setText((String)listadoTable.getValueAt(seleccion, 5));
-                limCreditoField.setText((String)listadoTable.getValueAt(seleccion, 6));
-                saldoField.setText((String)listadoTable.getValueAt(seleccion, 7));
-                chequeCheck.setSelected(((String)listadoTable.getValueAt(seleccion, 8)).equals("SI"));
-                
-            }
+            if(seleccion!=-1)
+            trabajadoresCombo.requestFocus();
         }
     }
     /**
@@ -97,22 +90,14 @@ public class Ausencias extends javax.swing.JPanel {
         modificarButton = new javax.swing.JLabel();
         generalPanel = new javax.swing.JPanel();
         lbl_codigo = new javax.swing.JLabel();
-        nombreField = new javax.swing.JTextField();
         lbl_codigo1 = new javax.swing.JLabel();
-        apellidoField = new javax.swing.JTextField();
-        lbl_codigo2 = new javax.swing.JLabel();
-        direccionField = new javax.swing.JTextField();
-        lbl_codigo3 = new javax.swing.JLabel();
-        nitField = new javax.swing.JTextField();
         lbl_codigo4 = new javax.swing.JLabel();
-        lbl_codigo5 = new javax.swing.JLabel();
-        chequeCheck = new javax.swing.JCheckBox();
         generalButton = new javax.swing.JLabel();
-        descuentoField = new javax.swing.JFormattedTextField();
-        limCreditoField = new javax.swing.JFormattedTextField();
-        lbl_codigo7 = new javax.swing.JLabel();
-        saldoField = new javax.swing.JFormattedTextField();
-        telefonosButton = new javax.swing.JLabel();
+        fechaDate = new com.toedter.calendar.JDateChooser();
+        trabajadoresCombo = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        descripcionArea = new javax.swing.JTextArea();
+        autorizadoCheck = new javax.swing.JCheckBox();
         eliminarButton = new javax.swing.JLabel();
         verButton = new javax.swing.JLabel();
         listadoPanel = new javax.swing.JPanel();
@@ -121,6 +106,7 @@ public class Ausencias extends javax.swing.JPanel {
         lbl_codigo6 = new javax.swing.JLabel();
         Minimizar = new javax.swing.JLabel();
         Salir = new javax.swing.JLabel();
+        chequeCheck2 = new javax.swing.JCheckBox();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -157,73 +143,15 @@ public class Ausencias extends javax.swing.JPanel {
 
         lbl_codigo.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo.setText("Nombre:");
-
-        nombreField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        nombreField.setBorder(null);
-        nombreField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        nombreField.setNextFocusableComponent(apellidoField);
-        nombreField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                nombreFieldFocusGained(evt);
-            }
-        });
+        lbl_codigo.setText("Fecha:");
 
         lbl_codigo1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo1.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo1.setText("Apellido:");
-
-        apellidoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        apellidoField.setBorder(null);
-        apellidoField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        apellidoField.setNextFocusableComponent(nitField);
-        apellidoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                apellidoFieldFocusGained(evt);
-            }
-        });
-
-        lbl_codigo2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lbl_codigo2.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo2.setText("Dirección:");
-
-        direccionField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        direccionField.setBorder(null);
-        direccionField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        direccionField.setNextFocusableComponent(descuentoField);
-        direccionField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                direccionFieldFocusGained(evt);
-            }
-        });
-
-        lbl_codigo3.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lbl_codigo3.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo3.setText("Límite de crédito:");
-
-        nitField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        nitField.setBorder(null);
-        nitField.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        nitField.setNextFocusableComponent(direccionField);
-        nitField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                nitFieldFocusGained(evt);
-            }
-        });
+        lbl_codigo1.setText("Descripción/Motivo:");
 
         lbl_codigo4.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo4.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo4.setText("NIT:");
-
-        lbl_codigo5.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lbl_codigo5.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo5.setText("% de descuento:");
-
-        chequeCheck.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        chequeCheck.setForeground(new java.awt.Color(255, 255, 255));
-        chequeCheck.setText("¿Se le acepta cheque?");
-        chequeCheck.setNextFocusableComponent(generalButton);
-        chequeCheck.setOpaque(false);
+        lbl_codigo4.setText("Trabajador:");
 
         generalButton.setBackground(new java.awt.Color(255, 0, 0));
         generalButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -238,52 +166,19 @@ public class Ausencias extends javax.swing.JPanel {
             }
         });
 
-        descuentoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        descuentoField.setText("0");
-        descuentoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        descuentoField.setNextFocusableComponent(limCreditoField);
-        descuentoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                descuentoFieldFocusGained(evt);
-            }
-        });
+        fechaDate.setDateFormatString("yyyy/MM/dd");
+        fechaDate.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        limCreditoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        limCreditoField.setText("0");
-        limCreditoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        limCreditoField.setNextFocusableComponent(saldoField);
-        limCreditoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                limCreditoFieldFocusGained(evt);
-            }
-        });
+        trabajadoresCombo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
 
-        lbl_codigo7.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lbl_codigo7.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo7.setText("Saldo actual:");
+        descripcionArea.setColumns(20);
+        descripcionArea.setRows(5);
+        jScrollPane2.setViewportView(descripcionArea);
 
-        saldoField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        saldoField.setText("0.00");
-        saldoField.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        saldoField.setNextFocusableComponent(chequeCheck);
-        saldoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                saldoFieldFocusGained(evt);
-            }
-        });
-
-        telefonosButton.setBackground(new java.awt.Color(255, 0, 0));
-        telefonosButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        telefonosButton.setForeground(new java.awt.Color(255, 255, 255));
-        telefonosButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        telefonosButton.setText("TELEFONOS");
-        telefonosButton.setName(""); // NOI18N
-        telefonosButton.setOpaque(true);
-        telefonosButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                telefonosButtonMouseClicked(evt);
-            }
-        });
+        autorizadoCheck.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        autorizadoCheck.setForeground(new java.awt.Color(255, 255, 255));
+        autorizadoCheck.setText("¿Se le autorizó?");
+        autorizadoCheck.setOpaque(false);
 
         javax.swing.GroupLayout generalPanelLayout = new javax.swing.GroupLayout(generalPanel);
         generalPanel.setLayout(generalPanelLayout);
@@ -294,77 +189,47 @@ public class Ausencias extends javax.swing.JPanel {
                     .addGroup(generalPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lbl_codigo1)
-                                .addComponent(lbl_codigo))
                             .addComponent(lbl_codigo4)
-                            .addComponent(lbl_codigo2))
-                        .addGap(68, 68, 68)
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nitField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_codigo3)
-                                    .addComponent(lbl_codigo7))
-                                .addGap(7, 7, 7)
-                                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(limCreditoField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                                    .addComponent(saldoField)))
-                            .addGroup(generalPanelLayout.createSequentialGroup()
-                                .addComponent(lbl_codigo5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(descuentoField))))
+                            .addComponent(lbl_codigo))
+                        .addGap(94, 94, 94)
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(trabajadoresCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fechaDate, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addGap(416, 416, 416)
-                        .addComponent(chequeCheck))
+                        .addGap(9, 9, 9)
+                        .addComponent(lbl_codigo1)
+                        .addGap(18, 18, 18)
+                        .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(autorizadoCheck)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(generalPanelLayout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(telefonosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(304, 304, 304)
+                        .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(188, Short.MAX_VALUE))
         );
         generalPanelLayout.setVerticalGroup(
             generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(generalPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_codigo)
-                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_codigo5)
-                    .addComponent(descuentoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_codigo1)
-                    .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_codigo3)
-                    .addComponent(limCreditoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl_codigo4)
+                    .addComponent(trabajadoresCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lbl_codigo7)
-                        .addComponent(saldoField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lbl_codigo4)
-                        .addComponent(nitField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(fechaDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_codigo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_codigo2)
-                    .addComponent(direccionField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chequeCheck))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(telefonosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_codigo1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addComponent(autorizadoCheck)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(generalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 720, 210));
+        add(generalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 770, 270));
 
         eliminarButton.setBackground(new java.awt.Color(0, 0, 0));
         eliminarButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -384,7 +249,7 @@ public class Ausencias extends javax.swing.JPanel {
         verButton.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         verButton.setForeground(new java.awt.Color(255, 255, 255));
         verButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        verButton.setText("VER CLIENTES");
+        verButton.setText("VER AUSENCIAS");
         verButton.setName(""); // NOI18N
         verButton.setOpaque(true);
         verButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -392,7 +257,7 @@ public class Ausencias extends javax.swing.JPanel {
                 verButtonMouseClicked(evt);
             }
         });
-        add(verButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 160, 50));
+        add(verButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 190, 50));
 
         listadoPanel.setOpaque(false);
 
@@ -425,7 +290,7 @@ public class Ausencias extends javax.swing.JPanel {
 
         lbl_codigo6.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lbl_codigo6.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_codigo6.setText("Listado de clientes:");
+        lbl_codigo6.setText("Listado de ausencias:");
 
         javax.swing.GroupLayout listadoPanelLayout = new javax.swing.GroupLayout(listadoPanel);
         listadoPanel.setLayout(listadoPanelLayout);
@@ -436,7 +301,7 @@ public class Ausencias extends javax.swing.JPanel {
                 .addGroup(listadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(listadoPanelLayout.createSequentialGroup()
                         .addComponent(lbl_codigo6)
-                        .addContainerGap(743, Short.MAX_VALUE))
+                        .addContainerGap(723, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
         listadoPanelLayout.setVerticalGroup(
@@ -449,7 +314,7 @@ public class Ausencias extends javax.swing.JPanel {
                 .addGap(68, 68, 68))
         );
 
-        add(listadoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 920, 320));
+        add(listadoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 920, 310));
 
         Minimizar.setForeground(new java.awt.Color(255, 255, 255));
         Minimizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosSCE/minus-symbol.png"))); // NOI18N
@@ -470,6 +335,12 @@ public class Ausencias extends javax.swing.JPanel {
             }
         });
         add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 0, -1, -1));
+
+        chequeCheck2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        chequeCheck2.setForeground(new java.awt.Color(255, 255, 255));
+        chequeCheck2.setText("¿Se le acepta cheque?");
+        chequeCheck2.setOpaque(false);
+        add(chequeCheck2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void ingresarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresarButtonMouseClicked
@@ -484,8 +355,8 @@ public class Ausencias extends javax.swing.JPanel {
         //Cambia el texto del botón
         generalButton.setText("Ingresar");
         generalButton.setEnabled(true);
-        //Pone el foco en el texto de nombre
-        nombreField.requestFocus();
+        //Pone el foco en el texto de DPI
+        trabajadoresCombo.requestFocus();
         
     }//GEN-LAST:event_ingresarButtonMouseClicked
 
@@ -499,7 +370,7 @@ public class Ausencias extends javax.swing.JPanel {
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
             //Obtiene la lista de clientes y la setea en la tabla
-            listadoTable.setModel(conexion.obtenerClientesJP());
+            listadoTable.setModel(conexion.obtenerAusencias());
             //Setea el texto del boton
             generalButton.setText("Actualizar Datos");
             generalButton.setEnabled(true);
@@ -523,7 +394,7 @@ public class Ausencias extends javax.swing.JPanel {
             generalButton.setText("Eliminar Selección");
             generalButton.setEnabled(true);
             //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
-            listadoTable.setModel(conexion.obtenerClientesJP());
+            listadoTable.setModel(conexion.obtenerAusencias());
             listadoTable.requestFocus();
         } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Eliminación", "Error:\n"+ex.toString());
@@ -538,7 +409,7 @@ public class Ausencias extends javax.swing.JPanel {
             //Cambia el color del boton a rojo
             verButton.setBackground(Color.RED);
             //Obtiene la lista de clientes y la pone en la tabla
-            listadoTable.setModel(conexion.obtenerClientesJP());
+            listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
@@ -566,45 +437,53 @@ public class Ausencias extends javax.swing.JPanel {
             //Si esta en modo ingreso, modificación o eliminación, hace cosas distintas
             //Se comprueba en que modo está
             if(ingresarButton.getBackground()==Color.RED){
-                if(!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")){
-                    //Valida los datos de los textos de numero
-                    descuentoField.commitEdit();
-                    limCreditoField.commitEdit();
-                    saldoField.commitEdit();
-                    //Hace un ingreso a la BD
-                    int resultado=conexion.crearCliente(nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                //Comprobamos que hayan al menos ciertos datos
+                if(trabajadoresCombo.getSelectedIndex()!=-1&&fechaDate.getDate()!=null){
+                    //Crea las fechas como Strings
+                    String fecha="";
+                    if(fechaDate.getDate()!=null)
+                        fecha=""+(1900+fechaDate.getDate().getYear())+"-"+(1+fechaDate.getDate().getMonth())+"-"+fechaDate.getDate().getDate();
+                    //Obtenemos el ID del trabajador
+                    String[] trabajadorSeparado=trabajadoresCombo.getSelectedItem().toString().split("-");
+                    String idTrabajador=trabajadorSeparado[trabajadorSeparado.length-1];
+                    //Hace el ingreso a la BD
+                    int resultado=conexion.ingresarAusencia(Integer.parseInt(idTrabajador),fecha,descripcionArea.getText().trim(),autorizadoCheck.isSelected());
                     //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
                     if(resultado==1){
                         DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
                         dialogo.setVisible(true);
+                        //Limpia el formulario
+                        limpiar();
                     }
                     else if(resultado==0){
-                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
+                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este trabajador ya existe");
                         dialogo.setVisible(true);
                     }
+                }else{
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Debe ingresar al menos el trabajador y la fecha\nVerifique que todos los campos estén ingresados correctamente");
+                    dialogo.setVisible(true);
+                    trabajadoresCombo.requestFocus();
+                }
+            }else if(modificarButton.getBackground()==Color.RED){
+                //compruba que hayan un mínimo de datos ingresados
+                if(trabajadoresCombo.getSelectedIndex()!=-1&&fechaDate.getDate()!=null){
+                    //Crea las fechas como Strings
+                    String fecha="";
+                    if(fechaDate.getDate()!=null)
+                        fecha=""+(1900+fechaDate.getDate().getYear())+"-"+(1+fechaDate.getDate().getMonth())+"-"+fechaDate.getDate().getDate();
+                    //Obtenemos el ID del trabajador
+                    String[] trabajadorSeparado=trabajadoresCombo.getSelectedItem().toString().split("-");
+                    String idTrabajador=trabajadorSeparado[trabajadorSeparado.length-1];
+                    //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
+                    int filasMod=conexion.modificarAusencia(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),Integer.parseInt(idTrabajador),fecha,descripcionArea.getText().trim(),autorizadoCheck.isSelected());
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
+                    dialogo.setVisible(true);
                     //Limpia el formulario
                     limpiar();
                 }else{
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Debe ingresar al menos el nombre del cliente");
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono\nVerifique que todos los campos estén ingresados correctamente");
                     dialogo.setVisible(true);
-                    nombreField.requestFocus();
-                }
-            }else if(modificarButton.getBackground()==Color.RED){
-                if(!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")){
-                //Valida los datos de los campos de numero
-                descuentoField.commitEdit();
-                limCreditoField.commitEdit();
-                saldoField.commitEdit();
-                //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
-                int filasMod=conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
-                DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
-                dialogo.setVisible(true);
-                //Limpia el formulario
-                limpiar();
-                }else{
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificacion", "Debe ingresar al menos el nombre del cliente");
-                    dialogo.setVisible(true);
-                    nombreField.requestFocus();
+                    trabajadoresCombo.requestFocus();
                 }
             }else if(eliminarButton.getBackground()==Color.RED)
             {
@@ -614,17 +493,16 @@ public class Ausencias extends javax.swing.JPanel {
                 //Si se acepta, entonces lo borra
                 if(dialogo.isAceptar()){
                     //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
-                    int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
+                    int filasMod=conexion.eliminarTrabajador(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
                     dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al cliente\nRegistros actualizados: "+filasMod);
                     dialogo.setVisible(true);
                     //Limpia el formulario
                     limpiar();
                 }
             }
-        } catch (SQLException|ParseException|NoSePuedeConectar ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
-            limpiar();
         }
         
     }//GEN-LAST:event_generalButtonMouseClicked
@@ -639,68 +517,29 @@ public class Ausencias extends javax.swing.JPanel {
     private void SalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalirMouseClicked
         System.exit(0);
     }//GEN-LAST:event_SalirMouseClicked
-
-    private void descuentoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_descuentoFieldFocusGained
-        descuentoField.selectAll();
-    }//GEN-LAST:event_descuentoFieldFocusGained
-
-    private void limCreditoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_limCreditoFieldFocusGained
-        limCreditoField.selectAll();
-    }//GEN-LAST:event_limCreditoFieldFocusGained
-
-    private void saldoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_saldoFieldFocusGained
-        saldoField.selectAll();
-    }//GEN-LAST:event_saldoFieldFocusGained
-
-    private void nombreFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreFieldFocusGained
-        nombreField.selectAll();
-    }//GEN-LAST:event_nombreFieldFocusGained
-
-    private void apellidoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_apellidoFieldFocusGained
-        apellidoField.selectAll();
-    }//GEN-LAST:event_apellidoFieldFocusGained
-
-    private void nitFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nitFieldFocusGained
-        nitField.selectAll();
-    }//GEN-LAST:event_nitFieldFocusGained
-
-    private void direccionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_direccionFieldFocusGained
-        direccionField.selectAll();
-    }//GEN-LAST:event_direccionFieldFocusGained
-
-    private void telefonosButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_telefonosButtonMouseClicked
-        
-    }//GEN-LAST:event_telefonosButtonMouseClicked
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Minimizar;
     private javax.swing.JLabel Salir;
-    private javax.swing.JTextField apellidoField;
-    private javax.swing.JCheckBox chequeCheck;
-    private javax.swing.JFormattedTextField descuentoField;
-    private javax.swing.JTextField direccionField;
+    private javax.swing.JCheckBox autorizadoCheck;
+    private javax.swing.JCheckBox chequeCheck2;
+    private javax.swing.JTextArea descripcionArea;
     private javax.swing.JLabel eliminarButton;
+    private com.toedter.calendar.JDateChooser fechaDate;
     private javax.swing.JLabel generalButton;
     private javax.swing.JPanel generalPanel;
     private javax.swing.JLabel ingresarButton;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbl_codigo;
     private javax.swing.JLabel lbl_codigo1;
-    private javax.swing.JLabel lbl_codigo2;
-    private javax.swing.JLabel lbl_codigo3;
     private javax.swing.JLabel lbl_codigo4;
-    private javax.swing.JLabel lbl_codigo5;
     private javax.swing.JLabel lbl_codigo6;
-    private javax.swing.JLabel lbl_codigo7;
-    private javax.swing.JFormattedTextField limCreditoField;
     private javax.swing.JPanel listadoPanel;
     private javax.swing.JTable listadoTable;
     private javax.swing.JLabel modificarButton;
-    private javax.swing.JTextField nitField;
-    private javax.swing.JTextField nombreField;
-    private javax.swing.JFormattedTextField saldoField;
-    private javax.swing.JLabel telefonosButton;
+    private javax.swing.JComboBox<String> trabajadoresCombo;
     private javax.swing.JLabel verButton;
     // End of variables declaration//GEN-END:variables
 }
