@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -54,6 +56,7 @@ public class Trabajadores extends javax.swing.JPanel {
         nombreField.setText("");
         apellidoField.setText("");
         telefonoField.setText("");
+        direccionField.setText("");
         //Inicializa con 0 los campos de numero
         bonoField.setText("0.00");
         comisionField.setText("0.00");
@@ -61,10 +64,13 @@ public class Trabajadores extends javax.swing.JPanel {
         //Limpia los datePickers
         inicioDate.setDate(null);
         bonoDate.setDate(null);
+        //Pone la fecha de hoy a los datesPickers
+        Calendar calendario= Calendar.getInstance();
+        inicioDate.setDate(null/*calendario.getTime()*/);
+        bonoDate.setDate(null/*calendario.getTime()*/);
         //Setea un modelo vacio a la tabla
         listadoTable.setModel(new DefaultTableModel());
         listadoPanel.setEnabled(true);
-        
     }
     /**
      * Carga los datos de la fila seleccionada en los campos, si se esta en modo modificación
@@ -81,11 +87,40 @@ public class Trabajadores extends javax.swing.JPanel {
                 direccionField.setText(listadoTable.getValueAt(seleccion,6).toString());
                 salarioField.setText(listadoTable.getValueAt(seleccion,7).toString());
                 bonoField.setText(listadoTable.getValueAt(seleccion,8).toString());
-                String fecha=listadoTable.getValueAt(seleccion,9).toString();
-                inicioDate.setDate(new Date(Integer.parseInt(fecha.substring(0, 4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(6,8))));
+                String fecha;
+                int dia,mes,anio;
+                fecha=listadoTable.getValueAt(seleccion,9).toString();
+                if(!fecha.equals("N/A")){
+                    anio=Integer.parseInt(fecha.substring(0,4));
+                    if(fecha.charAt(6)=='-'){
+                        mes=Integer.parseInt(fecha.substring(5,6));
+                        dia=Integer.parseInt(fecha.substring(7,fecha.length()));
+                    }
+                    else
+                    {
+                        mes=Integer.parseInt(fecha.substring(5,7));
+                        dia=Integer.parseInt(fecha.substring(8,fecha.length()));
+                    }
+                    inicioDate.setDate(new Date(anio-1900,mes-1,dia));
+                }else
+                    inicioDate.setDate(null);
                 fecha=listadoTable.getValueAt(seleccion,10).toString();
-                bonoDate.setDate(new Date(Integer.parseInt(fecha.substring(0, 4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(6,8))));
+                if(!fecha.equals("N/A")){
+                    anio=Integer.parseInt(fecha.substring(0,4));
+                     if(fecha.charAt(6)=='-'){
+                        mes=Integer.parseInt(fecha.substring(5,6));
+                        dia=Integer.parseInt(fecha.substring(7,fecha.length()));
+                    }
+                    else
+                    {
+                        mes=Integer.parseInt(fecha.substring(5,7));
+                        dia=Integer.parseInt(fecha.substring(8,fecha.length()));
+                    }
+                    bonoDate.setDate(new Date(anio-1900,mes-1,dia));
+                }else
+                    bonoDate.setDate(null);
             }
+            dpiField.requestFocus();
         }
     }
     /**
@@ -534,8 +569,8 @@ public class Trabajadores extends javax.swing.JPanel {
         //Cambia el texto del botón
         generalButton.setText("Ingresar");
         generalButton.setEnabled(true);
-        //Pone el foco en el texto de nombre
-        nombreField.requestFocus();
+        //Pone el foco en el texto de DPI
+        dpiField.requestFocus();
         
     }//GEN-LAST:event_ingresarButtonMouseClicked
 
@@ -549,7 +584,7 @@ public class Trabajadores extends javax.swing.JPanel {
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
             //Obtiene la lista de clientes y la setea en la tabla
-            listadoTable.setModel(conexion.obtenerClientesJP());
+            listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             //Setea el texto del boton
             generalButton.setText("Actualizar Datos");
             generalButton.setEnabled(true);
@@ -573,7 +608,7 @@ public class Trabajadores extends javax.swing.JPanel {
             generalButton.setText("Eliminar Selección");
             generalButton.setEnabled(true);
             //Obtiene la lista de clientes y la pone en la tabla, pone el foco en la misma
-            listadoTable.setModel(conexion.obtenerClientesJP());
+            listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             listadoTable.requestFocus();
         } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Eliminación", "Error:\n"+ex.toString());
@@ -588,7 +623,7 @@ public class Trabajadores extends javax.swing.JPanel {
             //Cambia el color del boton a rojo
             verButton.setBackground(Color.RED);
             //Obtiene la lista de clientes y la pone en la tabla
-            listadoTable.setModel(conexion.obtenerClientesJP());
+            listadoTable.setModel(conexion.obtenerTrabajadoresJP());
             //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
@@ -617,44 +652,59 @@ public class Trabajadores extends javax.swing.JPanel {
             //Se comprueba en que modo está
             if(ingresarButton.getBackground()==Color.RED){
                 //Comprobamos que hayan al menos ciertos datos
-                if(dpiField.getText().trim().length()>7&&!dpiField.getText().trim().equals("")&&!dpiField.getText().trim().equals("N/A")&&!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")||!apellidoField.getText().trim().equals("")&&!apellidoField.getText().trim().equals("N/A")&&!direccionField.getText().trim().equals("")&&!direccionField.getText().trim().equals("N/A")){
+                boolean dpi=dpiField.getText().trim().length()>10,telefono=telefonoField.getText().trim().length()==8;
+                if((dpiField.getText().trim().length()>10)&&!dpiField.getText().trim().equals("")&&!dpiField.getText().trim().equals("N/A")&&!nombreField.getText().trim().equals("")&&!nombreField.getText().trim().equals("N/A")||!apellidoField.getText().trim().equals("")&&!apellidoField.getText().trim().equals("N/A")&&!direccionField.getText().trim().equals("")&&!direccionField.getText().trim().equals("N/A")&&(telefonoField.getText().trim().length()==8)){
                     //Valida los datos de los textos de numero
                     bonoField.commitEdit();
-                    //Hace un ingreso a la BD
-                    String inicio=inicioDate.getDate().toString();
-                    String bono=bonoDate.getDate().toString();
+                    salarioField.commitEdit();
+                    comisionField.commitEdit();
+                    //Crea las fechas como Strings
+                    String inicio="",bono="";
+                    if(inicioDate.getDate()!=null)
+                        inicio=""+(1900+inicioDate.getDate().getYear())+"-"+(1+inicioDate.getDate().getMonth())+"-"+inicioDate.getDate().getDate();
+                    if(bonoDate.getDate()!=null)
+                        bono=""+(1900+bonoDate.getDate().getYear())+"-"+(1+bonoDate.getDate().getMonth())+"-"+bonoDate.getDate().getDate();
+                    //Hace el ingreso a la BD
                     int resultado=conexion.crearTrabajador(dpiField.getText().trim(),nombreField.getText().trim(),apellidoField.getText().trim(),telefonoField.getText().trim(),Float.parseFloat(comisionField.getText()),direccionField.getText().trim(),Float.parseFloat(salarioField.getText()),Float.parseFloat(bonoField.getText()),inicio,bono);
                     //Si el resultado es 1, significa que si se ingreso, si es 0 que no (ya existe)
                     if(resultado==1){
                         DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Se ha ingresado correctamente");
                         dialogo.setVisible(true);
+                        //Limpia el formulario
+                        limpiar();
                     }
                     else if(resultado==0){
-                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
+                        DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este trabajador ya existe");
                         dialogo.setVisible(true);
                     }
-                    //Limpia el formulario
-                    limpiar();
                 }else{
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono");
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono\nVerifique que todos los campos estén ingresados correctamente");
                     dialogo.setVisible(true);
-                    nombreField.requestFocus();
+                    dpiField.requestFocus();
                 }
             }else if(modificarButton.getBackground()==Color.RED){
                 //compruba que hayan un mínimo de datos ingresados
-                if(dpiField.getText().length()>7&&!dpiField.getText().equals("")&&!dpiField.getText().equals("N/A")&&!nombreField.getText().equals("")&&!nombreField.getText().equals("N/A")||!apellidoField.getText().equals("")&&!apellidoField.getText().equals("N/A")&&!direccionField.getText().equals("")&&!direccionField.getText().equals("N/A")){
+                if(dpiField.getText().length()>10&&!dpiField.getText().equals("")&&!dpiField.getText().equals("N/A")&&!nombreField.getText().equals("")&&!nombreField.getText().equals("N/A")||!apellidoField.getText().equals("")&&!apellidoField.getText().equals("N/A")&&!direccionField.getText().equals("")&&!direccionField.getText().equals("N/A")&&telefonoField.getText().length()<9){
                     //Valida los datos de los campos de numero
                     bonoField.commitEdit();
+                    salarioField.commitEdit();
+                    comisionField.commitEdit();
+                    //Crea las fechas como Strings
+                    String inicio="",bono="";
+                    if(inicioDate.getDate()!=null)
+                        inicio=""+(1900+inicioDate.getDate().getYear())+"-"+(1+inicioDate.getDate().getMonth())+"-"+inicioDate.getDate().getDate();
+                    if(bonoDate.getDate()!=null)
+                        bono=""+(1900+bonoDate.getDate().getYear())+"-"+(1+bonoDate.getDate().getMonth())+"-"+bonoDate.getDate().getDate();
                     //Hace la consulta de modificación y devuelve el número de filas cambiadas (Debe de ser 1)
-                    int filasMod=0;//conexion.modificarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),nombreField.getText().trim(), apellidoField.getText().trim(), (long)descuentoField.getValue(),direccionField.getText().trim(), (long)limCreditoField.getValue(),Float.parseFloat(saldoField.getText()),nitField.getText().trim(), chequeCheck.isSelected());
+                    int filasMod=conexion.modificarTrabajador(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()),dpiField.getText().trim(),nombreField.getText().trim(),apellidoField.getText().trim(),telefonoField.getText().trim(),Float.parseFloat(comisionField.getText()),direccionField.getText().trim(),Float.parseFloat(salarioField.getText()),Float.parseFloat(bonoField.getText()),inicio,bono);
                     DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Modificación", "Se ha actualizado correctamente\nRegistros actualizados: "+filasMod);
                     dialogo.setVisible(true);
                     //Limpia el formulario
                     limpiar();
                 }else{
-                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono");
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Modificación", "Debe ingresar al menos el DPI, Nombre, Apellido, Dirección y Telefono\nVerifique que todos los campos estén ingresados correctamente");
                     dialogo.setVisible(true);
-                    nombreField.requestFocus();
+                    dpiField.requestFocus();
                 }
             }else if(eliminarButton.getBackground()==Color.RED)
             {
@@ -664,7 +714,7 @@ public class Trabajadores extends javax.swing.JPanel {
                 //Si se acepta, entonces lo borra
                 if(dialogo.isAceptar()){
                     //Manda la orden de eliminación a la BD, devuelve el número de filas cambiadas
-                    int filasMod=conexion.eliminarCliente(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
+                    int filasMod=conexion.eliminarTrabajador(Integer.parseInt(listadoTable.getValueAt(listadoTable.getSelectedRow(),0).toString()));
                     dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Eliminación", "Se ha eliminado al cliente\nRegistros actualizados: "+filasMod);
                     dialogo.setVisible(true);
                     //Limpia el formulario
@@ -674,7 +724,6 @@ public class Trabajadores extends javax.swing.JPanel {
         } catch (SQLException|ParseException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
             dialogo.setVisible(true);
-            limpiar();
         }
         
     }//GEN-LAST:event_generalButtonMouseClicked

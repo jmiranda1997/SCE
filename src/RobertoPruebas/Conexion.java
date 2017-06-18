@@ -11,6 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -1189,8 +1190,10 @@ public class Conexion {
         Statement instruccion = conexion.createStatement();
         ResultSet resultado = instruccion.executeQuery("SELECT id, DPI, Nombre, Apellido, Telefono, Comision, Direccion, SalarioBase, BonoIncentivo, FechaDeInicio, FechaBono, Habilitado FROM Trabajador;");
         while(resultado.next()){
-            if(resultado.getString("Habilitado").equals("1"))
-                modelo.addRow(new String[] {resultado.getString("id"),resultado.getString("DPI"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Telefono"),resultado.getString("Comision"),resultado.getString("Dirección"),resultado.getString("SalarioBase"), resultado.getString("BonoIncentivo"), resultado.getString("FechaDeInicio"), resultado.getString("FechaBono")});
+            if(resultado.getString("Habilitado").equals("1")){
+                String fechaInicio=resultado.getString("FechaDeInicio"),fechaBono=resultado.getString("FechaBono");
+                modelo.addRow(new String[] {resultado.getString("id"),resultado.getString("DPI"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Telefono"),resultado.getString("Comision"),resultado.getString("Direccion"),resultado.getString("SalarioBase"), resultado.getString("BonoIncentivo"),(fechaInicio==null?"N/A":fechaInicio) ,(fechaBono==null?"N/A":fechaBono)});
+            }
         }
         conexion.close();
         return modelo;
@@ -1231,7 +1234,7 @@ public class Conexion {
     public int crearTrabajador(String DPI, String nombre, String apellido, String telefono, float comision, String direccion, float salario, float bono, String fechaInicio, String fechaBono) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT creaTrabajadores('"+(DPI.equals("")? "N/A":DPI)+"','"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"','"+(telefono.equals("")? "N/A":telefono)+"',"+comision+",'"+(direccion.equals("")? "N/A":direccion)+"',"+salario+","+bono+",'"+fechaInicio+"','"+fechaBono+"') R"); //se guarda el resultado de la instruccion
+        ResultSet resultado = instruccion.executeQuery("SELECT creaTrabajadores('"+(DPI.equals("")? "N/A":DPI)+"','"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"','"+(telefono.equals("")? "N/A":telefono)+"',"+comision+",'"+(direccion.equals("")? "N/A":direccion)+"',"+salario+","+bono+","+(fechaInicio.equals("")?"NULL":"'"+fechaInicio+"'")+","+(fechaBono.equals("")?"NULL":"'"+fechaBono+"'")+") R"); //se guarda el resultado de la instruccion
         int res=-1;
         while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
         {
@@ -1260,7 +1263,7 @@ public class Conexion {
     public int modificarTrabajador(int id, String DPI, String nombre, String apellido, String telefono, float comision, String direccion, float salario, float bono, String fechaInicio, String fechaBono) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        int resultado = instruccion.executeUpdate("UPDATE Trabajador SET DPI='"+(DPI.equals("")? "N/A":DPI)+"',Nombre='"+(nombre.equals("")? "N/A":nombre)+"',Apellido='"+(apellido.equals("")? "N/A":apellido)+"',Telefono='"+(telefono.equals("")? "N/A":telefono)+"',Comision="+comision+",Direccion='"+(direccion.equals("")? "N/A":direccion)+"',SalarioBase="+salario+",BonoIncentivo="+bono+",FechaDeInicio'"+fechaInicio+"',FechaBono='"+fechaBono+"' WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("UPDATE Trabajador SET DPI='"+(DPI.equals("")? "N/A":DPI)+"',Nombre='"+(nombre.equals("")? "N/A":nombre)+"',Apellido='"+(apellido.equals("")? "N/A":apellido)+"',Telefono='"+(telefono.equals("")? "N/A":telefono)+"',Comision="+comision+",Direccion='"+(direccion.equals("")? "N/A":direccion)+"',SalarioBase="+salario+",BonoIncentivo="+bono+",FechaDeInicio="+(fechaInicio.equals("")?"NULL":"'"+fechaInicio+"'")+",FechaBono="+(fechaBono.equals("")?"NULL":"'"+fechaBono+"'")+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
         conexion.close();
         return resultado;
     }
@@ -1279,7 +1282,24 @@ public class Conexion {
         conexion.close();
         return resultado;
     }
-  
+    /**
+     * Obtiene la lista de usuarios
+     * @return un arreglo con la lista de usuarios
+     * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
+     */
+    public ArrayList obtenerUsuariosPTrabajadores() throws SQLException, NoSePuedeConectar{
+        ArrayList users=new ArrayList();
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT u.Usuario FROM Usuario u INNER JOIN Trabajador t ON u.id=t.Usuario_id"); //se guarda el resultado de la instruccion
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            users.add(resultado.getString(1));
+        }
+        conexion.close();
+        return users;
+    }
 //   public String fecha()throws SQLException, NoSePuedeConectar{
 //       String Fecha = "";
 //       conectar(); //permite la conexion con la base de datos
