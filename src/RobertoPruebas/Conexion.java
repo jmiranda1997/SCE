@@ -11,7 +11,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -185,6 +184,30 @@ public class Conexion {
             }
         };
     }
+    private void iniciarTablaTrabajadadores() {
+//        
+        trabajadores = new DefaultTableModel(null, new String[]{"id", "Nombre"}){
+            boolean[] canEdit = new boolean [] {
+        false, false
+            };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
+    private void iniciarTablaTelefonos() {
+//        
+        telefonos = new DefaultTableModel(null, new String[]{"Nombre", "Tipo", "Numero"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false
+            };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+    }
 //    private void iniciarTablaClientes() {
 ////        
 //        Clientes = new DefaultTableModel(null, new String[]{"Codigo", "Nit",  "Nombre",  "Descuento", "Credito", "Saldo"}){
@@ -216,7 +239,7 @@ public class Conexion {
         instruccion.executeUpdate("UPDATE proveedor SET Habilitado = 0 WHERE Nombre = '" + Nombre + "';");
         conexion.close();
     }
-    private DefaultTableModel Proveedores, Productos, Pedidos, Clientes, Existencias;
+    private DefaultTableModel Proveedores, Productos, Pedidos, Clientes, Existencias, trabajadores, telefonos;
     /**
      * Metodo que regresa la lista de proveedores como un arreglo
      * @return
@@ -236,6 +259,34 @@ public class Conexion {
         }
         conexion.close();
         return Proveedores;
+    }
+    public DefaultTableModel obtenerTrabajadores() throws SQLException, NoSePuedeConectar{
+        trabajadores = null;
+        iniciarTablaTrabajadadores();
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Habilitado FROM Trabajador;");
+        while(resultado.next()){
+            boolean habilitado = (resultado.getString("Habilitado").equals("1"));
+            if(habilitado) trabajadores.addRow(new String[] {resultado.getInt("id") + "", resultado.getString("Nombre") + " " + resultado.getString("Apellido")});
+        }
+        conexion.close();
+        return trabajadores;
+    }
+    public DefaultTableModel obtenerTelefonoCliente(int Cliente_id) throws SQLException, NoSePuedeConectar{
+        telefonos = null;
+        iniciarTablaTelefonos();
+        if (Cliente_id != 0){
+            conectar();
+            Statement instruccion = conexion.createStatement();
+            ResultSet resultado = instruccion.executeQuery("SELECT t.Numero Numero, t.Extension Extencion, t.Nombre, ca.Codigo Codigo, tip.Tipo Tipo FROM telefono t INNER JOIN codigoarea ca ON t.CodigoArea_id = ca.id INNER JOIN tipotelefono tip ON t.Tipo_id = tip.id WHERE t.Cliente_id = " + Cliente_id + ";");
+            while(resultado.next()){
+                telefonos.addRow(new String[] {resultado.getString("Nombre") , resultado.getString("Tipo") , resultado.getString("Codigo") + " " + resultado.getString("Numero") + ((resultado.getString("Extencion") == null)? "": " Ext: " + resultado.getString("Extencion"))});
+            }
+            conexion.close();
+        }
+        return telefonos;
     }
     public DefaultTableModel obtenerProductos() throws SQLException, NoSePuedeConectar{
          Productos = null;
@@ -276,7 +327,7 @@ public class Conexion {
         conexion.close();
         return Existencias;
     }
-    private int sucursalId(String sucursal) throws SQLException, NoSePuedeConectar{
+    public int sucursalId(String sucursal) throws SQLException, NoSePuedeConectar{
         int id= 0;
         conectar();
         
@@ -466,6 +517,18 @@ public class Conexion {
         conexion.close();
         return res;
     }
+    public String obtenerUsuario (int Trabajador_id) throws NoSePuedeConectar, SQLException{
+        String User = "";
+        
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT u.Usuario U FROM trabajador t INNER JOIN usuario u ON t.Usuario_id = u.id WHERE t.id = " + Trabajador_id +";");
+        while (resultado.next()) {            
+            User = resultado.getString("U");
+        }
+        conexion.close();        
+        return User;
+    }
     /**
      * Invoca un procedimiento almacenado en la BD para crear un nuevo usuario
      * @param usuario usuario nuevo
@@ -515,6 +578,24 @@ public class Conexion {
         }
         conexion.close();
         return users;
+    }
+    public void insertarFormaPagoFac(float cantidad, String Descripccion,int  Tipo_id, int Fact_id) throws NoSePuedeConectar, SQLException{
+        conectar();
+        
+        Statement instruccion = conexion.createStatement();
+        instruccion.executeUpdate("INSERT INTO formapago (Cantidad, Descripcion, Tipo_id, Factura_id) VALUES (" + cantidad + ", '" + Descripccion + "', "+ Tipo_id + ", " +Fact_id + ");");
+        conexion.close();
+    }
+    public int obtenerFacid(String Numero, String Serie, int Sucursal_id) throws NoSePuedeConectar, SQLException{
+        int id= 0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id FROM factura WHERE Numero ='"+ Numero + "' AND Sucursales_id = " + Sucursal_id + " AND Serie = '" +Serie + "';");
+        while (resultado.next()) {            
+            id = resultado.getInt("id");
+        }
+        conexion.close();
+        return id;
     }
     /**
      * Metodo que inserta un nuevo producto en la base
@@ -724,7 +805,7 @@ public class Conexion {
    public void crearFactura(String Numero, String Serie, float sub, float iva, int cliente_id, int Usuario_id, int Sucursal_id, int Ventas_id, String comentario) throws SQLException, NoSePuedeConectar{
       conectar();
        Statement instruccion = conexion.createStatement();
-       instruccion.executeUpdate("INSERT INTO factura (Numero, Serie, Subtotal, IVA, Total, Cliente_id, Usuario_id, Sucursales_id, Ventas_id, Comentario) VALUES ('" + Numero + "', '"+ Serie+ "', "+sub+ ", " + iva + ", " + (sub+iva) +", "
+       instruccion.executeUpdate("INSERT INTO factura (Numero, Serie, Subtotal, IVA, Total, Cliente_id, Trabajador_id, Sucursales_id, Ventas_id, Comentario) VALUES ('" + Numero + "', '"+ Serie+ "', "+sub+ ", " + iva + ", " + (sub+iva) +", "
                +  cliente_id+ ", " + Usuario_id + ", " + Sucursal_id+ ", "+ Ventas_id + ", '" + comentario+ "');");
 
        conexion.close();
@@ -741,9 +822,9 @@ public class Conexion {
        ArrayList lista=new ArrayList();
         conectar();
         Statement instruccion=conexion.createStatement();
-        instruccion.executeUpdate("insert into ventas (Cliente_id,Usuario_id) values ("+idCliente+","+id_usuario+");");//se inseta el cloente
+        instruccion.executeUpdate("insert into ventas (Cliente_id, Trabajador_id) values ("+idCliente+","+id_usuario+");");//se inseta el cloente
         int id=0;
-        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Usuario_id="+id_usuario+" and date(NOW())=date(fecha);");//se obtiene el cliente insertado
+        ResultSet resultado=instruccion.executeQuery("select id from ventas where Cliente_id="+idCliente+" and Trabajador_id="+id_usuario+" and date(NOW())=date(fecha);");//se obtiene el cliente insertado
         while(resultado.next())
         { 
            id=resultado.getInt(1);
@@ -1396,6 +1477,17 @@ public class Conexion {
         }
         conexion.close();
         return lista;
+    }
+    public String obtenerNumeroFac(int id) throws NoSePuedeConectar, SQLException{
+        String numero = "";        
+        conectar();
+            Statement instruccion = conexion.createStatement();
+            ResultSet resultado = instruccion.executeQuery("SELECT NumeroFac FROM sucursales WHERE id = " + id + ";");
+            while (resultado.next()) {            
+                numero = resultado.getString("NumeroFac");
+            }
+        conexion.close();
+        return numero;
     }
 //   public String fecha()throws SQLException, NoSePuedeConectar{
 //       String Fecha = "";
