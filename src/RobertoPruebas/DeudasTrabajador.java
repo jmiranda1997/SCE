@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.NoSePuedeConectar;
 import Ventanas.selectorCliente;
 import java.awt.Color;
 import java.sql.SQLException;
@@ -50,6 +51,8 @@ public class DeudasTrabajador extends javax.swing.JPanel {
             ftx_prestamoTotal.setVisible(!adelanto);
         } catch (SQLException ex) {
             Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -57,7 +60,7 @@ public class DeudasTrabajador extends javax.swing.JPanel {
      * lo creo, si ya hay uno solo carga el monto
      * @throws SQLException 
      */
-    private void insertarPrestamo() throws SQLException{
+    private void insertarPrestamo() throws SQLException, NoSePuedeConectar{
         double prestamoMes=conexion.obtenerPrestamoMes(trabajadorActual,false,false);//Carga el prestamo del mes 
         if(prestamoMes==0)//SI es igual a 0 crea el prestamo del mes
         {
@@ -77,7 +80,7 @@ public class DeudasTrabajador extends javax.swing.JPanel {
      * Metodo que vuelve a cargar los datos a los campos de la deuda del mes y el monto
      * @throws SQLException 
      */
-    private void recargarMontos() throws SQLException
+    private void recargarMontos() throws SQLException, NoSePuedeConectar
     {
         ftx_deuda.setValue(conexion.obtenerPrestamoMes(trabajadorActual, adelanto,false));
         ftx_deuda.setText("Q"+String.format("%.2f",Double.parseDouble(ftx_deuda.getValue().toString())));
@@ -646,6 +649,8 @@ public class DeudasTrabajador extends javax.swing.JPanel {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSePuedeConectar ex) {
+                Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btn_SeleccionclienteMouseClicked
@@ -667,6 +672,8 @@ public class DeudasTrabajador extends javax.swing.JPanel {
             
         } catch (SQLException ex) {
             Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_adelantoMouseClicked
 
@@ -684,6 +691,8 @@ public class DeudasTrabajador extends javax.swing.JPanel {
             ftx_prestamoTotal.setValue(conexion.obtenerPrestamoMes(trabajadorActual,false, true));
             ftx_prestamoTotal.setText("Q"+String.format("%.2f",Double.parseDouble(ftx_prestamoTotal.getValue().toString())));
         } catch (SQLException ex) {
+            Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
             Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_prestamoMouseClicked
@@ -804,6 +813,8 @@ public class DeudasTrabajador extends javax.swing.JPanel {
                     insertarPrestamo();
             }
         } catch (SQLException ex) {
+            Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
             Logger.getLogger(DeudasTrabajador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_guardarMouseClicked

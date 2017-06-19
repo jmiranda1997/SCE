@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.NoSePuedeConectar;
 import Ventanas.*;
 import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
@@ -36,6 +37,8 @@ public class selectorTrabajador extends javax.swing.JDialog {
         } catch (SQLException ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(selectorTrabajador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -144,6 +147,8 @@ public class selectorTrabajador extends javax.swing.JDialog {
                     trabajador=Conexion_DB.obtenerTrabajadorDeuda(tabla_cliente.getValueAt(tabla_cliente.getSelectedRow(),0).toString(),
                             tabla_cliente.getValueAt(tabla_cliente.getSelectedRow(),1).toString());
                 } catch (SQLException ex) {
+                    Logger.getLogger(selectorTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSePuedeConectar ex) {
                     Logger.getLogger(selectorTrabajador.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

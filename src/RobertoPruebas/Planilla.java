@@ -5,9 +5,12 @@
  */
 package RobertoPruebas;
 
+import Excepciones.NoSePuedeConectar;
+import java.awt.Color;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,13 +19,44 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Planilla extends javax.swing.JPanel {
     private Conexion conexion;
+    private int mesActual=0, anioActual=0;
     private int id=0;
     /**
      * Creates new form Planilla
+     * @param conexion
      */
     public Planilla(Conexion conexion) {
         initComponents();
         this.conexion=conexion;
+        try {
+            mesActual=conexion.obtenerMesActual();
+            anioActual=conexion.obtenerAnio();
+            cmb_anio.setVisible(false);
+            cmb_mes.setVisible(false);
+            switch(mesActual){
+                case 1: lbl_mes.setText("Enero"); break;
+                case 2: lbl_mes.setText("Febrero"); break;
+                case 3: lbl_mes.setText("Marzo"); break;
+                case 4: lbl_mes.setText("Abril"); break;
+                case 5: lbl_mes.setText("Mayo"); break;
+                case 6: lbl_mes.setText("Junio"); break;
+                case 7: lbl_mes.setText("Julio"); break;
+                case 8: lbl_mes.setText("Agosto"); break;
+                case 9: lbl_mes.setText("Septiembre"); break;
+                case 10: lbl_mes.setText("Octubre"); break;
+                case 11: lbl_mes.setText("Noviembre"); break;
+                default: lbl_mes.setText("Diciembre"); break;  
+            }
+            lbl_anio.setText(anioActual+"");
+            for(int i=2000;i<=anioActual;i++)
+            {
+                cmb_anio.addItem(i+"");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -36,8 +70,15 @@ public class Planilla extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        btn_generar = new javax.swing.JLabel();
-        btn_Cancelar1 = new javax.swing.JLabel();
+        btn_actual = new javax.swing.JLabel();
+        lbl_nit = new javax.swing.JLabel();
+        lbl_nit1 = new javax.swing.JLabel();
+        lbl_nit2 = new javax.swing.JLabel();
+        lbl_anio = new javax.swing.JLabel();
+        lbl_mes = new javax.swing.JLabel();
+        cmb_anio = new javax.swing.JComboBox<>();
+        cmb_mes = new javax.swing.JComboBox<>();
+        btn_ver = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setPreferredSize(new java.awt.Dimension(930, 650));
@@ -57,27 +98,62 @@ public class Planilla extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        btn_generar.setBackground(new java.awt.Color(0, 0, 0));
-        btn_generar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        btn_generar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_generar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn_generar.setText("GENERAR");
-        btn_generar.setOpaque(true);
-        btn_generar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_actual.setBackground(new java.awt.Color(0, 0, 0));
+        btn_actual.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btn_actual.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_actual.setText("ACTUAL");
+        btn_actual.setOpaque(true);
+        btn_actual.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_generarMouseClicked(evt);
+                btn_actualMouseClicked(evt);
             }
         });
 
-        btn_Cancelar1.setBackground(new java.awt.Color(0, 0, 0));
-        btn_Cancelar1.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        btn_Cancelar1.setForeground(new java.awt.Color(255, 255, 255));
-        btn_Cancelar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn_Cancelar1.setText("GENERAR");
-        btn_Cancelar1.setOpaque(true);
-        btn_Cancelar1.addMouseListener(new java.awt.event.MouseAdapter() {
+        lbl_nit.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        lbl_nit.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_nit.setText("NIT");
+
+        lbl_nit1.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        lbl_nit1.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_nit1.setText("MES");
+
+        lbl_nit2.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        lbl_nit2.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_nit2.setText("AÑO");
+
+        lbl_anio.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        lbl_anio.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_anio.setText("-");
+
+        lbl_mes.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        lbl_mes.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_mes.setText("-");
+
+        cmb_anio.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        cmb_anio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_anioActionPerformed(evt);
+            }
+        });
+
+        cmb_mes.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        cmb_mes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        cmb_mes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_mesActionPerformed(evt);
+            }
+        });
+
+        btn_ver.setBackground(new java.awt.Color(0, 0, 0));
+        btn_ver.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btn_ver.setForeground(new java.awt.Color(255, 255, 255));
+        btn_ver.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_ver.setText("VER");
+        btn_ver.setOpaque(true);
+        btn_ver.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_Cancelar1MouseClicked(evt);
+                btn_verMouseClicked(evt);
             }
         });
 
@@ -87,45 +163,127 @@ public class Planilla extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 930, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(btn_Cancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(btn_generar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(lbl_nit1)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lbl_mes)
+                                .addGap(149, 149, 149)
+                                .addComponent(lbl_nit2))
+                            .addComponent(cmb_mes, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_anio)
+                            .addComponent(cmb_anio, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_actual, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btn_ver, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lbl_nit)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_Cancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_generar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_actual, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_ver, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_nit1)
+                    .addComponent(lbl_nit2)
+                    .addComponent(lbl_anio)
+                    .addComponent(lbl_mes))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmb_anio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmb_mes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lbl_nit)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_generarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_generarMouseClicked
+    private void btn_actualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_actualMouseClicked
         // TODO add your handling code here:
+        btn_actual.setBackground(Color.red);
+        btn_ver.setBackground(Color.BLACK);
+        cmb_mes.setVisible(false);
+        cmb_anio.setVisible(false);
         try {
-            {
-                id=this.conexion.obtenerPlanilla(conexion.obtenerMesActual(),2017);
-                DefaultTableModel tabla=conexion.obtenerPlanilla(conexion.obtenerMesActual());
+                id=this.conexion.obtenerIdPlanilla(mesActual,anioActual);
+                DefaultTableModel tabla=conexion.obtenerPlanilla(mesActual,id);
                 if(tabla!=null)
-                jTable1.setModel(tabla);
-            }
+                    jTable1.setModel(tabla);
+                conexion.actualizarPlanilla(id);
         } catch (SQLException ex) {
             Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btn_generarMouseClicked
+    }//GEN-LAST:event_btn_actualMouseClicked
 
-    private void btn_Cancelar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Cancelar1MouseClicked
+    private void cmb_anioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_anioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn_Cancelar1MouseClicked
+        try {
+                id=this.conexion.obtenerIdPlanilla(cmb_mes.getSelectedIndex()+1,Integer.parseInt(cmb_anio.getSelectedItem().toString()));
+                DefaultTableModel tabla=conexion.obtenerPlanilla(cmb_mes.getSelectedIndex()+1,id);
+                if(tabla!=null)
+                    jTable1.setModel(tabla);
+        } catch (SQLException ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cmb_anioActionPerformed
+
+    private void btn_verMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_verMouseClicked
+        // TODO add your handling code here:
+        btn_actual.setBackground(Color.black);
+        btn_ver.setBackground(Color.red);
+        cmb_mes.setVisible(true);
+        cmb_anio.setVisible(true);
+
+    }//GEN-LAST:event_btn_verMouseClicked
+
+    private void cmb_mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesActionPerformed
+        // TODO add your handling code here:
+        try {
+                id=this.conexion.obtenerIdPlanilla(cmb_mes.getSelectedIndex()+1,Integer.parseInt(cmb_anio.getSelectedItem().toString()));
+                DefaultTableModel tabla=conexion.obtenerPlanilla(cmb_mes.getSelectedIndex()+1,id);
+                if(tabla!=null)
+                    jTable1.setModel(tabla);
+        } catch (SQLException ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(Planilla.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_cmb_mesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btn_Cancelar1;
-    private javax.swing.JLabel btn_generar;
+    private javax.swing.JLabel btn_actual;
+    private javax.swing.JLabel btn_ver;
+    private javax.swing.JComboBox<String> cmb_anio;
+    private javax.swing.JComboBox<String> cmb_mes;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_anio;
+    private javax.swing.JLabel lbl_mes;
+    private javax.swing.JLabel lbl_nit;
+    private javax.swing.JLabel lbl_nit1;
+    private javax.swing.JLabel lbl_nit2;
     // End of variables declaration//GEN-END:variables
 }
