@@ -1277,7 +1277,6 @@ public class Conexion {
     public int eliminarTrabajador(int id) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
         int resultado = instruccion.executeUpdate("UPDATE Trabajador SET habilitado=0 WHERE id="+id+";"); //se guarda el resultado de la instruccion
         conexion.close();
         return resultado;
@@ -1313,8 +1312,7 @@ public class Conexion {
     public int ingresarAusencia(int idTrabajador, String fecha, String descripcion, boolean autorizada) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
-        int resultado = instruccion.executeUpdate("INSERT ON Aucencia (Trabajador_id, Fecha, Descripcion, Autorizada) VALUES ("+idTrabajador+","+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",'"+descripcion+"',"+(autorizada?"1":"0")+");"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("INSERT INTO Ausencia (Trabajador_id, Fecha, Descripcion, Autorizada) VALUES ("+idTrabajador+","+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",'"+descripcion+"',"+(autorizada?"1":"0")+");"); //se guarda el resultado de la instruccion
         conexion.close();
         return resultado;
     }
@@ -1332,8 +1330,7 @@ public class Conexion {
     public int modificarAusencia(int id,int idTrabajador, String fecha, String descripcion, boolean autorizada) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        //int resultado = instruccion.executeUpdate("DELETE FROM Cliente WHERE id="+id+";"); //se guarda el resultado de la instruccion
-        int resultado = instruccion.executeUpdate("UPDATE Aucencia SET Trabajador_id="+idTrabajador+",Fecha="+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",Descripcion='"+descripcion+"',Autorizada="+(autorizada?"1":"0")+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        int resultado = instruccion.executeUpdate("UPDATE Ausencia SET Trabajador_id="+idTrabajador+",Fecha="+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",Descripcion='"+descripcion+"',Autorizada="+(autorizada?"1":"0")+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
         conexion.close();
         return resultado;
     }
@@ -1348,7 +1345,7 @@ public class Conexion {
         modelo=inicializarTablaAusencias(modelo);
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado = instruccion.executeQuery("SELECT id, Trabajador_id, Fecha, Descripción, Autorizada FROM Ausencia;");
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Trabajador_id, Fecha, Descripcion, Autorizada FROM Ausencia;");
         while(resultado.next()){
             String trabActualID=resultado.getString("Trabajador_id"), autorizada=resultado.getString("Autorizada");
             Statement consultaTrabajador=conexion.createStatement();
@@ -1376,6 +1373,13 @@ public class Conexion {
         };
         return modelo;
     } 
+    public int eliminarAusencia(int id) throws NoSePuedeConectar, SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("DELETE FROM Ausencia WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
 //   public String fecha()throws SQLException, NoSePuedeConectar{
 //       String Fecha = "";
 //       conectar(); //permite la conexion con la base de datos
