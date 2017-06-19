@@ -32,7 +32,7 @@ public class Principal extends javax.swing.JFrame {
     private Compras panel_Compras;
     private Ventas panel_Ventas;
     private Trabajadores trabajadores;
-    private JPanel ausencias;
+    private Ausencias ausencias;
     /**
      * Creates new form Principal
      */
