@@ -35,7 +35,7 @@ public class selectorSucursal extends javax.swing.JDialog {
     private void inicializarTabala(){
         try {
             Sucursales = Conexion_DB.obtenerSucursales();
-            Tabla =new DefaultTableModel(null, new String[]{"Numero", "Factura", "Serie"}){
+            Tabla =new DefaultTableModel(null, new String[]{"Nombre", "Factura", "Serie"}){
                 boolean[] canEdit = new boolean [] {
                     false, false, false
                 };
@@ -181,7 +181,7 @@ public class selectorSucursal extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

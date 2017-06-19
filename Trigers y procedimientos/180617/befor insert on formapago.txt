@@ -1,0 +1,13 @@
+DELIMITER //
+
+DROP TRIGGER IF EXISTS nuevaFormaPago //
+
+CREATE TRIGGER nuevaFormaPago
+BEFORE INSERT ON formapago
+FOR EACH ROW
+BEGIN
+
+	SET NEW.Fecha = NOW();
+
+END //
+DELIMITER ; 
