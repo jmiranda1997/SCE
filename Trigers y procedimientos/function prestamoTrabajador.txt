@@ -1,0 +1,21 @@
+delimiter //
+drop function if exists prestamoTrabajador //
+create function prestamoTrabajador(vmes int, vtrabajadorid int, vAnticipo int) returns double
+begin
+	declare vanticipoMes double default 0;
+	if(vAnticipo=1) then
+		select sum(saldo) from trabajador t left join prestamos p on p.Trabajador_id=t.id where anticipo=1 and 	trabajador_id=vtrabajadorid  and month(p.Fecha)=vmes and year(p.Fecha)=year(now()) into vanticipoMes;
+		if(vanticipoMes is null) then
+			return 0;
+		else
+			return vanticipoMes;
+		end if;
+	else
+		select sum(saldo) from trabajador t left join prestamos p on p.Trabajador_id=t.id where anticipo=0 and 	trabajador_id=vtrabajadorid into vanticipoMes;
+		if(vanticipoMes is null) then
+			return 0;
+		else
+			return vanticipoMes;
+		end if;
+	end if;
+end; //

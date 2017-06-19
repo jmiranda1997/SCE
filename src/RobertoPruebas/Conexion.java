@@ -187,6 +187,68 @@ public class Conexion {
         };
         return tabla;
     }
+        private DefaultTableModel iniciarTablaTrabajador_planillaMeses(int mes) {
+        DefaultTableModel tabla;
+        if(mes>0){
+            String mesNombre;
+            switch (mes) {
+                case 1:
+                    mesNombre="Enero";
+                    break;
+                case 2:
+                    mesNombre="Febrero";
+                    break;
+                case 3:
+                    mesNombre="Marzo";
+                    break;
+                case 4:
+                    mesNombre="Abril";
+                    break;
+                case 5:
+                    mesNombre="Mayo";
+                    break;
+                case 6:
+                    mesNombre="Junio";
+                    break;
+                case 7:
+                    mesNombre="Julio";
+                    break;
+                case 8:
+                    mesNombre="Agosto";
+                    break;
+                case 9:
+                    mesNombre="Septiembre";
+                    break;
+                case 10:
+                    mesNombre="Octubre";
+                    break;
+                case 11:
+                    mesNombre="Noviembre";
+                    break;
+                default:
+                    mesNombre="Diciembre";
+                    break;
+            }
+            tabla = new DefaultTableModel(null, new String[]{"DPI","Nombre","Prestamo","Salario",mesNombre,"Anticipo","Comision","Pago Total","Alertas"}){
+                boolean[] canEdit = new boolean [] {false, false, false, false,false};
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            };
+        }
+        else
+        {
+            tabla = new DefaultTableModel(null, new String[]{"DPI","Nombre","Salario","Bono","Comision"}){
+                boolean[] canEdit = new boolean [] {false, false, false, false,false};
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            };
+        }
+        return tabla;
+    }
     private void iniciarTablaExistencias() {
 //        
         Existencias = new DefaultTableModel(null, new String[]{"Sucursal", "Cantidad"}){
@@ -1024,7 +1086,7 @@ public class Conexion {
         String[] datos=null;
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado=instruccion.executeQuery("select t.id, t.apellido,t.SalarioBase, "+
+        ResultSet resultado=instruccion.executeQuery("select t.id, t.apellido,t.SalarioBase,"+
                 "t.BonoIncentivo, t.Comision from trabajador t where dpi='"+dpi+"' and nombre='"+nombre+"';");
         if(resultado.next())
         {
@@ -1112,5 +1174,55 @@ public class Conexion {
                     +" where month(fecha)=month(now()) and year(fecha)=year(now()) and anticipo=0 and Trabajador_id="+trabajador+";");
         conexion.close();
     }
-    
+    public DefaultTableModel obtenerPlanilla(int mes) throws SQLException{
+        DefaultTableModel trabajadores=null;
+        trabajadores = iniciarTablaTrabajador_planillaMeses(mes);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select t.DPI,t.Nombre,apellido,prestamoTrabajador("+mes+",t.id,0),"+
+                "(t.SalarioBase+t.BonoIncentivo),(t.bonoincentivo/2-prestamoTrabajador("+ mes+",t.id,1)),prestamoTrabajador("+ mes+",t.id,1),"
+                        + "t.comision,t.bonoincentivo/2 from trabajador t where habilitado=1;");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2)+resultado.getString(3),
+                resultado.getString(4), resultado.getString(5),resultado.getString(6),resultado.getString(7),
+                resultado.getString(8),resultado.getString(9)};
+            trabajadores.addRow(fila);
+        }
+        conexion.close();
+        return trabajadores;
+    }
+    public int obtenerPlanilla(int mes,int anio) throws SQLException{
+        int idPlanilla=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select id from planillas where "
+                + "month(fecha)="+mes+" and "+anio+"=year(now());");
+        if(resultado.next())
+        {
+            idPlanilla=resultado.getInt(1);
+            conexion.close();
+        }
+        if(idPlanilla==0)
+        {
+            instruccion = conexion.createStatement();
+            instruccion.executeUpdate("insert into planillas (fecha,realizado) values (now(),0);");
+            conexion.close();
+            return obtenerPlanilla(mes, anio);
+        }
+        else 
+            return idPlanilla;
+    }
+    public int dia() throws SQLException{
+        int dia=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select day(now());");
+        if(resultado.next())
+        {
+            dia=resultado.getInt(1);
+        }
+        conexion.close();
+        return dia;
+    }
 }
