@@ -11,12 +11,8 @@ import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -387,7 +383,7 @@ public class Ausencias extends javax.swing.JPanel {
             //Cambia el texto del botón
             generalButton.setText("Ingresar");
             generalButton.setEnabled(true);
-            ArrayList trabajadores=conexion.obtenerTrabajadoresAusencias();
+            ArrayList trabajadores=conexion.obtenerTrabajadoresParaAusencias();
             for (int i = 0; i < trabajadores.size(); i++) {
                 trabajadoresCombo.addItem(trabajadores.get(i).toString());
             }
@@ -395,7 +391,8 @@ public class Ausencias extends javax.swing.JPanel {
             //Pone el foco en el texto de DPI
             trabajadoresCombo.requestFocus();
         } catch (NoSePuedeConectar|SQLException ex) {
-            Logger.getLogger(Ausencias.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
         }
         
     }//GEN-LAST:event_ingresarButtonMouseClicked
@@ -409,7 +406,7 @@ public class Ausencias extends javax.swing.JPanel {
             //Muestra los paneles
             listadoPanel.setVisible(true);
             generalPanel.setVisible(true);
-            ArrayList trabajadores=conexion.obtenerTrabajadoresAusencias();
+            ArrayList trabajadores=conexion.obtenerTrabajadoresParaAusencias();
             for (int i = 0; i < trabajadores.size(); i++) {
                 trabajadoresCombo.addItem(trabajadores.get(i).toString());
             }

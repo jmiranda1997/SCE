@@ -89,6 +89,8 @@ public class Seguridad extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         userIButtton = new javax.swing.JLabel();
         cancelarInButton = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        trabajadoresCombo = new javax.swing.JComboBox<>();
         gesConButton = new javax.swing.JLabel();
         gesUsuariosButton = new javax.swing.JLabel();
         usuariosPanel1 = new javax.swing.JPanel();
@@ -345,6 +347,12 @@ public class Seguridad extends javax.swing.JPanel {
             }
         });
 
+        jLabel10.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Trabajador:");
+
+        trabajadoresCombo.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+
         javax.swing.GroupLayout ingresarPanelLayout = new javax.swing.GroupLayout(ingresarPanel);
         ingresarPanel.setLayout(ingresarPanelLayout);
         ingresarPanelLayout.setHorizontalGroup(
@@ -356,14 +364,16 @@ public class Seguridad extends javax.swing.JPanel {
                         .addGroup(ingresarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel8))
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ingresarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(passIField2, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                            .addComponent(trabajadoresCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(passIField2, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                             .addComponent(passIField)
                             .addComponent(userIField)))
                     .addGroup(ingresarPanelLayout.createSequentialGroup()
-                        .addGap(60, 60, 60)
+                        .addGap(87, 87, 87)
                         .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cancelarInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -384,15 +394,19 @@ public class Seguridad extends javax.swing.JPanel {
                 .addGroup(ingresarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passIField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(ingresarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(trabajadoresCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(ingresarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(userIButtton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelarInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(ingresarPanel);
-        ingresarPanel.setBounds(10, 260, 349, 210);
+        ingresarPanel.setBounds(10, 260, 390, 180);
 
         gesConButton.setBackground(new java.awt.Color(255, 0, 0));
         gesConButton.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -622,8 +636,19 @@ public class Seguridad extends javax.swing.JPanel {
     }//GEN-LAST:event_logoutButtonMouseClicked
 
     private void verUsInButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verUsInButtonMouseClicked
-        ingresarPanel.setVisible(true);
-        usuariosPanel1.setVisible(false);
+        try {
+            ingresarPanel.setVisible(true);
+            usuariosPanel1.setVisible(false);
+            ArrayList trabajadores=conexion.obtenerTrabajadoresParaUsuarios();
+            for (int i = 0; i < trabajadores.size(); i++) {
+                trabajadoresCombo.addItem(trabajadores.get(i).toString());
+            }
+            trabajadoresCombo.setSelectedIndex(-1);
+        } catch (NoSePuedeConectar|SQLException ex) {
+            DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Error:\n"+ex.toString());
+            dialogo.setVisible(true);
+        }
+        
     }//GEN-LAST:event_verUsInButtonMouseClicked
 
     private void gesConButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gesConButtonMouseClicked
@@ -706,10 +731,13 @@ public class Seguridad extends javax.swing.JPanel {
         //Obtiene el nombre del usuario
         String user=userIField.getText();
         //Compara que las contraseñas sean iguales
-        if(!user.equals("")&&pass1.equals(pass2)&&!pass1.equals("")){
+        if(!user.equals("")&&pass1.equals(pass2)&&!pass1.equals("")&&trabajadoresCombo.getSelectedIndex()!=-1){
             try {
+                //Obtenemos el ID del trabajador
+                String[] trabajadorSeparado=trabajadoresCombo.getSelectedItem().toString().split("-");
+                int idTrabajador=Integer.parseInt(trabajadorSeparado[trabajadorSeparado.length-1]);
                 //Manda la orden de ingreso de usuario, si la función retorna 1 significa que se ingresó correctamente
-                if(conexion.crearUsuario(user, pass1)==1){
+                if(conexion.crearUsuario(user, pass1,idTrabajador)==1){
                     //Muestra un mensaje de exito, y limpia
                     DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_INFORMACION, "Ingreso", "Ingreso exitoso");
                     dialogo.setVisible(true);
@@ -717,6 +745,14 @@ public class Seguridad extends javax.swing.JPanel {
                     passIField2.setText("");
                     userIField.setText("");
                     limpiar();
+                }
+                else{
+                    DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Ingreso", "Este usuario ya existe");
+                    dialogo.setVisible(true);
+                    passIField.setText("");
+                    passIField2.setText("");
+                    userIField.setText("");
+                    userIField.requestFocus();
                 }
             } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo= new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "Error", "Error:\n"+ex.toString());
@@ -744,7 +780,10 @@ public class Seguridad extends javax.swing.JPanel {
         userField.setText("");
         passField.setText("");
         bdField.setText("");
-        
+        int tamano=trabajadoresCombo.getModel().getSize();
+        for (int i = 0; i < tamano; i++) {
+            trabajadoresCombo.removeItemAt(0);
+        }        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -762,6 +801,7 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JPanel ingresarPanel;
     private javax.swing.JTextField ipField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -776,6 +816,7 @@ public class Seguridad extends javax.swing.JPanel {
     private javax.swing.JPasswordField passIField;
     private javax.swing.JPasswordField passIField2;
     private javax.swing.JLabel probarDBButton;
+    private javax.swing.JComboBox<String> trabajadoresCombo;
     private javax.swing.JLabel userEButton;
     private javax.swing.JTextField userField;
     private javax.swing.JLabel userIButtton;

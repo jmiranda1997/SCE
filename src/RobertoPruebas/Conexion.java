@@ -474,10 +474,10 @@ public class Conexion {
      * @throws SQLException en caso de error
      * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
-    public int crearUsuario(String usuario, String pass) throws SQLException, NoSePuedeConectar{
+    public int crearUsuario(String usuario, String pass, int trabajadorID) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT creacionUsuarioVacio('"+usuario+"','"+pass+"','"+claveCifradoBase+"') R"); //se guarda el resultado de la instruccion
+        ResultSet resultado = instruccion.executeQuery("SELECT creacionUsuarioVacio('"+usuario+"','"+pass+"','"+claveCifradoBase+"',"+trabajadorID+") R"); //se guarda el resultado de la instruccion
         int res=-1;
         while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
         {
@@ -1287,7 +1287,7 @@ public class Conexion {
      * @throws NoSePuedeConectar error al conectar a la BD
      * @throws SQLException en caso de error
      */
-    public ArrayList obtenerTrabajadoresAusencias() throws NoSePuedeConectar, SQLException{
+    public ArrayList obtenerTrabajadoresParaAusencias() throws NoSePuedeConectar, SQLException{
         ArrayList lista=new ArrayList();
         conectar();
         Statement instruccion = conexion.createStatement();
@@ -1379,6 +1379,23 @@ public class Conexion {
         int resultado = instruccion.executeUpdate("DELETE FROM Ausencia WHERE id="+id+";"); //se guarda el resultado de la instruccion
         conexion.close();
         return resultado;
+    }
+    /**
+     * Obtiene una lista de todos los trabajadores para el módulo de usuarios
+     * @return ArrayList con los trabajadores habilitados, con el formato "Nombre Apellido-ID"
+     * @throws NoSePuedeConectar error al conectar a la BD
+     * @throws SQLException en caso de error
+     */
+    public ArrayList obtenerTrabajadoresParaUsuarios() throws NoSePuedeConectar, SQLException{
+        ArrayList lista=new ArrayList();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Habilitado FROM Trabajador WHERE Usuario_id IS NULL AND Habilitado=1;");
+        while(resultado.next()){
+            lista.add(resultado.getString("Nombre")+" "+ resultado.getString("Apellido")+"-"+resultado.getString("id"));
+        }
+        conexion.close();
+        return lista;
     }
 //   public String fecha()throws SQLException, NoSePuedeConectar{
 //       String Fecha = "";
