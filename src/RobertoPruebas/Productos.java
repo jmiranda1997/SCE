@@ -992,6 +992,8 @@ public class Productos extends javax.swing.JPanel {
                     txt_existencia.setText(conexion.obtenerExistencia(0, Integer.parseInt(productoActual.get(0).toString()))+"");
                     } catch (SQLException ex) {
                 Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSePuedeConectar ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
             }
                 
         }
