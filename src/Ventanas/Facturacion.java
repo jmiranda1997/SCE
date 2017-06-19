@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
 import java.awt.Color;
@@ -39,7 +40,7 @@ public class Facturacion extends javax.swing.JDialog {
         
         try {
             lbl_Fecha.setText(Conexion_DB.fecha());
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -665,7 +666,7 @@ public class Facturacion extends javax.swing.JDialog {
                     txt_Direccion.setEditable(true);
                     txt_Descuento.setText("0");
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                 dialogo.setVisible(true);
             }
@@ -755,7 +756,7 @@ public class Facturacion extends javax.swing.JDialog {
     private void tabla_detalleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_detalleKeyReleased
        if (evt.getKeyCode() == 112) {
                 selectorProductofac selector = new selectorProductofac(null, true, Sucursal[0]);
-                selector.setProductos(Productos);
+               // selector.setProductos(Productos);
                 selector.setVisible(true);
             }
     }//GEN-LAST:event_tabla_detalleKeyReleased
@@ -798,7 +799,7 @@ public class Facturacion extends javax.swing.JDialog {
                 rbtn_Credito.setSelected(false);
             }
             
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
@@ -819,7 +820,7 @@ public class Facturacion extends javax.swing.JDialog {
                 rbtn_Credito.setSelected(false);
             }
             
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }

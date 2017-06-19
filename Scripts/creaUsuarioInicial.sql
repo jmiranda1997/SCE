@@ -1,0 +1,1 @@
+SELECT creacionUsuarioVacio('admin','admin','SCEUser Cifrado AES');

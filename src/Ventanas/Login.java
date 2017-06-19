@@ -6,9 +6,7 @@
 package Ventanas;
 
 
-import Excepciones.ArchivoNoExiste;
-import Excepciones.FormatoInvalido;
-import Excepciones.NoSePuedeEscribirArchivo;
+import Excepciones.*;
 import JP.*;
 import RobertoPruebas.*;
 import static Ventanas.Seguridad.claveCifrado;
@@ -18,17 +16,15 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import Ventanas.*;
+import com.sun.glass.events.KeyEvent;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -286,6 +282,11 @@ public class Login extends javax.swing.JFrame {
                 jLabel9MouseClicked(evt);
             }
         });
+        jLabel9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jLabel9KeyReleased(evt);
+            }
+        });
         jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 513, 192, 84));
 
         jCheckBox1.setBackground(new java.awt.Color(0, 0, 0));
@@ -293,6 +294,12 @@ public class Login extends javax.swing.JFrame {
         jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox1.setText("GUARDAR CONTRASEÑA");
         jCheckBox1.setBorder(null);
+        jCheckBox1.setNextFocusableComponent(jLabel9);
+        jCheckBox1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jCheckBox1KeyReleased(evt);
+            }
+        });
         jPanel3.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, -1, -1));
 
         jLabel10.setBackground(new java.awt.Color(0, 0, 0));
@@ -379,27 +386,16 @@ public class Login extends javax.swing.JFrame {
                     this.setVisible(false);
                 }
                 else{
-                    DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Usuario o contraseña incorrecta", "Error");  
+                    DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Error", "Usuario o contraseña incorrecta");  
                     dialogo.setVisible(true);
                 }
                 jTextField2.setText("");
                 jPasswordField1.setText("");
                 jTextField2.requestFocus();
                 
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSePuedeEscribirArchivo ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSePuedeConectar|SQLException|NoSuchAlgorithmException|NoSuchPaddingException|InvalidKeyException|IllegalBlockSizeException|BadPaddingException|NoSePuedeEscribirArchivo ex) {
+                DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Log In", "Error:\n"+ex.toString());  
+                dialogo.setVisible(true);
             }
         }
     }
@@ -410,7 +406,7 @@ public class Login extends javax.swing.JFrame {
 
     private void jPasswordField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyReleased
         int code = evt.getKeyCode();
-        if(code==10){
+        if(code==KeyEvent.VK_ENTER){
             if(!jTextField2.getText().trim().equals("")&&!new String(jPasswordField1.getPassword()).trim().equals(""))
                 logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());
             else{
@@ -422,6 +418,36 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jPasswordField1KeyReleased
+
+    private void jCheckBox1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCheckBox1KeyReleased
+        int code = evt.getKeyCode();
+        if(code==KeyEvent.VK_ENTER){
+            if(!jTextField2.getText().trim().equals("")&&!new String(jPasswordField1.getPassword()).trim().equals(""))
+                logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());
+            else{
+                DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Debe llenar los campos", "Por favor ingrese todos los campos");  
+                dialogo.setVisible(true);
+                jTextField2.setText("");
+                jPasswordField1.setText("");
+                jTextField2.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_jCheckBox1KeyReleased
+
+    private void jLabel9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel9KeyReleased
+        int code = evt.getKeyCode();
+        if(code==KeyEvent.VK_ENTER){
+            if(!jTextField2.getText().trim().equals("")&&!new String(jPasswordField1.getPassword()).trim().equals(""))
+                logueo(jTextField2.getText(),new String(jPasswordField1.getPassword()),jCheckBox1.isSelected());
+            else{
+                DialogoOpcion dialogo = new DialogoOpcion(this, true, DialogoOpcion.ICONO_ERROR, "Debe llenar los campos", "Por favor ingrese todos los campos");  
+                dialogo.setVisible(true);
+                jTextField2.setText("");
+                jPasswordField1.setText("");
+                jTextField2.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_jLabel9KeyReleased
 
     /**
      * @param args the command line arguments

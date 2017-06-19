@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class selectorSucursal extends javax.swing.JDialog {
     private void inicializarTabala(){
         try {
             Sucursales = Conexion_DB.obtenerSucursales();
-            Tabla =new DefaultTableModel(null, new String[]{"Numero", "Factura", "Serie"}){
+            Tabla =new DefaultTableModel(null, new String[]{"Nombre", "Factura", "Serie"}){
                 boolean[] canEdit = new boolean [] {
                     false, false, false
                 };
@@ -47,7 +48,7 @@ public class selectorSucursal extends javax.swing.JDialog {
                 Tabla.addRow(new String[] {Sucursales[0].get(i).toString(), Sucursales[1].get(i).toString(), Sucursales[2].get(i).toString()});
             }
             tabla_Sucursales.setModel(Tabla);
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogodeMensaje men = new DialogodeMensaje();
             men.setContenido("ERROR", ex.getMessage(), DialogodeConfrimacion.ICONO_ERROR);
             men.setVisible(true);
@@ -75,6 +76,7 @@ public class selectorSucursal extends javax.swing.JDialog {
         tabla_Sucursales = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -179,7 +181,7 @@ public class selectorSucursal extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

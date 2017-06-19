@@ -1,0 +1,11 @@
+DELIMITER //
+DROP TRIGGER IF EXISTS aumentaarCoorelativofac //
+
+CREATE TRIGGER aumentaarCoorelativofac
+AFTER INSERT ON factura
+FOR EACH ROW
+BEGIN
+	UPDATE sucursales SET NumeroFac = NumeroFac + 1 WHERE id = NEW.Sucursales_id;
+
+END //
+DELIMITER ;

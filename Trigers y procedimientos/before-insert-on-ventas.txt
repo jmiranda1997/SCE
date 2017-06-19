@@ -1,0 +1,19 @@
+delimiter //
+drop trigger if exists nuevaVenta //
+create trigger nuevaVenta
+before insert on ventas
+for each row
+begin
+	declare num int default 0;
+	select max(numero) from ventas into num;
+	if num is not null then
+		set num=num+1;
+		set new.Numero=num;
+	else
+		set new.Numero=1;
+	end if;
+	set new.Total=0.00;
+	set new.Fecha=now();
+	
+end; //
+delimiter ;

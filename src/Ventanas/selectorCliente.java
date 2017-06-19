@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
 import java.sql.SQLException;
@@ -29,7 +30,7 @@ public class selectorCliente extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         try {
             tabla_cliente.setModel(Conexion_DB.obtenerClientes());
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }

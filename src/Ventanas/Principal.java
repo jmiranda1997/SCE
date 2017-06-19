@@ -26,8 +26,13 @@ import javax.swing.JPanel;
  * @author jonathanmiranda
  */
 public class Principal extends javax.swing.JFrame {
-    Conexion conexion;
-    JPanel compras,productos,seguridad;
+    private Conexion conexion;
+    private Seguridad seguridad;
+    private Clientes clientes;
+    private Compras panel_Compras;
+    private Ventas panel_Ventas;
+    private Trabajadores trabajadores;
+    private Ausencias ausencias;
     /**
      * Creates new form Principal
      */
@@ -240,7 +245,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.repaint();
         jPanel2.repaint();           
     }//GEN-LAST:event_btn_InventarioMouseClicked
-    private Compras panel_Compras; private Ventas panel_Ventas;
+    
     private void btn_ComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ComprasMouseClicked
         setEtiqueta(btn_Compras);
         resetEtiqueta(jLabel3);
@@ -281,8 +286,8 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(btn_Ventas);
         resetEtiqueta(btn_Inventario);
         resetEtiqueta(jLabel7);
-        //if(seguridad==null)
-            seguridad= new Clientes(conexion);
+        if(seguridad==null)
+            seguridad= new Seguridad(conexion);
         seguridad.setLocation(0,0);
         seguridad.setSize(jPanel2.getSize());
         jPanel2.removeAll();
@@ -299,6 +304,15 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(btn_Inventario);
+        if(clientes==null)
+            clientes= new Clientes(conexion);
+        clientes.setLocation(0,0);
+        clientes.setSize(jPanel2.getSize());
+        jPanel2.removeAll();
+        jPanel2.add(clientes,BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+        jPanel1.repaint();
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked

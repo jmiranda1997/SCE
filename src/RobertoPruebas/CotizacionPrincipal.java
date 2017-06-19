@@ -5,6 +5,7 @@
  */
 package RobertoPruebas;
 
+import Excepciones.*;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.SQLException;
@@ -79,21 +80,21 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
     public void añadir_panel(){
         if(cotizacionActual!=null && cotizacionActual.size()>3)//Comprueba que exista una cotizacion cargada en la ventan
         {
-            pn_cotizacion p=new pn_cotizacion(this);//Crea el nuevo panel
-            p.setName(cotizacionActual.get(0).toString());//le asigna como nombre la id de la cotizacion
-            p.lbl_numero.setText(cotizacionActual.get(1).toString());
-            p.lbl_nombre.setText(cotizacionActual.get(2).toString());
-            p.lbl_total.setText(String.format("%.2f",Double.parseDouble(cotizacionActual.get(3).toString())));
-            p.setSize(254,133);//Le da tamaño
-            p.setLocation(0,133*cotizacionesActivas);//Y localizacion
-            scp_listado.add(p);
-            pn_cotizaciones.add(p);
-            pn_cotizaciones.setPreferredSize(new Dimension(pn_cotizaciones.getWidth(),(cotizacionesActivas+1)*133));
-            scp_cotizaciones.revalidate();
-            scp_cotizaciones.repaint();
-            scp_listado.revalidate();
-            scp_listado.repaint();
-            cotizacionesActivas++;//aumenta las cotizaciones activas
+//            pn_cotizacion p=new pn_cotizacion(this);//Crea el nuevo panel
+//            p.setName(cotizacionActual.get(0).toString());//le asigna como nombre la id de la cotizacion
+//            p.lbl_numero.setText(cotizacionActual.get(1).toString());
+//            p.lbl_nombre.setText(cotizacionActual.get(2).toString());
+//            p.lbl_total.setText(String.format("%.2f",Double.parseDouble(cotizacionActual.get(3).toString())));
+//            p.setSize(254,133);//Le da tamaño
+//            p.setLocation(0,133*cotizacionesActivas);//Y localizacion
+//            scp_listado.add(p);
+//            pn_cotizaciones.add(p);
+//            pn_cotizaciones.setPreferredSize(new Dimension(pn_cotizaciones.getWidth(),(cotizacionesActivas+1)*133));
+//            scp_cotizaciones.revalidate();
+//            scp_cotizaciones.repaint();
+//            scp_listado.revalidate();
+//            scp_listado.repaint();
+//            cotizacionesActivas++;//aumenta las cotizaciones activas
         }
     }
     /**
@@ -671,7 +672,7 @@ public class CotizacionPrincipal extends javax.swing.JPanel {
             cambiarModo();
             cambiarCampos();
             añadir_panel();
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Logger.getLogger(CotizacionPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_guardarMouseClicked

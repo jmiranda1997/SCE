@@ -1,0 +1,10 @@
+DELIMITER //
+DROP FUNCTION IF EXISTS obtenerFecha //
+
+CREATE  FUNCTION obtenerFecha() RETURNS date
+
+BEGIN
+	RETURN NOW();
+END //
+
+DELIMITER ;

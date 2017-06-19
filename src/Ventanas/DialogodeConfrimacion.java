@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 
@@ -152,7 +153,7 @@ public class DialogodeConfrimacion extends javax.swing.JFrame {
         if (seleccion == 3) {
             try {
                 Conexion_DB.desHabilitarProvedor(Nombre);
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
                 Dialogo.setVisible(true);
             }

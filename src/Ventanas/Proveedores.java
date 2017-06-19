@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ public class Proveedores extends javax.swing.JPanel {
         tabla_prov.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         try {
             tabla_prov.setModel(Conexion_DB.obtenerProceedores());
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
             Dialogo.setVisible(true);
         }
@@ -473,7 +474,7 @@ public class Proveedores extends javax.swing.JPanel {
                 Dialogo.setContenido("ERROR", "INGRESE UN NOMBRE DE PROVEEDOR", DialogodeMensaje.ICONO_ERROR);
                 Dialogo.setVisible(true);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
             Dialogo.setVisible(true);
         }
@@ -489,7 +490,7 @@ public class Proveedores extends javax.swing.JPanel {
         txt_abonos.setText("0.00");
         try {
             tabla_prov.setModel(Conexion_DB.obtenerProceedores());
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
              Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
                 Dialogo.setVisible(true);
         }
@@ -535,7 +536,7 @@ public class Proveedores extends javax.swing.JPanel {
                 DialogoConfirmacion.setVisible(true);
                 
                 tabla_prov.setModel(Conexion_DB.obtenerProceedores());
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
                 Dialogo.setVisible(true);
             }

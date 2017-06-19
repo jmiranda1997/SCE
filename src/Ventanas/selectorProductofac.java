@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import RobertoPruebas.DialogoOpcion;
 import java.sql.SQLException;
@@ -21,6 +22,21 @@ public class selectorProductofac extends javax.swing.JDialog {
     /**
      * Creates new form selectorProductofac
      */
+    private boolean Aceptar = false;
+    private String Codigo; private float Cantidad;
+    private Conexion Conexion_DB = new Conexion();
+
+    public boolean isAceptar() {
+        return Aceptar;
+    }
+
+    public String getCodigo() {
+        return Codigo;
+    }
+
+    public float getCantidad() {
+        return Cantidad;
+    }
     public selectorProductofac(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -31,16 +47,15 @@ public class selectorProductofac extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         try {
             tabla_produc.setModel(Conexion_DB.obtenerProductosfac(Sucursal));
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
             dialogo.setVisible(true);
         }
     }
-    private DefaultTableModel Productos;
-    private Conexion Conexion_DB = new Conexion();
-    public void setProductos(DefaultTableModel Productos) {
-        this.Productos = Productos;
-    }
+    
+
+
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,6 +80,7 @@ public class selectorProductofac extends javax.swing.JDialog {
         sep_Filtro1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -220,16 +236,22 @@ public class selectorProductofac extends javax.swing.JDialog {
     private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
         // TODO add your handling code here:
 
-        int seleccion = tabla_produc.getSelectedRow(), seleccion2 = Productos.getRowCount()-1;
-        if (seleccion != -1) {
-            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), seleccion2, 0);
-            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), seleccion2, 1);
-            Productos.setValueAt(txt_Cantidad.getText(), seleccion2, 2);
-            Productos.setValueAt("0.00", seleccion2, 3);
-            Productos.setValueAt("0.00", seleccion2, 4);
-            Productos.addRow(new String[]{});
-        }
-        this.setVisible(false);
+       int seleccion = tabla_produc.getSelectedRow();
+        if (seleccion != -1 && Float.parseFloat(txt_Cantidad.getText()) <= Float.parseFloat(tabla_produc.getValueAt(seleccion, 3).toString())) {
+//            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 0).toString(), seleccion2, 0);
+//            Productos.setValueAt(tabla_produc.getValueAt(seleccion, 2).toString(), seleccion2, 1);
+//            Productos.setValueAt(txt_Cantidad.getText(), seleccion2, 2);
+//            Productos.setValueAt("0.00", seleccion2, 3);
+//            Productos.setValueAt("0.00", seleccion2, 4);
+//            Productos.addRow(new String[]{});
+            Codigo = tabla_produc.getValueAt(seleccion, 0).toString();
+            Cantidad = Float.parseFloat(txt_Cantidad.getText());
+            Aceptar = true;
+           this.setVisible(false);
+        }     else if(Float.parseFloat(txt_Cantidad.getText()) > Float.parseFloat(tabla_produc.getValueAt(seleccion, 3).toString())){
+             DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", "EXISTENCIA INSUFICIENTE, VERIFIQUE LA CANTIDAD");
+             dialogo.setVisible(true);
+        }      
     }//GEN-LAST:event_btn_AceptarMouseClicked
 
     private void tabla_producMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_producMousePressed
@@ -238,7 +260,7 @@ public class selectorProductofac extends javax.swing.JDialog {
             btn_Aceptar.setEnabled(true);
             try {
                 lbl_Total.setText("TOTAL: " + Conexion_DB.existencias(tabla_produc.getValueAt(seleccion, 0).toString()) + "     F10");
-            } catch (SQLException ex) {
+            } catch (SQLException|NoSePuedeConectar ex) {
                 DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
                 dialogo.setVisible(true);
             }

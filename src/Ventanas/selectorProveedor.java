@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Excepciones.*;
 import RobertoPruebas.Conexion;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ public class selectorProveedor extends javax.swing.JFrame {
             setLocationRelativeTo(null);
         try {
             tabla_prov.setModel(Conexion_DB.obtenerProceedores());
-        } catch (SQLException ex) {
+        } catch (SQLException|NoSePuedeConectar ex) {
             Dialogo.setContenido("ERROR", ex.getMessage(), DialogodeMensaje.ICONO_ERROR);
             Dialogo.setVisible(true);
         }
