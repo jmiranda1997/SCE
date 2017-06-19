@@ -304,16 +304,12 @@ public class Principal extends javax.swing.JFrame {
         resetEtiqueta(btn_Ventas);
         resetEtiqueta(jLabel6);
         resetEtiqueta(btn_Inventario);
-        if(ausencias==null)
-            ausencias=new Ausencias(conexion);
-        ausencias.setLocation(0,0);
-        ausencias.setSize(jPanel2.getSize());
-//        if(clientes==null)
-//            clientes= new Clientes(conexion);
-//        clientes.setLocation(0,0);
-//        clientes.setSize(jPanel2.getSize());
+        if(clientes==null)
+            clientes= new Clientes(conexion);
+        clientes.setLocation(0,0);
+        clientes.setSize(jPanel2.getSize());
         jPanel2.removeAll();
-        jPanel2.add(ausencias/*clientes*/,BorderLayout.CENTER);
+        jPanel2.add(clientes,BorderLayout.CENTER);
         jPanel2.revalidate();
         jPanel2.repaint();
         jPanel1.repaint();
