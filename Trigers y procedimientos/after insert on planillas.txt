@@ -1,0 +1,17 @@
+delimiter //
+drop trigger if exists nuevaPlanilla //
+create trigger nuevaPlanilla
+after insert on planillas
+for each row
+begin
+	declare vIdTrabajador int default 0;
+	declare puntero int default 0;
+	declare vcursor cursor for select id from trabajador where habilitado=1;
+	declare continue handler for sqlstate '02000' set puntero=1;	
+	open vcursor;
+	fetch vcursor into vIdTrabajador;
+	while not puntero do
+		insert into detalleplanilla (Planillas_id,Trabajador_id) values (new.id,vIdTrabajador);
+		fetch vcursor into vIdTrabajador;
+	end while;
+end; //

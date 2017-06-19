@@ -1,0 +1,13 @@
+delimiter //
+drop procedure if exists generarPlanilla //
+create procedure generarPlanilla() 
+begin
+	declare planillaMes int default 0;
+	select count(*) from planillas where month(fecha)=month(now()) and year(fecha)=year(now()) into planillaMes;
+	if planillaMes is null and day(now())>11 then
+		insert into planillas (fecha) values (now());
+	elseif day(now())>28 then
+		update planillas set realizado=2 where month(fecha)=month(now()) and year(fecha)=year(now());
+	end if;	
+end; //
+delimiter ;
