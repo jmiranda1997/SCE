@@ -1153,10 +1153,10 @@ public class Factura extends javax.swing.JPanel {
                     int sucursalid = Conexion_DB.sucursalId(Sucursal[0]);
                     if (metodos.getCredito() != 0) Conexion_DB.insertarFormaPagoFac(metodos.getCredito(), "", 1, sucursalid);
                     if (metodos.getEfectivo()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getEfectivo(), "", 2, sucursalid);
-                    if (metodos.getCheque1()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getCheque1(), metodos.getDesCheque1(), 1, sucursalid);
-                    if (metodos.getCheque2()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getCheque2(), metodos.getDesCheque1(), 1, sucursalid);
-                    if (metodos.getCheque3()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getCheque3(), metodos.getDesCheque1(), 1, sucursalid);
-                    if (metodos.getOtros()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getOtros(), metodos.getDesOtros(), 1, sucursalid);
+                    if (metodos.getCheque1()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getCheque1(), metodos.getDesCheque1(), 3, sucursalid);
+                    if (metodos.getCheque2()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getCheque2(), metodos.getDesCheque1(), 3, sucursalid);
+                    if (metodos.getCheque3()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getCheque3(), metodos.getDesCheque1(), 3, sucursalid);
+                    if (metodos.getOtros()!= 0) Conexion_DB.insertarFormaPagoFac(metodos.getOtros(), metodos.getDesOtros(), 4, sucursalid);
                     lbl_Correlativo.setText(Conexion_DB.obtenerNumeroFac(Integer.parseInt(Sucu[0])));
                 }
             } catch (SQLException|NoSePuedeConectar ex) {

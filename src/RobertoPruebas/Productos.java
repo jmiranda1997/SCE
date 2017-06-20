@@ -41,6 +41,7 @@ public class Productos extends javax.swing.JPanel {
         buttonGroup1.add(rbtn_Credito2);
         try {
             sucursales_unidades=new ArrayList[2];
+            cmb_sucursal.addItem("Total");
             sucursales_unidades=conexion.obtener_Sucursales_Unidades();
             for(int i=0; i<sucursales_unidades[0].size();i++)
             {
@@ -87,8 +88,6 @@ public class Productos extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         txt_codigo = new javax.swing.JTextField();
         txt_codigoBarra = new javax.swing.JTextField();
-        txt_venta = new javax.swing.JTextField();
-        txt_costo = new javax.swing.JTextField();
         txt_marca = new javax.swing.JTextField();
         txt_estanteria = new javax.swing.JTextField();
         txt_columna = new javax.swing.JTextField();
@@ -109,6 +108,8 @@ public class Productos extends javax.swing.JPanel {
         rbtn_Credito2 = new javax.swing.JRadioButton();
         txt_codigo1 = new javax.swing.JTextField();
         lbl_codigo1 = new javax.swing.JLabel();
+        ftx_costo = new javax.swing.JFormattedTextField();
+        ftx_venta = new javax.swing.JFormattedTextField();
         pn_herramientas = new javax.swing.JPanel();
         btn_ver = new javax.swing.JLabel();
         btn_nuevo = new javax.swing.JLabel();
@@ -246,58 +247,6 @@ public class Productos extends javax.swing.JPanel {
             }
         });
 
-        txt_venta.setBackground(new java.awt.Color(0, 0, 0));
-        txt_venta.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txt_venta.setForeground(new java.awt.Color(255, 255, 255));
-        txt_venta.setText("NO DISPONIBLE");
-        txt_venta.setBorder(null);
-        txt_venta.setCaretColor(new java.awt.Color(255, 255, 255));
-        txt_venta.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        txt_venta.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txt_ventaFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txt_ventaFocusLost(evt);
-            }
-        });
-        txt_venta.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                txt_ventaMousePressed(evt);
-            }
-        });
-        txt_venta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_ventaActionPerformed(evt);
-            }
-        });
-
-        txt_costo.setBackground(new java.awt.Color(0, 0, 0));
-        txt_costo.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txt_costo.setForeground(new java.awt.Color(255, 255, 255));
-        txt_costo.setText("NO DISPONIBLE");
-        txt_costo.setBorder(null);
-        txt_costo.setCaretColor(new java.awt.Color(255, 255, 255));
-        txt_costo.setDisabledTextColor(new java.awt.Color(204, 204, 204));
-        txt_costo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txt_costoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txt_costoFocusLost(evt);
-            }
-        });
-        txt_costo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                txt_costoMousePressed(evt);
-            }
-        });
-        txt_costo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_costoActionPerformed(evt);
-            }
-        });
-
         txt_marca.setBackground(new java.awt.Color(0, 0, 0));
         txt_marca.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txt_marca.setForeground(new java.awt.Color(255, 255, 255));
@@ -409,6 +358,7 @@ public class Productos extends javax.swing.JPanel {
         txt_existencia.setBorder(null);
         txt_existencia.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_existencia.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        txt_existencia.setNextFocusableComponent(btn_Guardar_Aceptar);
         txt_existencia.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txt_existenciaFocusGained(evt);
@@ -438,6 +388,11 @@ public class Productos extends javax.swing.JPanel {
 
         cmb_sucursal.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cmb_sucursal.setBorder(null);
+        cmb_sucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_sucursalActionPerformed(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
@@ -591,6 +546,44 @@ public class Productos extends javax.swing.JPanel {
             }
         });
 
+        ftx_costo.setBackground(new java.awt.Color(0, 0, 0));
+        ftx_costo.setBorder(null);
+        ftx_costo.setForeground(new java.awt.Color(255, 255, 255));
+        ftx_costo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        ftx_costo.setCaretColor(new java.awt.Color(255, 255, 255));
+        ftx_costo.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        ftx_costo.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        ftx_costo.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        ftx_costo.setPreferredSize(new java.awt.Dimension(271, 16));
+        ftx_costo.setValue(0);
+        ftx_costo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                ftx_costoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                ftx_costoFocusLost(evt);
+            }
+        });
+
+        ftx_venta.setBackground(new java.awt.Color(0, 0, 0));
+        ftx_venta.setBorder(null);
+        ftx_venta.setForeground(new java.awt.Color(255, 255, 255));
+        ftx_venta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        ftx_venta.setCaretColor(new java.awt.Color(255, 255, 255));
+        ftx_venta.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        ftx_venta.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        ftx_venta.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        ftx_venta.setPreferredSize(new java.awt.Dimension(271, 16));
+        ftx_venta.setValue(0);
+        ftx_venta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                ftx_ventaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                ftx_ventaFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnDetalleLayout = new javax.swing.GroupLayout(pnDetalle);
         pnDetalle.setLayout(pnDetalleLayout);
         pnDetalleLayout.setHorizontalGroup(
@@ -612,16 +605,16 @@ public class Productos extends javax.swing.JPanel {
                                             .addComponent(jLabel13)
                                             .addComponent(jLabel16))
                                         .addGap(19, 19, 19)
-                                        .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txt_venta, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_costo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_marca, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_estanteria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txt_marca, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                            .addComponent(txt_estanteria, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
                                             .addGroup(pnDetalleLayout.createSequentialGroup()
                                                 .addGap(2, 2, 2)
                                                 .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(txt_codigo, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                                                    .addComponent(txt_codigoBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))))
+                                                    .addComponent(txt_codigoBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)))
+                                            .addComponent(ftx_costo, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                            .addComponent(ftx_venta, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE))
                                         .addGap(18, 18, 18)
                                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(pnDetalleLayout.createSequentialGroup()
@@ -664,7 +657,7 @@ public class Productos extends javax.swing.JPanel {
                                 .addComponent(lbl_codigo1)
                                 .addGap(18, 18, 18)
                                 .addComponent(txt_codigo1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(scp_listado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(scp_listado, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)))
                     .addComponent(lbl_Titulo))
                 .addGap(0, 0, 0))
         );
@@ -692,8 +685,10 @@ public class Productos extends javax.swing.JPanel {
                                 .addGap(10, 10, 10)
                                 .addComponent(lbl_codigoBarra)
                                 .addGap(10, 10, 10)
-                                .addComponent(lbl_precioVenta)
-                                .addGap(10, 10, 10)
+                                .addGroup(pnDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lbl_precioVenta)
+                                    .addComponent(ftx_venta, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
                                 .addComponent(jLabel10)
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel13)
@@ -704,11 +699,9 @@ public class Productos extends javax.swing.JPanel {
                                 .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(7, 7, 7)
                                 .addComponent(txt_codigoBarra, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)
-                                .addComponent(txt_venta, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)
-                                .addComponent(txt_costo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)
+                                .addGap(39, 39, 39)
+                                .addComponent(ftx_costo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(8, 8, 8)
                                 .addComponent(txt_marca, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(7, 7, 7)
                                 .addComponent(txt_estanteria, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -748,9 +741,7 @@ public class Productos extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Guardar_Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 62, Short.MAX_VALUE))
-                    .addGroup(pnDetalleLayout.createSequentialGroup()
-                        .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))))
+                    .addComponent(scp_listado, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout pnContenidoLayout = new javax.swing.GroupLayout(pnContenido);
@@ -923,17 +914,18 @@ public class Productos extends javax.swing.JPanel {
     private void cambiarModo(){
         txt_codigo.setEnabled(nuevo);      
         txt_columna.setEnabled(nuevo||modificar);
-        txt_costo.setEnabled(nuevo||modificar);
+        ftx_costo.setEnabled(nuevo||modificar);
         txt_estanteria.setEnabled(nuevo||modificar);
         txt_existencia.setEnabled(nuevo);
         txt_fila.setEnabled(nuevo||modificar);
         txt_marca.setEnabled(nuevo||modificar);
-        txt_venta.setEnabled(nuevo||modificar);
+        ftx_venta.setEnabled(nuevo||modificar);
         txa_descripcion.setEnabled(nuevo||modificar);  
         btn_Guardar_Aceptar.setVisible(nuevo||modificar);
         txt_codigoBarra.setEnabled(nuevo||modificar);
         cmb_sucursal.setEnabled(nuevo || !modificar);
         tbl_productos.setEnabled(!nuevo);
+        cmb_unidad.setEnabled(true);
     }
     public void cargarProducto(int i)
     {
@@ -962,37 +954,48 @@ public class Productos extends javax.swing.JPanel {
     private void cargarProductoActual()
     {
         if(productoActual.size()>0 && !nuevo){
-            txt_codigo.setText(productoActual.get(1).toString());
-            txt_codigoBarra.setText(productoActual.get(2).toString());
-            txa_descripcion.setText(productoActual.get(3).toString());
-            txt_venta.setText(productoActual.get(4).toString());
-            txt_costo.setText(productoActual.get(5).toString());
-            if(productoActual.get(6)==null)
-                txt_estanteria.setText("");
-            else
-                txt_estanteria.setText(productoActual.get(6).toString());
-            if(productoActual.get(7)==null)
-                txt_columna.setText("");
-            else
-                txt_columna.setText(productoActual.get(7).toString());
-            if(productoActual.get(8)==null)
-                txt_fila.setText("");
-            else
-                txt_fila.setText(productoActual.get(8).toString());
-            if(productoActual.get(9)==null)
-            {
-                cmb_unidad.setSelectedIndex(cmb_unidad.getItemCount()-1);
-                cmb_unidad.setEnabled(false);
+            try {
+                txt_codigo.setText(productoActual.get(1).toString());
+                txt_codigoBarra.setText(productoActual.get(2).toString());
+                txa_descripcion.setText(productoActual.get(3).toString());
+                ftx_venta.setValue(Double.parseDouble(productoActual.get(4).toString()));
+                ftx_venta.setText("Q"+String.format("%.2f",Double.parseDouble(productoActual.get(4).toString())));
+                 ftx_costo.setValue(Double.parseDouble(productoActual.get(5).toString()));
+                ftx_costo.setText("Q"+String.format("%.2f",Double.parseDouble(productoActual.get(5).toString())));
+                if(productoActual.get(6)==null)
+                    txt_estanteria.setText("");
+                else
+                    txt_estanteria.setText(productoActual.get(6).toString());
+                if(productoActual.get(7)==null)
+                    txt_columna.setText("");
+                else
+                    txt_columna.setText(productoActual.get(7).toString());
+                if(productoActual.get(8)==null)
+                    txt_fila.setText("");
+                else
+                    txt_fila.setText(productoActual.get(8).toString());
+                if(productoActual.get(9)==null)
+                {
+                    cmb_unidad.setSelectedIndex(cmb_unidad.getItemCount()-1);
+                    cmb_unidad.setEnabled(false);
+                }
+                else
+                {
+                    cmb_unidad.setSelectedIndex(Integer.parseInt(productoActual.get(9).toString())-1);
+                    cmb_unidad.setEnabled(true);
+                }
+                if(productoActual.get(10)==null)
+                    txt_fila.setText("");
+                else
+                    txt_marca.setText(productoActual.get(10).toString());
+                cmb_sucursal.setSelectedIndex(0);
+                    txt_existencia.setText(conexion.obtenerExistencia(0, Integer.parseInt(productoActual.get(0).toString()))+"");
+                    } catch (SQLException ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSePuedeConectar ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else
-            {
-                cmb_unidad.setSelectedIndex(Integer.parseInt(productoActual.get(9).toString())-1);
-                cmb_unidad.setEnabled(true);
-            }
-            if(productoActual.get(10)==null)
-                txt_fila.setText("");
-            else
-                txt_marca.setText(productoActual.get(10).toString());
+                
         }
         else
             modoSinDatos();
@@ -1001,11 +1004,11 @@ public class Productos extends javax.swing.JPanel {
     {
         txt_marca.setText("");
         txt_columna.setText("");
-        txt_costo.setText("");
+        ftx_costo.setText("Q0.00");
         txt_codigoBarra.setText("");
         txt_existencia.setText("");
         txt_fila.setText("");
-        txt_venta.setText("");
+        ftx_venta.setText("Q0.00");
         txt_codigo.setText("");
         txa_descripcion.setText("");
         txt_estanteria.setText("");
@@ -1067,38 +1070,6 @@ public class Productos extends javax.swing.JPanel {
     private void txt_columnaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_columnaFocusGained
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_columnaFocusGained
-
-    private void txt_costoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_costoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_costoActionPerformed
-
-    private void txt_costoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_costoMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_costoMousePressed
-
-    private void txt_costoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_costoFocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_costoFocusLost
-
-    private void txt_costoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_costoFocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_costoFocusGained
-
-    private void txt_ventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ventaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_ventaActionPerformed
-
-    private void txt_ventaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_ventaMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_ventaMousePressed
-
-    private void txt_ventaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_ventaFocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_ventaFocusLost
-
-    private void txt_ventaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_ventaFocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_ventaFocusGained
 
     private void txt_codigoBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_codigoBarraActionPerformed
         // TODO add your handling code here:
@@ -1183,6 +1154,7 @@ public class Productos extends javax.swing.JPanel {
     private void btn_Guardar_AceptarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Guardar_AceptarMousePressed
         // TODO add your handling code here:
         btn_Guardar_Aceptar.setBackground(java.awt.Color.orange);
+        btn_Guardar_Aceptar.requestFocus();
     }//GEN-LAST:event_btn_Guardar_AceptarMousePressed
 
     private void btn_Guardar_AceptarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Guardar_AceptarMouseReleased
@@ -1191,9 +1163,10 @@ public class Productos extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Guardar_AceptarMouseReleased
 
     private void btn_Guardar_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Guardar_AceptarMouseClicked
+
         
         try {
-            if(nuevo){
+            if(nuevo && cmb_sucursal.getSelectedIndex()>0){
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText(), uni=(cmb_unidad.getSelectedIndex()+1)+"";
                 if(Integer.parseInt(uni)== cmb_unidad.getItemCount())
@@ -1201,9 +1174,9 @@ public class Productos extends javax.swing.JPanel {
                     uni=null;
                 }
                 conexion.insertarProducto(txt_codigo.getText(),txt_codigoBarra.getText(),
-                    txa_descripcion.getText(),Double.parseDouble(txt_venta.getText()),
-                    Double.parseDouble(txt_costo.getText()),est,col,fil,txt_marca.getText(),
-                    uni,Integer.parseInt(sucursales_unidades[0].get(cmb_sucursal.getSelectedIndex()).toString()),
+                    txa_descripcion.getText(),Double.parseDouble(ftx_venta.getValue().toString()),
+                    Double.parseDouble(ftx_costo.getValue().toString()),est,col,fil,txt_marca.getText(),
+                    uni,Integer.parseInt(sucursales_unidades[0].get(cmb_sucursal.getSelectedIndex()-1).toString()),
                     Double.parseDouble(txt_existencia.getText()));
                 llenarListado();
                 btn_verMouseClicked(evt); 
@@ -1212,8 +1185,8 @@ public class Productos extends javax.swing.JPanel {
                 String est=txt_estanteria.getText(), fil=txt_fila.getText(), 
                         col=txt_columna.getText();
                 conexion.modificarProducto(Integer.parseInt(productoActual.get(0).toString()),txt_codigo.getText(),txt_codigoBarra.getText(),
-                    txa_descripcion.getText(),Double.parseDouble(txt_venta.getText()),
-                    Double.parseDouble(txt_costo.getText()),est,col,fil,txt_marca.getText());
+                    txa_descripcion.getText(),Double.parseDouble(ftx_venta.getValue().toString()),
+                    Double.parseDouble(ftx_costo.getValue().toString()),est,col,fil,txt_marca.getText());
                  cargarProducto(Integer.parseInt(productoActual.get(0).toString()));
                  btn_verMouseClicked(evt);
                  llenarListado();
@@ -1408,6 +1381,38 @@ public class Productos extends javax.swing.JPanel {
         // TODO add your handling code here:
         llenarListado();
     }//GEN-LAST:event_rbtn_Credito2StateChanged
+
+    private void cmb_sucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_sucursalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_sucursalActionPerformed
+
+    private void ftx_costoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ftx_costoFocusLost
+        // TODO add your handling code here:
+        String cadena=ftx_costo.getText();
+        if(cadena.matches(("[+-]?\\d*(\\.\\d+)?")))
+        ftx_costo.setText("Q"+String.format("%.2f",Double.parseDouble(ftx_costo.getText())));
+        else
+        ftx_costo.setText("Q"+ftx_costo.getValue().toString());
+    }//GEN-LAST:event_ftx_costoFocusLost
+
+    private void ftx_ventaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ftx_ventaFocusLost
+        // TODO add your handling code here:
+        String cadena=ftx_venta.getText();
+        if(cadena.matches(("[+-]?\\d*(\\.\\d+)?")))
+        ftx_venta.setText("Q"+String.format("%.2f",Double.parseDouble(ftx_venta.getText())));
+        else
+        ftx_venta.setText("Q"+ftx_venta.getValue().toString());
+    }//GEN-LAST:event_ftx_ventaFocusLost
+
+    private void ftx_ventaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ftx_ventaFocusGained
+        // TODO add your handling code here:
+        ftx_venta.setText(ftx_venta.getValue().toString());
+    }//GEN-LAST:event_ftx_ventaFocusGained
+
+    private void ftx_costoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ftx_costoFocusGained
+        // TODO add your handling code here:
+        ftx_costo.setText(ftx_costo.getValue().toString());
+    }//GEN-LAST:event_ftx_costoFocusGained
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Salir1;
@@ -1419,6 +1424,8 @@ public class Productos extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cmb_sucursal;
     private javax.swing.JComboBox<String> cmb_unidad;
+    private javax.swing.JFormattedTextField ftx_costo;
+    private javax.swing.JFormattedTextField ftx_venta;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1449,11 +1456,9 @@ public class Productos extends javax.swing.JPanel {
     private javax.swing.JTextField txt_codigo1;
     private javax.swing.JTextField txt_codigoBarra;
     private javax.swing.JTextField txt_columna;
-    private javax.swing.JTextField txt_costo;
     private javax.swing.JTextField txt_estanteria;
     private javax.swing.JTextField txt_existencia;
     private javax.swing.JTextField txt_fila;
     private javax.swing.JTextField txt_marca;
-    private javax.swing.JTextField txt_venta;
     // End of variables declaration//GEN-END:variables
 }

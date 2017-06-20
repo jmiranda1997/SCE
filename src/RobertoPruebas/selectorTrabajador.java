@@ -5,50 +5,47 @@
  */
 package RobertoPruebas;
 
-import Excepciones.*;
+import Excepciones.NoSePuedeConectar;
+import Ventanas.*;
 import RobertoPruebas.Conexion;
-import Ventanas.DialogodeConfrimacion;
-import Ventanas.DialogodeMensaje;
+import RobertoPruebas.DialogoOpcion;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author jonathan Miranda
  */
-public class selectorFactura extends javax.swing.JDialog {
+public class selectorTrabajador extends javax.swing.JDialog {
 
     /**
-     * Creates new form selectorSucursal
+     * Creates new form selectorCliente
      */
-    private final Conexion Conexion_DB = new Conexion();
-    private ArrayList ids;
-    private String[] datos=null;
-    public selectorFactura(java.awt.Frame parent, boolean modal) {
+    private Conexion Conexion_DB = new Conexion();
+    private String[] trabajador=null;
+    public selectorTrabajador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        try {
-            DefaultTableModel tabla=Conexion_DB.obtenerFacturasConsulta(null,null,null);
-            if(tabla!=null)
-            {
-                tabla_Sucursales.setModel(tabla);
-                ids=Conexion_DB.id_ventas(null,null,null);
-            }
-            else
-                this.setVisible(false);
-        } catch (SQLException|NoSePuedeConectar ex) {
-            Logger.getLogger(selectorFactura.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         this.setLocationRelativeTo(null);
+        try {
+            DefaultTableModel tabla=Conexion_DB.obtenerListado_Trabajadores();
+            if(tabla!=null)
+                tabla_cliente.setModel(Conexion_DB.obtenerListado_Trabajadores());
+        } catch (SQLException ex) {
+            DialogoOpcion dialogo = new DialogoOpcion(null, true, DialogoOpcion.ICONO_ERROR, "ERROR", ex.getMessage());
+            dialogo.setVisible(true);
+        } catch (NoSePuedeConectar ex) {
+            Logger.getLogger(selectorTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    public String[] getDatos() {
-        return datos;
+
+    public String[] getTrabajador() {
+        return trabajador;
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,11 +57,11 @@ public class selectorFactura extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btn_Aceptar = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lbl_Titulo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabla_Sucursales = new javax.swing.JTable();
+        tabla_cliente = new javax.swing.JTable();
+        sep_Filtro = new javax.swing.JSeparator();
         btn_Cancelar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -73,32 +70,18 @@ public class selectorFactura extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btn_Aceptar.setBackground(new java.awt.Color(255, 0, 0));
-        btn_Aceptar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
-        btn_Aceptar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_Aceptar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn_Aceptar.setText("ACEPTAR");
-        btn_Aceptar.setEnabled(false);
-        btn_Aceptar.setOpaque(true);
-        btn_Aceptar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_AceptarMouseClicked(evt);
-            }
-        });
-        jPanel1.add(btn_Aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 160, 40));
-
         jPanel2.setBackground(new java.awt.Color(255, 0, 0));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lbl_Titulo.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lbl_Titulo.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_Titulo.setText("SELECCIONE UNA FACTURA");
+        lbl_Titulo.setText("SELECCIONE UN TRABAJADOR");
         jPanel2.add(lbl_Titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 40));
 
-        tabla_Sucursales.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        tabla_Sucursales.setModel(new javax.swing.table.DefaultTableModel(
+        tabla_cliente.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        tabla_cliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -106,25 +89,28 @@ public class selectorFactura extends javax.swing.JDialog {
 
             }
         ));
-        tabla_Sucursales.setGridColor(new java.awt.Color(0, 0, 0));
-        tabla_Sucursales.setRowHeight(24);
-        tabla_Sucursales.setSelectionBackground(new java.awt.Color(255, 0, 0));
-        tabla_Sucursales.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        tabla_Sucursales.setShowVerticalLines(false);
-        tabla_Sucursales.getTableHeader().setReorderingAllowed(false);
-        tabla_Sucursales.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabla_cliente.setGridColor(new java.awt.Color(0, 0, 0));
+        tabla_cliente.setRowHeight(24);
+        tabla_cliente.setSelectionBackground(new java.awt.Color(255, 0, 0));
+        tabla_cliente.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        tabla_cliente.setShowVerticalLines(false);
+        tabla_cliente.getTableHeader().setReorderingAllowed(false);
+        tabla_cliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tabla_SucursalesMousePressed(evt);
+                tabla_clienteMousePressed(evt);
             }
         });
-        tabla_Sucursales.addKeyListener(new java.awt.event.KeyAdapter() {
+        tabla_cliente.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tabla_SucursalesKeyPressed(evt);
+                tabla_clienteKeyPressed(evt);
             }
         });
-        jScrollPane1.setViewportView(tabla_Sucursales);
+        jScrollPane1.setViewportView(tabla_cliente);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 650, 280));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 650, 300));
+
+        sep_Filtro.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(sep_Filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 650, -1));
 
         btn_Cancelar.setBackground(new java.awt.Color(255, 0, 0));
         btn_Cancelar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -137,7 +123,7 @@ public class selectorFactura extends javax.swing.JDialog {
                 btn_CancelarMouseClicked(evt);
             }
         });
-        jPanel1.add(btn_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 380, 160, 40));
+        jPanel1.add(btn_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 410, 160, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,39 +133,36 @@ public class selectorFactura extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
-        datos=new String[9];
-        datos[0]=ids.get(tabla_Sucursales.getSelectedRow()).toString();
-        datos[1]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),0).toString();
-        datos[2]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),1).toString();
-        datos[3]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),2).toString();
-        datos[4]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),3).toString();
-        datos[5]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),4).toString();
-        datos[6]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),5).toString();
-        datos[7]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),6).toString();
-        datos[8]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),7).toString();
-        this.setVisible(false);
-        
-    }//GEN-LAST:event_btn_AceptarMouseClicked
-
-    private void tabla_SucursalesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_SucursalesMousePressed
-        if (tabla_Sucursales.getSelectedRow() != -1) {
-            btn_Aceptar.setEnabled(true);
+    private void tabla_clienteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_clienteMousePressed
+        if(evt.getClickCount()==2){
+            int seleccion = tabla_cliente.getSelectedRow();
+            if (seleccion != -1) {
+                try {
+                    trabajador=Conexion_DB.obtenerTrabajadorDeuda(tabla_cliente.getValueAt(tabla_cliente.getSelectedRow(),0).toString(),
+                            tabla_cliente.getValueAt(tabla_cliente.getSelectedRow(),1).toString());
+                } catch (SQLException ex) {
+                    Logger.getLogger(selectorTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSePuedeConectar ex) {
+                    Logger.getLogger(selectorTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            this.setVisible(false);
         }
+    }//GEN-LAST:event_tabla_clienteMousePressed
 
-    }//GEN-LAST:event_tabla_SucursalesMousePressed
-
-    private void tabla_SucursalesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_SucursalesKeyPressed
+    private void tabla_clienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_clienteKeyPressed
         //filaSeleccionada();
-    }//GEN-LAST:event_tabla_SucursalesKeyPressed
+    }//GEN-LAST:event_tabla_clienteKeyPressed
 
     private void btn_CancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CancelarMouseClicked
+        // TODO add your handling code here:
+
         this.setVisible(false);
     }//GEN-LAST:event_btn_CancelarMouseClicked
 
@@ -194,19 +177,19 @@ public class selectorFactura extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(selectorFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(selectorTrabajador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(selectorFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(selectorTrabajador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(selectorFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(selectorTrabajador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(selectorFactura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(selectorTrabajador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -214,7 +197,7 @@ public class selectorFactura extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                selectorFactura dialog = new selectorFactura(new javax.swing.JFrame(), true);
+                selectorTrabajador dialog = new selectorTrabajador(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -227,12 +210,12 @@ public class selectorFactura extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btn_Aceptar;
     private javax.swing.JLabel btn_Cancelar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_Titulo;
-    private javax.swing.JTable tabla_Sucursales;
+    private javax.swing.JSeparator sep_Filtro;
+    private javax.swing.JTable tabla_cliente;
     // End of variables declaration//GEN-END:variables
 }

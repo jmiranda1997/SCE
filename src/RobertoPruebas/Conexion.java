@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class Conexion {
     private static Connection conexion;//variable que servira para la conexión a la base de datos
     private static final String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://"; //variables que serivran en la conexion, estas nunca deben ser modificados0
-    private static String user="root", ip="localhost", pass="@Sistemas2017", nombreBD="sce"; //Variables que pueden ser modificadas y por defecto son las que se muestran
+    private static String user="root", ip="localhost", pass="", nombreBD="sce"; //Variables que pueden ser modificadas y por defecto son las que se muestran
     public final static String claveCifradoBase="SCEUser Cifrado AES";
     /**
      * Crea un objeto conexión con datos predeterminados
@@ -517,7 +517,6 @@ public class Conexion {
         conexion.close();
         return res;
     }
-    
     public String obtenerUsuario (int Trabajador_id) throws NoSePuedeConectar, SQLException{
         String User = "";
         
@@ -538,10 +537,10 @@ public class Conexion {
      * @throws SQLException en caso de error
      * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
      */
-    public int crearUsuario(String usuario, String pass) throws SQLException, NoSePuedeConectar{
+    public int crearUsuario(String usuario, String pass, int trabajadorID) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-        ResultSet resultado = instruccion.executeQuery("SELECT creacionUsuarioVacio('"+usuario+"','"+pass+"','"+claveCifradoBase+"') R"); //se guarda el resultado de la instruccion
+        ResultSet resultado = instruccion.executeQuery("SELECT creacionUsuarioVacio('"+usuario+"','"+pass+"','"+claveCifradoBase+"',"+trabajadorID+") R"); //se guarda el resultado de la instruccion
         int res=-1;
         while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
         {
@@ -620,15 +619,12 @@ public class Conexion {
             int sucursal, double existencia) throws SQLException, NoSePuedeConectar{
         conectar(); //permite la conexion con la base de datos
         int marcaId=0;
-        int fraccion=0;
         if(estanteria.isEmpty())
             estanteria=null;
         if(columna.isEmpty())
             columna=null;
         if(fila.isEmpty())
             fila=null;
-        if(unidad!=null)
-            fraccion=1;
         Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
         ResultSet resultado = instruccion.executeQuery("select id from marca where Nombre= '"+marca.toUpperCase()+"';"); //se guarda el resultado de la instruccion, en esta ocasion, es una consulta
         if(resultado.next())
@@ -645,8 +641,8 @@ public class Conexion {
         }
         instruccion=conexion.createStatement();
         instruccion.executeUpdate("insert into producto (codigo,codigo_barras,descripcion,precio_venta,precio_costo,Estanteria,"
-                +"Columna,Fila,marca_id,unidad_id,fraccion) values ('"+codigo+"','"+codBarras+"','"+descrip+"',"+venta+","+costo+","+estanteria+","+
-                columna+","+fila+","+marcaId+","+unidad+","+fraccion+");");
+                +"Columna,Fila,marca_id,unidad_id) values ('"+codigo+"','"+codBarras+"','"+descrip+"',"+venta+","+costo+","+estanteria+","+
+                columna+","+fila+","+marcaId+","+unidad+");");
         instruccion=conexion.createStatement();
         resultado = instruccion.executeQuery("select max(id) from producto;");
         instruccion=conexion.createStatement();
@@ -1068,10 +1064,9 @@ public class Conexion {
             };
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado=instruccion.executeQuery("select f.Numero,c.Nombre,c.Apellido,"+
-                "c.NIT,u.Usuario,f.Serie,date(f.Fecha),s.Nombre from factura f left join usuario u "+
-                "on u.id=f.Usuario_id left join cliente c on c.id=f.Cliente_id left join"+
-                " sucursales s on s.id=f.Sucursales_id;");
+        ResultSet resultado=instruccion.executeQuery("select f.Numero,c.Nombre,c.Apellido,c.NIT,t.Nombre,f.Serie,date(f.Fecha),"
+                + "s.Nombre from factura f left join trabajador t on t.id=f.Trabajador_id left join cliente c on c.id=f.Cliente_id "
+                + "left join sucursales s on s.id=f.Sucursales_id;");
         while(resultado.next())
         {
             String[] fila=new String[]{resultado.getString(1),resultado.getString(2),resultado.getString(3),
@@ -1090,9 +1085,9 @@ public class Conexion {
         ArrayList ids=new ArrayList();
         conectar();
         Statement instruccion = conexion.createStatement();
-        ResultSet resultado=instruccion.executeQuery("select v.id from factura f left join usuario u "+
-                "on u.id=f.Usuario_id left join cliente c on c.id=f.Cliente_id left join"+
-                " sucursales s on s.id=f.Sucursales_id left join ventas v on v.Usuario_id=u.id;");
+        ResultSet resultado=instruccion.executeQuery("select v.id from factura f left join trabajador t on "
+                + "t.id=f.Trabajador_id left join cliente c on c.id=f.Cliente_id left join sucursales s on "
+                + "s.id=f.Sucursales_id left join ventas v on v.Trabajador_id=t.id;");
         while(resultado.next())
         {
             ids.add(resultado.getInt(1));
@@ -1259,6 +1254,226 @@ public class Conexion {
         instruccion.executeUpdate("UPDATE ventas SET Vendida = 1 WHERE id =" + id + ";");
         conexion.close();
     }
+     /**
+     * Metodo que regresa la lista de trabajadores como un arreglo
+     * @return una DefaultTableModel con los trabajadores en la BD
+     * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
+     */
+    public DefaultTableModel obtenerTrabajadoresJP() throws SQLException, NoSePuedeConectar{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaTrabajadores(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, DPI, Nombre, Apellido, Telefono, Comision, Direccion, SalarioBase, BonoIncentivo, FechaDeInicio, FechaBono, Habilitado FROM Trabajador;");
+        while(resultado.next()){
+            if(resultado.getString("Habilitado").equals("1")){
+                String fechaInicio=resultado.getString("FechaDeInicio"),fechaBono=resultado.getString("FechaBono");
+                modelo.addRow(new String[] {resultado.getString("id"),resultado.getString("DPI"), resultado.getString("Nombre"), resultado.getString("Apellido"), resultado.getString("Telefono"),resultado.getString("Comision"),resultado.getString("Direccion"),resultado.getString("SalarioBase"), resultado.getString("BonoIncentivo"),(fechaInicio==null?"N/A":fechaInicio) ,(fechaBono==null?"N/A":fechaBono)});
+            }
+        }
+        conexion.close();
+        return modelo;
+    }
+    /**
+     * Crea una nuevo DefaultTableModel para trabajadores
+     * @param modelo el modelo para la JTable, vacio o con otros datos
+     * @return el modelo para la JTable, inicializado
+     */
+    private DefaultTableModel inicializarTablaTrabajadores(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"ID", "DPI", "Nombre", "Apellido", "Telefono", "Comision", "Direccion", "Salario Base", "Bono", "Inicio", "Fecha de Bono"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false,false,false,false,false,false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
+    /**
+     * Invoca una funcion almacenada que ingresa trabajadores
+     * @param DPI DPI del trabajador
+     * @param nombre nombre del trabajador
+     * @param apellido apellido del trabajador
+     * @param telefono telefono del trabajador
+     * @param comision comisión del trabajador
+     * @param direccion dirección del trabajador
+     * @param salario salario del trabajador
+     * @param bono bono incentivo del trabajador
+     * @param fechaInicio fecha en que inició a trabajar
+     * @param fechaBono fecha para el bono incentivo
+     * @return 1 si se insertó, 0 de lo contrario
+     * @throws SQLException
+     * @throws NoSePuedeConectar 
+     */
+    public int crearTrabajador(String DPI, String nombre, String apellido, String telefono, float comision, String direccion, float salario, float bono, String fechaInicio, String fechaBono) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        ResultSet resultado = instruccion.executeQuery("SELECT creaTrabajadores('"+(DPI.equals("")? "N/A":DPI)+"','"+(nombre.equals("")? "N/A":nombre)+"','"+(apellido.equals("")? "N/A":apellido)+"','"+(telefono.equals("")? "N/A":telefono)+"',"+comision+",'"+(direccion.equals("")? "N/A":direccion)+"',"+salario+","+bono+","+(fechaInicio.equals("")?"NULL":"'"+fechaInicio+"'")+","+(fechaBono.equals("")?"NULL":"'"+fechaBono+"'")+") R"); //se guarda el resultado de la instruccion
+        int res=-1;
+        while(resultado.next())//Es una funcion booleana que mueve el cursor del resultado, si este es TRUE, aun hay registros de resultado
+        {
+            res= resultado.getInt(1);
+        }
+        conexion.close();
+        return res;
+    }
+    /**
+     * Modifica los datos de un trabajador
+     * @param id ID del trabajador
+     * @param DPI DPI del trabajador
+     * @param nombre nombre del trabajador
+     * @param apellido apellido del trabajador
+     * @param telefono telefono del trabajador
+     * @param comision comisión del trabajador
+     * @param direccion dirección del trabajador
+     * @param salario salario del trabajador
+     * @param bono bono incentivo del trabajador
+     * @param fechaInicio fecha en que inició a trabajar
+     * @param fechaBono fecha para el bono incentivo
+     * @return el número de filas afectadas
+     * @throws SQLException en caso de error
+     * @throws NoSePuedeConectar en caso de que no pueda conectarse a la BD
+     */
+    public int modificarTrabajador(int id, String DPI, String nombre, String apellido, String telefono, float comision, String direccion, float salario, float bono, String fechaInicio, String fechaBono) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("UPDATE Trabajador SET DPI='"+(DPI.equals("")? "N/A":DPI)+"',Nombre='"+(nombre.equals("")? "N/A":nombre)+"',Apellido='"+(apellido.equals("")? "N/A":apellido)+"',Telefono='"+(telefono.equals("")? "N/A":telefono)+"',Comision="+comision+",Direccion='"+(direccion.equals("")? "N/A":direccion)+"',SalarioBase="+salario+",BonoIncentivo="+bono+",FechaDeInicio="+(fechaInicio.equals("")?"NULL":"'"+fechaInicio+"'")+",FechaBono="+(fechaBono.equals("")?"NULL":"'"+fechaBono+"'")+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+    /**
+     * Elimina un trabajador de la BD
+     * @param id id del trabajador a borrar
+     * @return el numero de filas afectadas (debe ser 1)
+     * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
+     */
+    public int eliminarTrabajador(int id) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("UPDATE Trabajador SET habilitado=0 WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+    /**
+     * Obtiene una lista de todos los trabajadores para el módulo de ausencias
+     * @return ArrayList con los trabajadores habilitados, con el formato "Nombre Apellido-ID"
+     * @throws NoSePuedeConectar error al conectar a la BD
+     * @throws SQLException en caso de error
+     */
+    public ArrayList obtenerTrabajadoresParaAusencias() throws NoSePuedeConectar, SQLException{
+        ArrayList lista=new ArrayList();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Habilitado FROM Trabajador;");
+        while(resultado.next()){
+            if(resultado.getString("Habilitado").equals("1"))
+                lista.add(resultado.getString("Nombre")+" "+ resultado.getString("Apellido")+"-"+resultado.getString("id"));
+        }
+        conexion.close();
+        return lista;
+    }
+    /**
+     * Ingresa una nueva ausencia en la BD
+     * @param idTrabajador ID del trabajador que se ausentó
+     * @param fecha fecha en que ausentó
+     * @param descripcion el motivo por el cual se ausentó
+     * @param autorizada si su ausencia se autorizó o no
+     * @return número de filas afectadas, debe ser 1
+     * @throws SQLException en caso de error
+     * @throws NoSePuedeConectar en caso de que no pueda conectarse a la BD
+     */
+    public int ingresarAusencia(int idTrabajador, String fecha, String descripcion, boolean autorizada) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("INSERT INTO Ausencia (Trabajador_id, Fecha, Descripcion, Autorizada) VALUES ("+idTrabajador+","+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",'"+(descripcion.equals("")?"N/A":descripcion)+"',"+(autorizada?"1":"0")+");"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+     /**
+     * Modifica una ausencia en la BD
+     * @param id ID de la ausencia
+     * @param idTrabajador ID del trabajador que se ausentó
+     * @param fecha fecha en que ausentó
+     * @param descripcion el motivo por el cual se ausentó
+     * @param autorizada si su ausencia se autorizó o no
+     * @return número de filas afectadas, debe ser 1
+     * @throws SQLException en caso de error
+     * @throws NoSePuedeConectar en caso de que no pueda conectarse a la BD
+     */
+    public int modificarAusencia(int id,int idTrabajador, String fecha, String descripcion, boolean autorizada) throws SQLException, NoSePuedeConectar{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("UPDATE Ausencia SET Trabajador_id="+idTrabajador+",Fecha="+(fecha.equals("")?"NOW()":"'"+fecha+"'")+",Descripcion='"+(descripcion.equals("")?"N/A":descripcion)+"',Autorizada="+(autorizada?"1":"0")+" WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+    /**
+     * Metodo que regresa la lista de ausencias como un arreglo
+     * @return una DefaultTableModel con las ausencias en la BD
+     * @throws SQLException en caso de error
+     * @throws Excepciones.NoSePuedeConectar en caso de que no se pueda conectar a la BD
+     */
+    public DefaultTableModel obtenerAusencias() throws SQLException, NoSePuedeConectar{
+        DefaultTableModel modelo = null;
+        modelo=inicializarTablaAusencias(modelo);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Trabajador_id, Fecha, Descripcion, Autorizada FROM Ausencia;");
+        while(resultado.next()){
+            String trabActualID=resultado.getString("Trabajador_id"), autorizada=resultado.getString("Autorizada");
+            Statement consultaTrabajador=conexion.createStatement();
+            ResultSet resultadoT=consultaTrabajador.executeQuery("SELECT Nombre, Apellido FROM Trabajador WHERE id="+trabActualID);
+            if(resultadoT.next())
+                modelo.addRow(new String[] {resultado.getString("id"),resultadoT.getString(1)+" "+resultadoT.getString(2)+"-"+trabActualID, resultado.getString("Fecha"), resultado.getString("Descripcion"), (autorizada.equals("1")?"SI":"NO")});
+        }
+        conexion.close();
+        return modelo;
+    }
+    /**
+     * Crea una nuevo DefaultTableModel para trabajadores
+     * @param modelo el modelo para la JTable, vacio o con otros datos
+     * @return el modelo para la JTable, inicializado
+     */
+    private DefaultTableModel inicializarTablaAusencias(DefaultTableModel modelo) {
+//        
+        modelo = new DefaultTableModel(null, new String[]{"ID", "Trabajador", "Fecha", "Descripción", "Autorizada"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false
+            };
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        return modelo;
+    } 
+    public int eliminarAusencia(int id) throws NoSePuedeConectar, SQLException{
+        conectar(); //permite la conexion con la base de datos
+        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
+        int resultado = instruccion.executeUpdate("DELETE FROM Ausencia WHERE id="+id+";"); //se guarda el resultado de la instruccion
+        conexion.close();
+        return resultado;
+    }
+    /**
+     * Obtiene una lista de todos los trabajadores para el módulo de usuarios
+     * @return ArrayList con los trabajadores habilitados, con el formato "Nombre Apellido-ID"
+     * @throws NoSePuedeConectar error al conectar a la BD
+     * @throws SQLException en caso de error
+     */
+    public ArrayList obtenerTrabajadoresParaUsuarios() throws NoSePuedeConectar, SQLException{
+        ArrayList lista=new ArrayList();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado = instruccion.executeQuery("SELECT id, Nombre, Apellido, Habilitado FROM Trabajador WHERE Usuario_id IS NULL AND Habilitado=1;");
+        while(resultado.next()){
+            lista.add(resultado.getString("Nombre")+" "+ resultado.getString("Apellido")+"-"+resultado.getString("id"));
+        }
+        conexion.close();
+        return lista;
+    }
     public String obtenerNumeroFac(int id) throws NoSePuedeConectar, SQLException{
         String numero = "";        
         conectar();
@@ -1270,18 +1485,261 @@ public class Conexion {
         conexion.close();
         return numero;
     }
-  
-//   public String fecha()throws SQLException, NoSePuedeConectar{
-//       String Fecha = "";
-//       conectar(); //permite la conexion con la base de datos
-//        Statement instruccion=conexion.createStatement(); //Crea una nueva instruccion para la base de datos
-//        ResultSet resultado = instruccion.executeQuery("SELECT obtenerFecha() Fecha;");
-//       while (resultado.next()) {     
-//           Fecha = resultado.getString("Fecha");
-//       }
-//       
-//       conexion.close();
-//       return Fecha;
-//   }
-   
+    private DefaultTableModel iniciarTablaTrabajador_planilla() {
+        DefaultTableModel tabla;
+        tabla = new DefaultTableModel(null, new String[]{"DPI","Nombre","Salario","Bono","Comision"}){
+            boolean[] canEdit = new boolean [] {
+        false, false, false, false,false
+            };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+            }
+        };
+        return tabla;
+    }
+        private DefaultTableModel iniciarTablaTrabajador_planillaMeses(int mes) {
+        DefaultTableModel tabla;
+        if(mes>0){
+            String mesNombre;
+            switch (mes) {
+                case 1:
+                    mesNombre="Enero";
+                    break;
+                case 2:
+                    mesNombre="Febrero";
+                    break;
+                case 3:
+                    mesNombre="Marzo";
+                    break;
+                case 4:
+                    mesNombre="Abril";
+                    break;
+                case 5:
+                    mesNombre="Mayo";
+                    break;
+                case 6:
+                    mesNombre="Junio";
+                    break;
+                case 7:
+                    mesNombre="Julio";
+                    break;
+                case 8:
+                    mesNombre="Agosto";
+                    break;
+                case 9:
+                    mesNombre="Septiembre";
+                    break;
+                case 10:
+                    mesNombre="Octubre";
+                    break;
+                case 11:
+                    mesNombre="Noviembre";
+                    break;
+                default:
+                    mesNombre="Diciembre";
+                    break;
+            }
+            tabla = new DefaultTableModel(null, new String[]{"DPI","Nombre","Prestamo","Salario",mesNombre,"Anticipo","Comision","Pago Total","Alertas"}){
+                boolean[] canEdit = new boolean [] {false, false, false, false,false,false,false,false,false};
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            };
+        }
+        else
+        {
+            tabla = new DefaultTableModel(null, new String[]{"DPI","Nombre","Salario","Bono","Comision"}){
+                boolean[] canEdit = new boolean [] {false, false, false, false,false};
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            };
+        }
+        return tabla;
+    }
+    public DefaultTableModel obtenerListado_Trabajadores() throws SQLException, NoSePuedeConectar{
+        DefaultTableModel trabajadores=null;
+        trabajadores = iniciarTablaTrabajador_planilla();
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select t.DPI, t.Nombre, t.SalarioBase, "+
+                "t.BonoIncentivo, t.Comision from trabajador t;");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2),resultado.getString(3),
+                resultado.getString(4),resultado.getString(5)};
+            trabajadores.addRow(fila);
+        }
+        conexion.close();
+        return trabajadores;
+        
+    }
+    /**
+     * Funcion que retorna los datos de un trabajador buscandolo con su nombre y dpi
+     * @param dpi dpi en una cadena de texto
+     * @param nombre nombre en una cadena de texto
+     * @return arreglo de cadenas con la id,nombre,dpi,apellido,salario,bono y comision
+     * @throws SQLException error al conectar con la base de datos
+     */
+    public String[] obtenerTrabajadorDeuda(String dpi, String nombre) throws SQLException, NoSePuedeConectar
+    {
+        String[] datos=null;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select t.id, t.apellido,t.SalarioBase,"+
+                "t.BonoIncentivo, t.Comision from trabajador t where dpi='"+dpi+"' and nombre='"+nombre+"';");
+        if(resultado.next())
+        {
+            datos=new String[]{resultado.getString(1),dpi,nombre,resultado.getString(2),resultado.getString(3),
+                resultado.getString(4),resultado.getString(5)};
+        }
+        conexion.close();
+        return datos;
+    }
+    /**
+     * Metodo que inserta una deuda al trabajador en la tabla prestamos
+     * @param trabajador id del trabajador
+     * @param cantidad monto de la deuda
+     * @param anticipo bandera que indica si la deuda es un anticipo o prestamo
+     */
+    public void insertarAdelanto(int trabajador, double cantidad, boolean anticipo) throws SQLException, NoSePuedeConectar
+    {
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        if(anticipo)
+            instruccion.executeUpdate("insert into prestamos (Trabajador_id,Fecha,Cantidad,Saldo,Anticipo) values ("+
+                    trabajador+",now(),"+cantidad+","+cantidad+",1);");
+        else
+            instruccion.executeUpdate("insert into prestamos (Trabajador_id,Fecha,Cantidad,Saldo,Anticipo) values ("+
+                    trabajador+",now(),"+cantidad+","+cantidad+",0);");
+        conexion.close();
+    }
+    /**
+     * funcion entera que retorna el mes del servidor como un numero
+     * @return
+     * @throws SQLException 
+     */
+    public int obtenerMesActual() throws SQLException, NoSePuedeConectar{
+        int mes=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select month(now());");
+        if(resultado.next())
+        {
+            mes=resultado.getInt(1);
+        }
+        conexion.close();
+        return mes;
+    }
+    public double obtenerPrestamoMes(int trabajador, boolean anticipo, boolean total) throws SQLException, NoSePuedeConectar{
+        double prestamo=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado;
+        if(anticipo)
+            resultado=instruccion.executeQuery("select sum(saldo) from prestamos where trabajador_id="+trabajador+
+                    " and anticipo=1 and month(fecha)=month(now()) and year(fecha)=year(now());");
+        else
+        {
+            if(total)
+                resultado=instruccion.executeQuery("select sum(saldo) from prestamos where trabajador_id="+trabajador+
+                        " and anticipo=0;");
+            else
+                 resultado=instruccion.executeQuery("select sum(saldo) from prestamos where trabajador_id="+trabajador+
+                        " and anticipo=0 and month(fecha)=month(now()) and year(fecha)=year(now());"); 
+        }
+        if(resultado.next())
+        {
+            prestamo=resultado.getDouble(1);
+        }
+        conexion.close();
+        return prestamo;
+    }
+    /**
+     * MEtodo que modifica los prestamos
+     * @param trabajador id del trabajador
+     * @param cantidad monto que se añadira
+     * @param anticipo bandera que indica si es un prestamo o un anticipo TRUE-anticipo, FALSE-prestamo
+     * @throws SQLException 
+     */
+    public void modificarAdelanto(int trabajador, double cantidad, boolean anticipo) throws SQLException, NoSePuedeConectar
+    {
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        if(anticipo)
+            instruccion.executeUpdate("update prestamos set cantidad=cantidad+"+cantidad+", saldo=saldo+"+cantidad
+                    +" where month(fecha)=month(now()) and year(fecha)=year(now()) and anticipo=1 and Trabajador_id="+trabajador+";");
+        else
+            instruccion.executeUpdate("update prestamos set cantidad=cantidad+"+cantidad+", saldo=saldo+"+cantidad
+                    +" where month(fecha)=month(now()) and year(fecha)=year(now()) and anticipo=0 and Trabajador_id="+trabajador+";");
+        conexion.close();
+    }
+    public DefaultTableModel obtenerPlanilla(int mes,int idPlanilla) throws SQLException, NoSePuedeConectar{
+        DefaultTableModel trabajadores=null;
+        trabajadores = iniciarTablaTrabajador_planillaMeses(mes);
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select t.DPI,t.Nombre,apellido,prestamoTrabajador(6,t.id,0),"
+                + "(t.SalarioBase+t.BonoIncentivo),(d.monto-prestamoTrabajador(6,t.id,1)),prestamoTrabajador(6,t.id,1),"
+                + "t.comision,d.monto from trabajador t left join detalleplanilla d on "
+                + "d.Trabajador_id=t.id inner join planillas p on p.id=d.Planillas_id where habilitado=1 "
+                + "and p.id="+idPlanilla+";");
+        while(resultado.next())
+        {
+            String[] fila=new String[]{resultado.getString(1),resultado.getString(2)+resultado.getString(3),
+                resultado.getString(4), resultado.getString(5),resultado.getString(6),resultado.getString(7),
+                resultado.getString(8),resultado.getString(9)};
+            trabajadores.addRow(fila);
+        }
+        conexion.close();
+        return trabajadores;
+    }
+    public int obtenerIdPlanilla(int mes,int anio) throws SQLException, NoSePuedeConectar{
+        int idPlanilla=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        instruccion.executeUpdate("call generarPlanilla();");
+        ResultSet resultado=instruccion.executeQuery("select id from planillas where "
+                + "month(fecha)="+mes+" and "+anio+"=year(fecha);");
+        if(resultado.next())
+        {
+            idPlanilla=resultado.getInt(1);
+            conexion.close();
+        }
+        return idPlanilla;
+    }
+    public void actualizarPlanilla(int id) throws SQLException, NoSePuedeConectar
+    {
+       conectar();
+        Statement instruccion = conexion.createStatement();
+        instruccion.executeUpdate("update planillas set total=-1 where id="+id+";");
+        conexion.close(); 
+    }
+    public int obtenerDia() throws SQLException, NoSePuedeConectar{
+        int dia=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select day(now());");
+        if(resultado.next())
+        {
+            dia=resultado.getInt(1);
+        }
+        conexion.close();
+        return dia;
+    }
+    public int obtenerAnio() throws SQLException, NoSePuedeConectar{
+        int dia=0;
+        conectar();
+        Statement instruccion = conexion.createStatement();
+        ResultSet resultado=instruccion.executeQuery("select year(now());");
+        if(resultado.next())
+        {
+            dia=resultado.getInt(1);
+        }
+        conexion.close();
+        return dia;
+    }
 }
