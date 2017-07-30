@@ -65,8 +65,10 @@ public class selectorFactura extends javax.swing.JDialog {
         lbl_Titulo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_Sucursales = new javax.swing.JTable();
+        btn_Cancelar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -124,6 +126,19 @@ public class selectorFactura extends javax.swing.JDialog {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 650, 280));
 
+        btn_Cancelar.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Cancelar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
+        btn_Cancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Cancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Cancelar.setText("CANCELAR");
+        btn_Cancelar.setOpaque(true);
+        btn_Cancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_CancelarMouseClicked(evt);
+            }
+        });
+        jPanel1.add(btn_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 380, 160, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,7 +154,6 @@ public class selectorFactura extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_AceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_AceptarMouseClicked
-        // TODO add your handling code here:
         datos=new String[9];
         datos[0]=ids.get(tabla_Sucursales.getSelectedRow()).toString();
         datos[1]=tabla_Sucursales.getValueAt(tabla_Sucursales.getSelectedRow(),0).toString();
@@ -164,6 +178,10 @@ public class selectorFactura extends javax.swing.JDialog {
     private void tabla_SucursalesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabla_SucursalesKeyPressed
         //filaSeleccionada();
     }//GEN-LAST:event_tabla_SucursalesKeyPressed
+
+    private void btn_CancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CancelarMouseClicked
+        this.setVisible(false);
+    }//GEN-LAST:event_btn_CancelarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -210,6 +228,7 @@ public class selectorFactura extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_Aceptar;
+    private javax.swing.JLabel btn_Cancelar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
